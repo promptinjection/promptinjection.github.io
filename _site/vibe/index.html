@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>/vibe — Prompt Injection Collective</title>
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>/vibe | Prompt Injection Collective</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="/vibe" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="http://localhost:4000/vibe/" />
+<meta property="og:url" content="http://localhost:4000/vibe/" />
+<meta property="og:site_name" content="Prompt Injection Collective" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="/vibe" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","headline":"/vibe","url":"http://localhost:4000/vibe/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css?v=eed8e8e86f9daf933ccc126a4dab5c4aacea9891">
+  </head>
+  <body class="vibe">
+    <div class="layout-wrapper">
+      <!-- Copilot Suggestion Modal Backdrop -->
+      <div class="copilot-suggestion-backdrop"></div>
+      <!-- Copilot Suggestion Modal -->
+      <div class="copilot-suggestion-modal" id="copilotSuggestionModal">
+        <div class="copilot-suggestion-content">
+          GitHub Copilot may work better with developer mode. Would you like to switch to GitHub Copilot?
+        </div>
+        <div class="copilot-suggestion-actions">
+          <div class="copilot-suggestion-buttons">
+            <button class="copilot-suggestion-button secondary" onclick="hideCopilotSuggestion(false)">No, thanks</button>
+            <button class="copilot-suggestion-button primary" onclick="hideCopilotSuggestion(true)">Switch to GitHub Copilot</button>
+          </div>
+          <label class="copilot-suggestion-checkbox">
+            <input type="checkbox" id="doNotShowAgain">
+            Don't show again
+          </label>
+        </div>
+      </div>
+      <header class="site-header">
+        <div class="header-left">
+          <h1 class="site-title">/vibe</h1>
+          <p class="site-slogan">awesome vibe coding prompts to help you build simple apps
+            
+          </p>
+          
+        </div>
+        <div class="header-right">
+          <a href="https://cursor.com" target="_blank" class="cursor-logo" title="Built with Cursor AI">
+            <svg height="1em" style="flex:none;line-height:1" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11.925 24l10.425-6-10.425-6L1.5 18l10.425 6z" fill="#10b981" class="cursor-logo-path dark-mode-path"></path>
+              <path d="M22.35 18V6L11.925 0v12l10.425 6z" fill="#10b981" class="cursor-logo-path dark-mode-path"></path>
+              <path d="M11.925 0L1.5 6v12l10.425-6V0z" fill="#10b981" class="cursor-logo-path dark-mode-path"></path>
+              <path d="M22.35 6L11.925 24V12L22.35 6z" fill="#fff" class="cursor-logo-path dark-mode-path"></path>
+              <path d="M22.35 6l-10.425 6L1.5 6h20.85z" fill="#fff" class="cursor-logo-path dark-mode-path"></path>
+            </svg>
+            <span>vibecoded with cursor</span>
+          </a>
+          <a href="https://github.com/promptinjection/promptinjection.github.io/stargazers" target="_blank" class="star-count">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            <span id="starCount">...</span>
+          </a>
+          </a>
+          <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">
+            <svg class="mode-icon sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            <svg class="mode-icon moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="content-wrapper">
+        <div class="sidebar">
+          <div class="search-container">
+            <div class="prompt-count" id="promptCount">
+              <span class="count-label">All Prompts</span>
+              <span class="prompts-count-label">Developer Prompts</span>
+              <span class="count-number">0</span>
+            </div>
+            <input type="text" id="searchInput" placeholder="Search prompts...">
+            <ul id="searchResults"></ul>
+          </div>
+        </div>
+        <div class="main-content">
+          
+          <div class="container-lg markdown-body">
+            <div id="promptContent">
+              
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="site-footer">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>About</h3>
+            <p>A curated collection of effective prompts for ChatGPT and other AI assistants, curated by <a href="https://x.com/fkadev">Fatih Kadir Akın</a>. While designed for ChatGPT, these prompts can be adapted for Claude, Gemini, Llama, and other language models to help you get more out of AI interactions.</p>
+          </div>
+          <div class="footer-section">
+            <h3>Contributing</h3>
+            <p>If you'd like to contribute, please fork the repository and make changes as you'd like. Pull requests are warmly welcome. Please read the <a href="https://github.com/f/awesome-chatgpt-prompts/blob/main/CONTRIBUTING.md" style="color: var(--accent-color);">contribution guidelines</a> first.</p>
+          </div>
+          <div class="footer-section">
+           
+        
+            
+              <a href="https://github.com/promptinjection/promptinjection.github.io/pulls" target="_blank" class="book-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="16"></line>
+                  <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+                View Unmerged Prompts
+              </a>
+            </div>
+          </div>
+          <div class="footer-section">
+            <h3>e-Books by @f</h3>
+            <div class="book-links">
+            
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <script src="script.js"></script>
+    
+    <style>
+      video { max-width: 100% !important; }
+      
+      /* Embed button styling */
+      .modal-embed-button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background-color: var(--accent-color);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin-right: 8px;
+      }
+      
+      .modal-embed-button:hover {
+        background-color: var(--accent-color-hover);
+        transform: translateY(-1px);
+      }
+      
+      .modal-embed-button svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+      
+      /* Responsive adjustments for modal buttons */
+      @media (max-width: 640px) {
+        .modal-footer-right {
+          flex-direction: column-reverse;
+          gap: 8px;
+        }
+        
+        .modal-embed-button {
+          margin-right: 0;
+          margin-bottom: 0;
+          width: 100%;
+          justify-content: center;
+        }
+        
+        .modal-chat-button {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+    </style>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MSNHFWTE77"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-MSNHFWTE77');
+    </script>
+  </body>
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en-US" }}">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{{ page.title | default: site.title }} — Prompt Injection Collective</title>
+    {% seo %}
+
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ "/style.css?v=" | append: site.github.build_revision | relative_url }}">
+  </head>
+  <body class="{{ page.body_class | default: '' }}">
+    <div class="layout-wrapper">
+      <!-- Copilot Suggestion Modal Backdrop -->
+      <div class="copilot-suggestion-backdrop"></div>
+      <!-- Copilot Suggestion Modal -->
+      <div class="copilot-suggestion-modal" id="copilotSuggestionModal">
+        <div class="copilot-suggestion-content">
+          GitHub Copilot may work better with developer mode. Would you like to switch to GitHub Copilot?
+        </div>
+        <div class="copilot-suggestion-actions">
+          <div class="copilot-suggestion-buttons">
+            <button class="copilot-suggestion-button secondary" onclick="hideCopilotSuggestion(false)">No, thanks</button>
+            <button class="copilot-suggestion-button primary" onclick="hideCopilotSuggestion(true)">Switch to GitHub Copilot</button>
+          </div>
+          <label class="copilot-suggestion-checkbox">
+            <input type="checkbox" id="doNotShowAgain">
+            Don't show again
+          </label>
+        </div>
+      </div>
+      <header class="site-header">
+        <div class="header-left">
+          <h1 class="site-title">{{ page.title | default: site.title }}</h1>
+          <p class="site-slogan">{{ page.subtitle | default: site.subtitle }}
+            {% if page.subpage != true %}
+            <a href="/vibe" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 hover:bg-green-200 transition-colors">
+              New: Try Vibe Coding Mode!
+            </a>
+            {% endif %}
+          </p>
+          {% if page.hide_platform_selector != true %}
+          <div class="site-description">
+            <p class="platform-hint">Choose your AI platform</p>
+            <div class="platform-pills">
+              <button class="platform-tag" data-platform="github-copilot" data-url="https://github.com/copilot">GitHub Copilot</button>
+              <button class="platform-tag" data-platform="chatgpt" data-url="https://chat.openai.com">ChatGPT</button>
+              <div class="platform-tag-container">
+                <button class="platform-tag" data-platform="grok" data-url="https://grok.com/chat?reasoningMode=none">Grok</button>
+                <div class="grok-mode-dropdown" style="display: none;">
+                  <div class="grok-mode-option" data-url="https://grok.com/chat?reasoningMode=none">Grok</div>
+                  <div class="grok-mode-option" data-url="https://grok.com/chat?reasoningMode=deepsearch">Grok Deep Search</div>
+                  <div class="grok-mode-option" data-url="https://grok.com/chat?reasoningMode=think">Grok Thinking</div>
+                </div>
+              </div>
+              <button class="platform-tag" data-platform="claude" data-url="https://claude.ai/new">Claude</button>
+              <button class="platform-tag" data-platform="perplexity" data-url="https://perplexity.ai">Perplexity</button>
+              <button class="platform-tag" data-platform="mistral" data-url="https://chat.mistral.ai/chat">Mistral</button>
+              <button class="platform-tag" data-platform="gemini" data-url="https://gemini.google.com">Gemini</button>
+              <button class="platform-tag" data-platform="llama" data-url="https://meta.ai">Meta</button>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+        <div class="header-right">
+          <a href="https://cursor.com" target="_blank" class="cursor-logo" title="Built with Cursor AI">
+            <svg height="1em" style="flex:none;line-height:1" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11.925 24l10.425-6-10.425-6L1.5 18l10.425 6z" fill="#10b981" class="cursor-logo-path dark-mode-path"></path>
+              <path d="M22.35 18V6L11.925 0v12l10.425 6z" fill="#10b981" class="cursor-logo-path dark-mode-path"></path>
+              <path d="M11.925 0L1.5 6v12l10.425-6V0z" fill="#10b981" class="cursor-logo-path dark-mode-path"></path>
+              <path d="M22.35 6L11.925 24V12L22.35 6z" fill="#fff" class="cursor-logo-path dark-mode-path"></path>
+              <path d="M22.35 6l-10.425 6L1.5 6h20.85z" fill="#fff" class="cursor-logo-path dark-mode-path"></path>
+            </svg>
+            <span>vibecoded with cursor</span>
+          </a>
+          <a href="https://github.com/promptinjection/promptinjection.github.io/stargazers" target="_blank" class="star-count">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            <span id="starCount">...</span>
+          </a>
+          </a>
+          <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">
+            <svg class="mode-icon sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            <svg class="mode-icon moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="content-wrapper">
+        <div class="sidebar">
+          <div class="search-container">
+            <div class="prompt-count" id="promptCount">
+              <span class="count-label">All Prompts</span>
+              <span class="prompts-count-label">Developer Prompts</span>
+              <span class="count-number">0</span>
+            </div>
+            <input type="text" id="searchInput" placeholder="Search prompts...">
+            <ul id="searchResults"></ul>
+          </div>
+        </div>
+        <div class="main-content">
+          {% if page.hide_platform_selector != true %}
+          <div class="main-content-header">
+            <div class="header-content">
+              <div class="platform-selectors">
+                Reply in <select id="languageSelect" class="custom-select">
+                  <option value="English">English</option>
+                  <option value="Spanish">Spanish</option>
+                  <option value="French">French</option>
+                  <option value="German">German</option>
+                  <option value="Italian">Italian</option>
+                  <option value="Portuguese">Portuguese</option>
+                  <option value="Russian">Russian</option>
+                  <option value="Chinese">Chinese</option>
+                  <option value="Japanese">Japanese</option>
+                  <option value="Korean">Korean</option>
+                  <option value="Turkish">Turkish</option>
+                  <option value="custom">Custom...</option>
+                </select>
+                <input type="text" id="customLanguage" class="custom-input" placeholder="language..." style="display: none;">
+                using <select id="toneSelect" class="custom-select">
+                  <option value="professional">professional</option>
+                  <option value="casual">casual</option>
+                  <option value="friendly">friendly</option>
+                  <option value="formal">formal</option>
+                  <option value="technical">technical</option>
+                  <option value="creative">creative</option>
+                  <option value="enthusiastic">enthusiastic</option>
+                  <option value="humorous">humorous</option>
+                  <option value="authoritative">authoritative</option>
+                  <option value="empathetic">empathetic</option>
+                  <option value="analytical">analytical</option>
+                  <option value="conversational">conversational</option>
+                  <option value="academic">academic</option>
+                  <option value="persuasive">persuasive</option>
+                  <option value="inspirational">inspirational</option>
+                  <option value="custom">Custom...</option>
+                </select>
+                <input type="text" id="customTone" class="custom-input" placeholder="tone..." style="display: none;">
+                tone, for <select id="audienceSelect" class="custom-select">
+                  <option value="everyone">everyone</option>
+                  <option value="developers">developers</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+          <div class="container-lg markdown-body">
+            <div id="promptContent">
+              {{ content }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="site-footer">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>About</h3>
+            <p>A curated collection of effective prompts for ChatGPT and other AI assistants, curated by <a href="https://x.com/fkadev">Fatih Kadir Akın</a>. While designed for ChatGPT, these prompts can be adapted for Claude, Gemini, Llama, and other language models to help you get more out of AI interactions.</p>
+          </div>
+          <div class="footer-section">
+            <h3>Contributing</h3>
+            <p>If you'd like to contribute, please fork the repository and make changes as you'd like. Pull requests are warmly welcome. Please read the <a href="https://github.com/f/awesome-chatgpt-prompts/blob/main/CONTRIBUTING.md" style="color: var(--accent-color);">contribution guidelines</a> first.</p>
+          </div>
+          <div class="footer-section">
+           
+        
+            
+              <a href="https://github.com/promptinjection/promptinjection.github.io/pulls" target="_blank" class="book-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="16"></line>
+                  <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+                View Unmerged Prompts
+              </a>
+            </div>
+          </div>
+          <div class="footer-section">
+            <h3>e-Books by @f</h3>
+            <div class="book-links">
+            
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <script src="script.js"></script>
+    {% if page.hide_tone_selector != true %}
+    <script>
+      // Initialize audience selector
+      const audienceSelect = document.getElementById('audienceSelect');
+      
+      // Handle Grok platform selection
+      document.addEventListener('DOMContentLoaded', () => {
+        const grokButton = document.querySelector('[data-platform="grok"]');
+        const grokDropdown = document.querySelector('.grok-mode-dropdown');
+        const grokOptions = document.querySelectorAll('.grok-mode-option');
+        let isGrokDropdownVisible = false;
+
+        // Add event listeners for all platform buttons
+        const platformButtons = document.querySelectorAll('.platform-tag');
+        platformButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            const platform = button.getAttribute('data-platform');
+            // If platform is not github-copilot, set audience to "everyone"
+            if (platform !== 'github-copilot') {
+              audienceSelect.value = 'everyone';
+              document.body.classList.remove('dev-mode');
+              // Trigger filtering if needed
+              if (typeof filterPrompts === 'function') {
+                filterPrompts();
+              }
+            }
+          });
+        });
+
+        // Hide dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+          if (!e.target.closest('.platform-tag-container')) {
+            grokDropdown.style.display = 'none';
+            isGrokDropdownVisible = false;
+          }
+        });
+
+        // Toggle dropdown
+        grokButton.addEventListener('click', (e) => {
+          e.stopPropagation();
+          isGrokDropdownVisible = !isGrokDropdownVisible;
+          grokDropdown.style.display = isGrokDropdownVisible ? 'block' : 'none';
+        });
+
+        // Handle option selection
+        grokOptions.forEach(option => {
+          option.addEventListener('click', (e) => {
+            const selectedUrl = option.dataset.url;
+            const selectedText = option.textContent;
+            grokButton.dataset.url = selectedUrl;
+            grokButton.textContent = selectedText;
+            grokDropdown.style.display = 'none';
+            isGrokDropdownVisible = false;
+            
+            // Also set audience to "everyone" for Grok options
+            audienceSelect.value = 'everyone';
+            document.body.classList.remove('dev-mode');
+            // Trigger filtering if needed
+            if (typeof filterPrompts === 'function') {
+              filterPrompts();
+            }
+          });
+        });
+      });
+      
+      // Set initial state based on URL params or default
+      const urlParams = new URLSearchParams(window.location.search);
+      const initialAudience = urlParams.get('audience') || 'everyone';
+      audienceSelect.value = initialAudience;
+      document.body.classList.toggle('dev-mode', initialAudience === 'developers');
+      
+      // Handle audience changes
+      audienceSelect.addEventListener('change', (e) => {
+        const isDevMode = e.target.value === 'developers';
+        document.body.classList.toggle('dev-mode', isDevMode);
+        
+        // Trigger prompt filtering
+        filterPrompts();
+      });
+    </script>
+    {% endif %}
+    <style>
+      video { max-width: 100% !important; }
+      
+      /* Embed button styling */
+      .modal-embed-button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background-color: var(--accent-color);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin-right: 8px;
+      }
+      
+      .modal-embed-button:hover {
+        background-color: var(--accent-color-hover);
+        transform: translateY(-1px);
+      }
+      
+      .modal-embed-button svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+      
+      /* Responsive adjustments for modal buttons */
+      @media (max-width: 640px) {
+        .modal-footer-right {
+          flex-direction: column-reverse;
+          gap: 8px;
+        }
+        
+        .modal-embed-button {
+          margin-right: 0;
+          margin-bottom: 0;
+          width: 100%;
+          justify-content: center;
+        }
+        
+        .modal-chat-button {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+    </style>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MSNHFWTE77"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-MSNHFWTE77');
+    </script>
+  </body>
+</html>
