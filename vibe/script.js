@@ -47,7 +47,7 @@ async function renderMainPrompts() {
   if (container) {
     container.innerHTML = `<div class="prompts-grid">
       <div class="prompt-card contribute-card">
-        <a href="https://github.com/f/awesome-chatgpt-prompts/pulls" target="_blank" style="text-decoration: none; color: inherit; height: 100%; display: flex; flex-direction: column;">
+        <a href="https://github.com/promptinjection/promptinjection.github.io/pulls" target="_blank" style="text-decoration: none; color: inherit; height: 100%; display: flex; flex-direction: column;">
           <div class="prompt-title" style="display: flex; align-items: center; gap: 8px;">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="10"></circle>
