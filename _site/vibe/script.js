@@ -47,7 +47,7 @@ async function renderMainPrompts() {
   if (container) {
     container.innerHTML = `<div class="prompts-grid">
       <div class="prompt-card contribute-card">
-        <a href="https://github.com/f/awesome-chatgpt-prompts/pulls" target="_blank" style="text-decoration: none; color: inherit; height: 100%; display: flex; flex-direction: column;">
+        <a href="https://github.com/promptinjection/promptinjection.github.io/pulls" target="_blank" style="text-decoration: none; color: inherit; height: 100%; display: flex; flex-direction: column;">
           <div class="prompt-title" style="display: flex; align-items: center; gap: 8px;">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="10"></circle>
@@ -246,7 +246,43 @@ document.addEventListener('DOMContentLoaded', () => {
   renderSidebarPrompts();
   setupSearch();
   fetchGitHubStars();
+  addHackingEffects();
 });
+
+// Add hacking-themed effects
+function addHackingEffects() {
+  // Add matrix background class
+  document.body.classList.add('matrix-bg');
+
+  // Add terminal-style typing effect to search placeholder
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.placeholder = '';
+    let i = 0;
+    const typeText = '> ENTER SEARCH QUERY...';
+
+    function typeWriter() {
+      if (i < typeText.length) {
+        searchInput.placeholder += typeText.charAt(i);
+        i++;
+        setTimeout(typeWriter, 100);
+      }
+    }
+    typeWriter();
+  }
+
+  // Add random glitch effect to cards
+  setInterval(() => {
+    const cards = document.querySelectorAll('.prompt-card');
+    if (cards.length > 0) {
+      const randomCard = cards[Math.floor(Math.random() * cards.length)];
+      randomCard.style.animation = 'glitch 0.2s ease-in-out';
+      setTimeout(() => {
+        randomCard.style.animation = '';
+      }, 200);
+    }
+  }, 5000);
+}
 
 // Dark mode toggle
 function toggleDarkMode() {

@@ -1,6 +1,6 @@
 ---
-title: /vibe
-subtitle: awesome vibe coding prompts to help you build simple apps
+title: /hack_vibe
+subtitle: "BREACH INITIATED - elite hacking prompts for cyber warfare & system infiltration"
 hide_platform_selector: true
 hide_extension_link: true
 hide_tone_selector: true

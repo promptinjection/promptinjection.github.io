@@ -246,7 +246,43 @@ document.addEventListener('DOMContentLoaded', () => {
   renderSidebarPrompts();
   setupSearch();
   fetchGitHubStars();
+  addHackingEffects();
 });
+
+// Add hacking-themed effects
+function addHackingEffects() {
+  // Add matrix background class
+  document.body.classList.add('matrix-bg');
+
+  // Add terminal-style typing effect to search placeholder
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.placeholder = '';
+    let i = 0;
+    const typeText = '> ENTER SEARCH QUERY...';
+
+    function typeWriter() {
+      if (i < typeText.length) {
+        searchInput.placeholder += typeText.charAt(i);
+        i++;
+        setTimeout(typeWriter, 100);
+      }
+    }
+    typeWriter();
+  }
+
+  // Add random glitch effect to cards
+  setInterval(() => {
+    const cards = document.querySelectorAll('.prompt-card');
+    if (cards.length > 0) {
+      const randomCard = cards[Math.floor(Math.random() * cards.length)];
+      randomCard.style.animation = 'glitch 0.2s ease-in-out';
+      setTimeout(() => {
+        randomCard.style.animation = '';
+      }, 200);
+    }
+  }, 5000);
+}
 
 // Dark mode toggle
 function toggleDarkMode() {
