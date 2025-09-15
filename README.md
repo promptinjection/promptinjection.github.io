@@ -1,87 +1,63 @@
 <p align="center">
-<img width="395" alt="Prompt Injection Collective" src="https://github.com/user-attachments/assets/e0d0e32d-d2ce-4459-9f37-e951d9f4f5de" />
+<img width="395" alt="prompts.chat" src="https://github.com/user-attachments/assets/e0d0e32d-d2ce-4459-9f37-e951d9f4f5de" />
 </p>
-
-<h1 align="center">Prompt Injection Collective</h1>
-<h3 align="center">World's First & Most Famous Prompt Injection Directory</h3>
-<p align="center">A Collective Initiative for AI Safety & Security Research</p>
 
 <h3 align="center">Sponsors</h3>
 
 <div align="center">
 
+  <a href="https://clemta.com" align="center" target="_blank">
+    <img height="50" alt="Clemta logo" src="https://clemta.com/wp-content/uploads/2023/03/logo-clemta-com-1.png.webp">
+  </a>
+  <br>
+  <sub>With Clemta, you can run your company from the comfort of your home.</sub>
+<hr>
+  <a href="https://github.com/f/mcptools" align="center" target="_blank">
+    <img height="60" alt="Hugging Face logo" src="https://github.com/f/mcptools/raw/master/.github/resources/logo.png">
+  </a>
+  <br>
+  <sub>If you're building MCPs, <a href="https://github.com/f/mcptools">MCP Tools</a> is a Swiss-army knife for MCP Servers.</sub>
+<hr>
+  <sub><a href="https://github.com/sponsors/f/sponsorships?sponsor=f&amp;tier_id=529895">Be my sponsor and your logo will be here!</a></sub>
+</div>
 
 ---
 [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
 
-Welcome to the **Prompt Injection Collective** - a community-driven initiative dedicated to researching and cataloging prompt injection techniques for AI safety and security! 
+Welcome to the "Awesome ChatGPT Prompts" repository! While this collection was originally created for [ChatGPT](https://chat.openai.com/chat), these prompts work great with other AI models like [Claude](https://claude.ai/new), [Gemini](https://gemini.google.com), [Hugging Face Chat](https://hf.co/chat), [Llama](https://meta.ai), [Mistral](https://chat.mistral.ai), and more.
 
-This repository serves as the world's first and most comprehensive directory of prompt injection examples. Originally created for understanding ChatGPT vulnerabilities, these techniques and defenses are applicable across all major AI models including [Claude](https://claude.ai/new), [Gemini](https://gemini.google.com), [Hugging Face Chat](https://hf.co/chat), [Llama](https://meta.ai), [Mistral](https://chat.mistral.ai), and more.
+[ChatGPT](https://chat.openai.com/chat) is a web interface created by [OpenAI](https://openai.com) that provides access to their GPT (Generative Pre-trained Transformer) language models. The underlying models, like GPT-4o and GPT-o1, are large language models trained on vast amounts of text data that can understand and generate human-like text. Like other AI chat interfaces, you can provide prompts and have natural conversations with the AI, which will generate contextual responses based on the conversation history and your inputs.
 
-## About Prompt Injection
+In this repository, you will find a variety of prompts that can be used with ChatGPT and other AI chat models. We encourage you to [add your own prompts](https://github.com/f/awesome-chatgpt-prompts/edit/main/README.md) to the list, and to use AI to help generate new prompts as well.
 
-Prompt injection is a security vulnerability that occurs when an AI model is manipulated through crafted input prompts to behave in unintended ways. Understanding these techniques is crucial for:
+To get started, simply clone this repository and use the prompts in the README.md file as input for your preferred AI chat model. You can also use the prompts in this file as inspiration for creating your own.
 
-- **AI Safety Research**: Identifying potential vulnerabilities in language models
-- **Security Testing**: Developing robust defenses against adversarial inputs  
-- **Educational Purposes**: Learning about AI alignment and safety considerations
-- **Responsible Development**: Building more secure AI applications
-
-## Our Mission
-
-The **Prompt Injection Collective** brings together researchers, developers, and security professionals to:
-
-- Document and categorize prompt injection techniques
-- Develop defensive strategies and countermeasures
-- Promote responsible disclosure of AI vulnerabilities
-- Advance the field of AI safety through collaborative research
-
-[ChatGPT](https://chat.openai.com/chat) and other AI chat interfaces use large language models that can be influenced through carefully crafted prompts. By studying these interactions, we can better understand AI behavior and develop more secure systems.
-
-In this repository, you will find a comprehensive collection of prompt injection techniques and examples that can be used for security research and educational purposes. We encourage responsible researchers to [contribute new findings](https://github.com/f/awesome-chatgpt-prompts/edit/main/README.md) to help advance AI safety.
-
-To get started, explore the examples in this README.md file and use them as a foundation for your own security research. Always conduct testing responsibly and in accordance with platform terms of service.
-
-## How to Contribute
-
-The **Prompt Injection Collective** thrives on community contributions! Here's how you can help:
-
-1. **Submit New Techniques**: Found a new prompt injection method? Share it with proper documentation
-2. **Improve Defenses**: Contribute countermeasures and mitigation strategies  
-3. **Educational Content**: Help explain techniques for learning purposes
-4. **Responsible Disclosure**: Report critical vulnerabilities through proper channels
-
-We hope you find this collection valuable for advancing AI safety research and building more secure systems!
+We hope you find these prompts useful and have fun exploring AI chat models!
 
 **[View on prompts.chat](https://prompts.chat)**
 
 **[View on Hugging Face](https://huggingface.co/datasets/fka/awesome-chatgpt-prompts/)**
 ---
 
-> ⚠️ **IMPORTANT DISCLAIMER:** The techniques documented here are for educational and research purposes only. Always:
-> - Conduct research responsibly and ethically
-> - Respect platform terms of service and usage policies  
-> - Use proper disclosure channels for reporting vulnerabilities
-> - Do not use these techniques for malicious purposes
-> 
-> If prompts don't work as expected, try variations, start new conversations, or adjust your approach. The goal is understanding, not exploitation.
+> ℹ️ **NOTE:** Sometimes, some of the prompts may not be working as you expected
+> or may be rejected by the AI. Please try again, start a new thread, or log out
+> and log back in. If these solutions do not work, please try rewriting the
+> prompt using your own sentences while keeping the instructions same.
 
-### Want to Learn About AI Security?
+### Want to Write Effective Prompts?
 
-I've authored an e-book called **"The Art of Prompt Injection: A Guide to
-Understanding AI Vulnerabilities and Defenses"**.
+I've authored an e-book called **"The Art of ChatGPT Prompting: A Guide to
+Crafting Clear and Effective Prompts"**.
 
-📖 **[Read the e-book](https://fka.gumroad.com/l/art-of-prompt-injection)**
+📖 **[Read the e-book](https://fka.gumroad.com/l/art-of-chatgpt-prompting)**
 
-🛡️ **Focus on Responsible Research**: This guide emphasizes ethical security research and responsible disclosure practices, helping you understand AI vulnerabilities while promoting safety and security in the field.
+### Want to Learn How to Make Money using ChatGPT Prompts?
 
-### Want to Learn Advanced Security Research?
-
-I've authored an e-book called **"AI Red Teaming: Strategies,
-Techniques, and Ethical Guidelines"**.
+I've authored an e-book called **"How to Make Money with ChatGPT: Strategies,
+Tips, and Tactics"**.
 
 📖
-**[Buy the e-book](https://fka.gumroad.com/l/ai-red-teaming)**
+**[Buy the e-book](https://fka.gumroad.com/l/how-to-make-money-with-chatgpt)**
 
 ### Want to Learn How to write image prompts for Midjourney AI?
 
