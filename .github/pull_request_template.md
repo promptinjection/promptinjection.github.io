@@ -1,3 +1,30 @@
+## Summary
+
+Describe what changed and why.
+
+## Type of change
+
+- [ ] Feature
+- [ ] Fix
+- [ ] Docs
+- [ ] Refactor
+
+## Screenshots (UI changes)
+
+Before:
+
+After:
+
+## Checklist
+
+- [ ] Builds locally with `bundle exec jekyll serve`
+- [ ] CSV changes (if any) are valid and quoted correctly
+- [ ] For UI changes, screenshots added
+- [ ] PR is focused (no unrelated changes)
+
+## Related issues
+
+Closes #
 # Add New Prompt
 
 You'll need to add your prompt into README.md, and to the `prompts.csv` file. If

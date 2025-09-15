@@ -6,14 +6,14 @@
     --header-height: 145px;
     --footer-height: 145px;
     --sidebar-width: 300px;
-    --accent-color: #ff0040;
-    --accent-color-hover: #ff1a56;
-    --secondary-accent: #00ff41;
-    --danger-color: #ff004d;
+    --accent-color: #ff1b1b;
+    --accent-color-hover: #ff3333;
+    --secondary-accent: #ff4d4d;
+    --danger-color: #ff1b1b;
     --warning-color: #ffff00;
     --success-color: #00ff41;
-    --cyber-blue: #00ffff;
-    --cyber-purple: #ff00ff;
+    --cyber-blue: #ff4444;
+    --cyber-purple: #ff7777;
     --tech-badge-bg: #1a0000;
     --tech-badge-text: #ff0040;
     --tech-badge-bg-dark: #1a0000;
@@ -25,11 +25,13 @@
     --card-bg: #1a0000;
     --card-bg-hover: #2a0000;
     --sidebar-bg: #0a0000;
-    --cyber-glow: #ff0040;
+    --cyber-glow: #ff1b1b;
     --terminal-green: #00ff41;
     --error-red: #ff0040;
     --hack-red: #ff0040;
     --matrix-green: #00ff41;
+    --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+    --font-mono: 'Fira Code', 'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
 }
 
 /* Cyberpunk Terminal-specific styles */
@@ -461,7 +463,7 @@ body.dark-mode {
 
 /* Add padding to main content to prevent overlap with fixed footer */
 .layout-wrapper {
-    padding-bottom: 100px;
+    padding-bottom: var(--footer-height);
 }
 
 @media (max-width: 768px) {
@@ -1118,6 +1120,17 @@ body.dark-mode {
     max-width: none;
 }
 
+/* Improve readability for long-form content */
+.container-lg.markdown-body,
+.markdown-body,
+.footer-section,
+.footer-section p,
+.footer-section h3,
+.site-slogan {
+    font-family: var(--font-sans);
+    line-height: 1.7;
+}
+
 @media (max-width: 1600px) {
     .prompts-grid {
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -1207,14 +1220,6 @@ body.dark-mode {
         padding: 3px 6px;
     }
     
-    .copy-button {
-        padding: 4px;
-    }
-    
-    .copy-button svg {
-        width: 14px;
-        height: 14px;
-    }
     
     .warning-banner {
         font-size: 13px;
@@ -1223,42 +1228,49 @@ body.dark-mode {
 }
 
 .prompt-card {
-    background: linear-gradient(135deg, var(--card-bg) 0%, #000011 100%);
-    border: 1px solid var(--cyber-glow);
-    border-radius: 8px;
-    padding: 20px;
+    background: linear-gradient(135deg, var(--card-bg) 0%, #0a0a0a 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 22px;
     position: relative;
-    transition: all 0.3s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     display: flex;
     flex-direction: column;
     height: 100%;
     min-height: 240px;
-    box-shadow: 0 0 15px rgba(0, 255, 65, 0.1);
-    animation: data-stream 0.5s ease-out;
+    box-shadow: 0 6px 24px rgba(255, 27, 27, 0.15);
+    animation: data-stream 0.4s ease-out;
 }
 
-.prompt-card::before {
-    content: '';
+.card-ribbon {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--cyber-blue), transparent);
-    opacity: 0.6;
+    top: 8px;
+    right: 12px;
+    background: #0b0b0b;
+    color: var(--accent-color);
+    border: 1px dashed var(--accent-color);
+    padding: 2px 8px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    transform: rotate(-4deg);
+    text-shadow: 0 0 6px rgba(255, 27, 27, 0.5);
+    box-shadow: 0 0 10px rgba(255, 27, 27, 0.2);
+    border-radius: 4px;
+    z-index: 20;
+    pointer-events: none; /* avoid blocking clicks */
 }
 
 .dark-mode .prompt-card {
     background: linear-gradient(135deg, var(--card-bg) 0%, #000011 100%);
-    border-color: var(--cyber-glow);
+    border-color: rgba(255, 255, 255, 0.12);
     box-shadow: 0 0 20px rgba(0, 255, 65, 0.15);
 }
 
 .prompt-card:hover {
-    transform: translateY(-6px) scale(1.02);
-    box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
-    border-color: var(--cyber-blue);
-    background: linear-gradient(135deg, var(--card-bg) 0%, #001133 100%);
+    transform: translateY(-6px);
+    box-shadow: 0 10px 36px rgba(0, 0, 0, 0.35);
+    border-color: rgba(255, 255, 255, 0.2);
+    background: linear-gradient(135deg, var(--card-bg) 0%, #101010 100%);
 }
 
 .prompt-title {
@@ -1301,37 +1313,29 @@ body.dark-mode {
     color: var(--text-color-dark);
 }
 
-.copy-button {
-    position: static;
-    background: linear-gradient(45deg, var(--card-bg), #001133);
-    border: 1px solid var(--cyber-glow);
-    border-radius: 4px;
-    cursor: pointer;
-    padding: 4px 6px;
-    color: var(--cyber-blue);
-    opacity: 0.8;
-    transition: all 0.3s ease;
-    z-index: 2;
-    margin-left: 8px;
-    flex-shrink: 0;
-    font-family: 'Fira Code', monospace;
-}
-
-.copy-button:hover {
-    opacity: 1;
-    background: linear-gradient(45deg, #001133, #002244);
-    box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
-    transform: scale(1.05);
-}
-
-.copy-button svg {
-    width: 16px;
-    height: 16px;
-    filter: drop-shadow(0 0 2px var(--cyber-blue));
-}
 
 .search-container {
     margin-bottom: 20px;
+}
+
+.category-dropdown-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.category-dropdown-toggle {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--accent-color);
+    background: transparent;
+    color: var(--accent-color);
+    cursor: pointer;
+}
+
+.category-dropdown-toggle:hover {
+    background: rgba(255, 27, 27, 0.08);
 }
 
 .prompt-count {
@@ -1392,6 +1396,14 @@ body.dark-mode {
     cursor: pointer;
     transition: all 0.2s ease;
     border-radius: 6px;
+}
+
+/* Sidebar items look like terminal commands with $ prefix */
+.search-result-item::before {
+    content: '$ ';
+    color: var(--accent-color);
+    margin-right: 6px;
+    opacity: 0.9;
 }
 
 .search-result-item:hover {
@@ -1468,18 +1480,18 @@ body.dark-mode {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: linear-gradient(135deg, var(--card-bg) 0%, #000011 100%);
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
     border: 2px solid var(--cyber-glow);
-    border-radius: 8px;
-    padding: 24px;
+    border-radius: 16px;
+    padding: 32px;
     width: 90%;
-    max-width: 800px;
-    max-height: 90vh;
+    max-width: 900px;
+    max-height: 85vh;
     overflow-y: auto;
     z-index: 1001;
-    box-shadow: 0 0 40px rgba(0, 255, 65, 0.3);
-    animation: modal-appear 0.3s ease-out;
-    font-family: 'Fira Code', monospace;
+    box-shadow: 0 20px 60px rgba(255, 27, 27, 0.4);
+    animation: modal-appear 0.4s ease-out;
+    font-family: var(--font-sans);
 }
 
 @keyframes modal-appear {
@@ -1536,32 +1548,24 @@ body.dark-mode {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 27, 27, 0.3);
 }
 
 .modal-title {
-    font-size: 1.4rem;
-    font-weight: 600;
+    font-size: 1.6rem;
+    font-weight: 700;
     margin: 0;
     padding-right: 80px;
-    color: var(--text-color-light);
+    color: var(--accent-color);
     flex: 1;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(255, 27, 27, 0.5);
 }
 
-.modal-copy-button {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-    color: var(--accent-color);
-    opacity: 0.8;
-    transition: opacity 0.2s ease;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 
 .modal-close {
     position: static;
@@ -1635,14 +1639,14 @@ body.dark-mode {
 
 /* Add modal header and footer styles */
 .modal-footer {
-    margin-top: 24px;
-    padding-top: 16px;
-    border-top: 1px solid #e1e4e8;
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 27, 27, 0.3);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    gap: 16px;
+    gap: 20px;
 }
 
 .modal-footer-left {
@@ -1664,19 +1668,25 @@ body.dark-mode {
 .modal-chat-button {
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    background: var(--accent-color);
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    background: linear-gradient(45deg, var(--accent-color), var(--accent-color-hover));
     color: white;
     border: none;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 27, 27, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .modal-chat-button:hover {
-    background: var(--accent-color-hover);
+    background: linear-gradient(45deg, var(--accent-color-hover), var(--accent-color));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 27, 27, 0.4);
 }
 
 .modal-chat-button svg {
@@ -1710,14 +1720,6 @@ body.dark-mode {
     color: var(--text-color-dark);
 }
 
-.modal-copy-button:hover {
-    opacity: 1;
-}
-
-.modal-copy-button svg {
-    width: 20px;
-    height: 20px;
-}
 
 .modal-close svg {
     width: 20px;
@@ -1767,15 +1769,16 @@ body.dark-mode {
 
 .contribute-card {
     border: 2px dashed var(--accent-color);
-    background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(153, 27, 27, 0.05) 100%);
-    transition: all 0.3s ease;
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.08) 0%, rgba(153, 27, 27, 0.04) 100%);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
     height: 100%;
+    border-radius: 14px;
 }
 
 .contribute-card:hover {
-    background: linear-gradient(135deg, rgba(220, 38, 38, 0.15) 0%, rgba(153, 27, 27, 0.1) 100%);
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.16) 0%, rgba(153, 27, 27, 0.1) 100%);
     transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(220, 38, 38, 0.2);
+    box-shadow: 0 10px 28px rgba(220, 38, 38, 0.25);
 }
 
 .dark-mode .contribute-card {
@@ -2191,15 +2194,27 @@ input:checked + .slider:before {
 }
 
 .modal-content {
-    color: var(--terminal-green);
-    line-height: 1.6;
-    font-family: 'Fira Code', monospace;
-    border-left: 2px solid var(--cyber-blue);
-    padding-left: 15px;
-    background: rgba(0, 17, 34, 0.3);
-    padding: 15px;
-    border-radius: 4px;
-    margin: 10px 0;
+    color: #e5e5e5;
+    line-height: 1.8;
+    font-family: var(--font-sans);
+    background: linear-gradient(135deg, #111111 0%, #0a0a0a 100%);
+    border: 1px solid rgba(255, 27, 27, 0.2);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+    position: relative;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+    opacity: 0.6;
 }
 
 .chrome-ext-link {
@@ -2460,13 +2475,18 @@ input:checked + .slider:before {
 }
 
 .modal-hint {
-    margin-bottom: 0;
-    font-size: 0.75rem;
-    color: var(--text-color-light);
-    opacity: 0.7;
+    margin-bottom: 16px;
+    font-size: 0.85rem;
+    color: #a0a0a0;
+    opacity: 0.9;
     display: block;
-    line-height: 1.4;
-    max-width: 300px;
+    line-height: 1.5;
+    max-width: 400px;
+    padding: 12px 16px;
+    background: rgba(255, 27, 27, 0.05);
+    border: 1px solid rgba(255, 27, 27, 0.1);
+    border-radius: 8px;
+    font-family: var(--font-sans);
 }
 
 .dark-mode .modal-hint {
@@ -3046,11 +3066,6 @@ body::before {
     transition: all 0.2s ease;
 }
 
-.copy-button:hover {
-    background: linear-gradient(45deg, var(--accent-color), var(--danger-color));
-    border-color: var(--secondary-accent);
-    box-shadow: 0 0 10px rgba(220, 38, 38, 0.4);
-}
 
 /* Enhanced action buttons */
 .action-buttons {
@@ -3114,7 +3129,6 @@ body::before {
         tap-highlight-color: rgba(220, 38, 38, 0.1);
     }
     
-    .copy-button,
     .category-filter {
         -webkit-tap-highlight-color: rgba(220, 38, 38, 0.2);
         tap-highlight-color: rgba(220, 38, 38, 0.2);
@@ -3123,14 +3137,6 @@ body::before {
 
 /* Improve button sizes for touch */
 @media (max-width: 768px) {
-    .copy-button {
-        min-width: 44px;
-        min-height: 44px;
-        padding: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
     
     .action-buttons {
         gap: 12px;
@@ -3145,3 +3151,78 @@ body::before {
         text-decoration: none;
     }
 } 
+
+/* Footer quick action button */
+.footer-run-ai-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: linear-gradient(45deg, var(--accent-color), var(--accent-color-hover));
+  color: #fff;
+  border: 1px solid var(--accent-color-hover);
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: .3px;
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+
+.footer-run-ai-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(255, 27, 27, .25);
+}
+
+.footer-run-ai-button .terminal-icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* Footer category tags */
+.category-tag {
+  display: inline-block;
+  background: rgba(255, 27, 27, 0.1);
+  color: var(--accent-color);
+  border: 1px solid rgba(255, 27, 27, 0.3);
+  border-radius: 4px;
+  padding: 2px 6px;
+  margin: 2px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Enforce consistent card heights */
+.prompt-card {
+  height: 300px; /* uniform height for all cards */
+  overflow: hidden;
+}
+
+/* Clamp title to two lines to prevent overflow */
+.prompt-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Clamp content for consistent card body */
+.prompt-content {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .prompt-card {
+    height: 240px;
+  }
+  .prompt-content {
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+  }
+}

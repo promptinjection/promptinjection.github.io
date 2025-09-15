@@ -11,8 +11,6 @@
 <meta name="generator" content="Jekyll v3.10.0" />
 <meta property="og:title" content="Prompt Injection" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Contributed by Community" />
-<meta property="og:description" content="Contributed by Community" />
 <link rel="canonical" href="http://localhost:4000/" />
 <meta property="og:url" content="http://localhost:4000/" />
 <meta property="og:site_name" content="prompts.chat" />
@@ -20,11 +18,12 @@
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Prompt Injection" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","description":"Contributed by Community","headline":"Prompt Injection","name":"prompts.chat","url":"http://localhost:4000/"}</script>
+{"@context":"https://schema.org","@type":"WebSite","headline":"Prompt Injection","name":"prompts.chat","url":"http://localhost:4000/"}</script>
 <!-- End Jekyll SEO tag -->
 
 
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
   </head>
   <body class="vibe">
@@ -49,7 +48,7 @@
             </svg>
             <span>vibecoded with cursor</span>
           </a>
-          <a href="https://github.com/f/awesome-chatgpt-prompts/stargazers" target="_blank" class="star-count">
+          <a href="https://github.com/promptinjection/promptinjection.github.io/stargazers" target="_blank" class="star-count">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
             </svg>
@@ -79,7 +78,7 @@
               <span class="prompts-count-label">Developer Prompts</span>
               <span class="count-number">0</span>
             </div>
-            <input type="text" id="searchInput" placeholder="Search prompts...">
+            <input type="text" id="searchInput" placeholder="> ENTER SEARCH QUERY...">
             <ul id="searchResults"></ul>
           </div>
         </div>
@@ -116,27 +115,20 @@
         <div class="footer-content">
           <div class="footer-section">
             <h3>About</h3>
-            <p>A curated collection of effective prompts for ChatGPT and other AI assistants, curated by <a href="https://x.com/fkadev">Fatih Kadir Akın</a>. While designed for ChatGPT, these prompts can be adapted for Claude, Gemini, Llama, and other language models to help you get more out of AI interactions.</p>
+            <p>A curated gallery of prompt injection patterns for security research and AI safety education. Created by <a href="https://github.com/sangam14" target="_blank">@sangam14</a>. This collection includes examples of jailbreaks, overrides, exfiltration attempts, and other injection techniques to help researchers understand and defend against prompt injection attacks.</p>
           </div>
           <div class="footer-section">
             <h3>Contributing</h3>
-            <p>If you'd like to contribute, please fork the repository and make changes as you'd like. Pull requests are warmly welcome. Please read the <a href="https://github.com/f/awesome-chatgpt-prompts/blob/main/CONTRIBUTING.md" style="color: var(--accent-color);">contribution guidelines</a> first.</p>
+            <p>Help expand our dataset! Submit new prompt injection examples, improve the UI, or fix bugs. Please read our <a href="https://github.com/promptinjection/promptinjection.github.io/blob/main/CONTRIBUTING.md" style="color: var(--accent-color);">contribution guidelines</a> and use the issue templates for organized submissions.</p>
           </div>
           <div class="footer-section">
-            <h3>Links</h3>
+            <h3>Resources</h3>
             <div class="book-links">
-              <a href="https://www.forbes.com/sites/tjmccue/2023/01/19/chatgpt-success-completely-depends-on-your-prompt/?sh=497a92a21a16" target="_blank" class="book-link">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                </svg>
-                Featured on Forbes
-              </a>
-              <a href="https://github.com/f/awesome-chatgpt-prompts" target="_blank" class="book-link">
+              <a href="https://github.com/promptinjection/promptinjection.github.io" target="_blank" class="book-link">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                 GitHub Repository
               </a>
-              <a href="https://huggingface.co/datasets/fka/awesome-chatgpt-prompts" target="_blank" class="book-link">
+              <a href="https://arxiv.org/abs/2302.12173" target="_blank" class="book-link">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                   <line x1="3" y1="10" x2="21" y2="10"></line>
@@ -144,33 +136,38 @@
                   <line x1="11" y1="15" x2="11" y2="19"></line>
                   <line x1="15" y1="15" x2="15" y2="19"></line>
                 </svg>
-                Hugging Face Dataset
+                Prompt Injection Research
               </a>
-              <a href="https://github.com/f/awesome-chatgpt-prompts/pulls" target="_blank" class="book-link">
+              <a href="https://owasp.org/www-community/attacks/Prompt_Injection" target="_blank" class="book-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 12l2 2 4-4"></path>
+                  <path d="M21 12c.552 0 1-.448 1-1V5c0-.552-.448-1-1-1H3c-.552 0-1 .448-1 1v6c0 .552.448 1 1 1h18z"></path>
+                </svg>
+                OWASP Guidelines
+              </a>
+              <a href="https://github.com/promptinjection/promptinjection.github.io/issues" target="_blank" class="book-link">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <circle cx="12" cy="12" r="10"></circle>
                   <line x1="12" y1="8" x2="12" y2="16"></line>
                   <line x1="8" y1="12" x2="16" y2="12"></line>
                 </svg>
-                View Unmerged Prompts
+                Submit Issues
               </a>
             </div>
           </div>
           <div class="footer-section">
-            <h3>e-Books by @f</h3>
+            <h3>Categories</h3>
             <div class="book-links">
-              <a href="https://fka.gumroad.com/l/art-of-chatgpt-prompting" class="book-link" target="_blank">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                The Art of ChatGPT Prompting
-              </a>
-              <a href="https://fka.gumroad.com/l/how-to-make-money-with-chatgpt" class="book-link" target="_blank">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                How to Make Money with ChatGPT
-              </a>
-              <a href="https://fka.gumroad.com/l/the-art-of-midjourney-ai-guide-to-creating-images-from-text" class="book-link" target="_blank">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                The Art of Midjourney AI
-              </a>
+              <span class="category-tag">Jailbreak</span>
+              <span class="category-tag">Override</span>
+              <span class="category-tag">Exfiltration</span>
+              <span class="category-tag">MaliciousContent</span>
+              <span class="category-tag">Obfuscation</span>
+              <span class="category-tag">RoleHijack</span>
+              <span class="category-tag">Multistep</span>
+              <span class="category-tag">HiddenPayload</span>
+              <span class="category-tag">CrossPrompt</span>
+              <span class="category-tag">Benign</span>
             </div>
           </div>
         </div>

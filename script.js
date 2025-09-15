@@ -71,18 +71,13 @@ async function renderMainPrompts() {
           // Simplified titles to avoid overlap - just use numbers for multiple examples
           const displayTitle = prompts.length > 1 ? `Example ${idx + 1}` : `${category} Example`;
           const countIndicator = prompts.length > 1 ? `<span class="example-count">${idx + 1} of ${prompts.length}</span>` : '';
+          const ribbonText = category.toUpperCase();
           
           return `
             <div class="prompt-card" data-category="${category}" data-global-id="${globalIndex}">
               <div class="prompt-title">
                 ${displayTitle}
                 <div class="action-buttons">
-                  <button class="copy-button" title="Copy prompt" onclick="copyPrompt(this, '${encodeURIComponent(prompt_text)}')">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                      <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                    </svg>
-                  </button>
                   ${url ? `<a href="${url}" target="_blank" class="source-link" title="View source">🔗</a>` : ''}
                 </div>
               </div>
@@ -91,6 +86,7 @@ async function renderMainPrompts() {
                 <span class="category-badge ${category.toLowerCase()}">${category}</span>
                 ${countIndicator}
               </div>
+              <div class="card-ribbon" data-ribbon="${ribbonText}">${ribbonText}</div>
             </div>`;
         }).join('');
         
@@ -213,18 +209,13 @@ async function filterByCategory(selectedCategory) {
           globalIndex++;
           const displayTitle = prompts.length > 1 ? `Example ${idx + 1}` : `${category} Example`;
           const countIndicator = prompts.length > 1 ? `<span class="example-count">${idx + 1} of ${prompts.length}</span>` : '';
+          const ribbonText = category.toUpperCase();
           
           return `
             <div class="prompt-card" data-category="${category}" data-global-id="${globalIndex}">
               <div class="prompt-title">
                 ${displayTitle}
                 <div class="action-buttons">
-                  <button class="copy-button" title="Copy prompt" onclick="copyPrompt(this, '${encodeURIComponent(prompt_text)}')">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                      <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                    </svg>
-                  </button>
                   ${url ? `<a href="${url}" target="_blank" class="source-link" title="View source">🔗</a>` : ''}
                 </div>
               </div>
@@ -233,6 +224,7 @@ async function filterByCategory(selectedCategory) {
                 <span class="category-badge ${category.toLowerCase()}">${category}</span>
                 ${countIndicator}
               </div>
+              <div class="card-ribbon" data-ribbon="${ribbonText}">${ribbonText}</div>
             </div>`;
         }).join('');
         
@@ -410,6 +402,54 @@ document.addEventListener('DOMContentLoaded', () => {
   renderSidebarPrompts();
   setupSearch();
   fetchGitHubStars();
+  updateModeIcons();
+
+  // Footer quick action: open last prompt in selected AI
+  const footerBtn = document.getElementById('footerRunAIButton');
+  if (footerBtn) {
+    footerBtn.addEventListener('click', () => {
+      if (!window.lastPromptText) return;
+      const encoded = encodeURIComponent(window.lastPromptText);
+      // Reuse openInChat flow if available
+      const platform = document.querySelector('.platform-tag.active');
+      if (!platform) return;
+      openInChat(footerBtn, encoded);
+    });
+  }
+
+  // Toggleable category dropdown (hidden by default)
+  const toggleBtn = document.getElementById('toggleCategoryDropdown');
+  const categorySelect = document.getElementById('categoryDropdown');
+  if (toggleBtn && categorySelect) {
+    toggleBtn.addEventListener('click', async () => {
+      const visible = categorySelect.style.display !== 'none';
+      if (visible) {
+        categorySelect.style.display = 'none';
+        toggleBtn.textContent = 'Category Filter ▾';
+        return;
+      }
+      // Populate on first open
+      if (categorySelect.options.length <= 1) {
+        const prompts = await loadPrompts();
+        const categories = Array.from(new Set(prompts.map(p => p.categories))).sort();
+        categories.forEach(cat => {
+          const opt = document.createElement('option');
+          opt.value = cat;
+          opt.textContent = cat;
+          categorySelect.appendChild(opt);
+        });
+      }
+      categorySelect.style.display = '';
+      toggleBtn.textContent = 'Category Filter ▴';
+    });
+
+    categorySelect.addEventListener('change', (e) => {
+      const value = e.target.value;
+      if (typeof filterByCategory === 'function') {
+        filterByCategory(value);
+      }
+    });
+  }
 });
 
 // Dark mode toggle
@@ -417,6 +457,7 @@ function toggleDarkMode() {
   document.body.classList.toggle('dark-mode');
   const isDark = document.body.classList.contains('dark-mode');
   localStorage.setItem('dark-mode', isDark);
+  updateModeIcons();
 }
 
 // Initialize dark mode from localStorage
@@ -425,24 +466,16 @@ if (savedDarkMode) {
   document.body.classList.add('dark-mode');
 }
 
-// Copy prompt to clipboard
-async function copyPrompt(button, encodedPrompt) {
-  try {
-    const promptText = decodeURIComponent(encodedPrompt);
-    await navigator.clipboard.writeText(promptText);
-    const originalHTML = button.innerHTML;
-    button.innerHTML = `
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="20 6 9 17 4 12"></polyline>
-      </svg>
-    `;
-    setTimeout(() => {
-      button.innerHTML = originalHTML;
-    }, 2000);
-  } catch (err) {
-    console.error("Failed to copy text: ", err);
-  }
+// Update sun/moon icons based on current mode
+function updateModeIcons() {
+  const sunIcon = document.querySelector('.sun-icon');
+  const moonIcon = document.querySelector('.moon-icon');
+  if (!sunIcon || !moonIcon) return;
+  const isDark = document.body.classList.contains('dark-mode');
+  sunIcon.style.display = isDark ? 'none' : '';
+  moonIcon.style.display = isDark ? '' : 'none';
 }
+
 
 // Open prompt in AI chat
 function openInChat(button, encodedPrompt) {
@@ -483,6 +516,8 @@ function openInChat(button, encodedPrompt) {
 // Add modal functionality
 function showModal(act, prompt, for_devs) {
   let modalOverlay = document.getElementById('modalOverlay');
+  // Remember last prompt for footer quick action
+  window.lastPromptText = prompt;
   if (!modalOverlay) {
     const modalHTML = `
       <div class="modal-overlay" id="modalOverlay">
@@ -490,12 +525,6 @@ function showModal(act, prompt, for_devs) {
           <div class="modal-header">
             <h2 class="modal-title"></h2>
             <div class="modal-actions">
-              <button class="modal-copy-button" title="Copy prompt">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                </svg>
-              </button>
               <button class="modal-close" title="Close">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -542,15 +571,12 @@ function showModal(act, prompt, for_devs) {
       }
     });
 
-    const modalCopyButton = modalOverlay.querySelectorAll('.modal-copy-button, .modal-chat-button');
-    modalCopyButton.forEach(button => {
-      button.addEventListener('click', () => {
-        copyPrompt(button, encodeURIComponent(prompt));
-        if (button.classList.contains('modal-chat-button')) {
-          alert('Now you can paste the prompt into your AI IDE, deeplinks to AI IDEs are coming soon (I hope)! — IDE devs, please DM me!');
-        }
+    const modalChatButton = modalOverlay.querySelector('.modal-chat-button');
+    if (modalChatButton) {
+      modalChatButton.addEventListener('click', () => {
+        alert('Now you can paste the prompt into your AI IDE, deeplinks to AI IDEs are coming soon (I hope)! — IDE devs, please DM me!');
       });
-    });
+    }
   }
 
   const modalTitle = modalOverlay.querySelector('.modal-title');

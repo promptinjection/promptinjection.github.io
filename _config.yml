@@ -2,6 +2,13 @@ name: prompts.chat
 title: prompts.chat
 subtitle: World's First & Most Famous Prompts Directory
 
-github_pages:
-  url: "promptinjection.github.io/"
-  branch: "main"
+# Site URL configuration for GitHub Pages
+# For a user/org site (promptinjection.github.io), baseurl must be empty
+url: "https://promptinjection.github.io"
+baseurl: ""
+
+# Build settings
+markdown: kramdown
+theme: null
+plugins:
+  - jekyll-seo-tag
