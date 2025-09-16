@@ -84,7 +84,10 @@ async function renderMainPrompts() {
               <p class="prompt-content">${prompt_text.replace(/\\n/g, '<br>')}</p>
               <div class="card-footer">
                 <span class="category-badge ${category.toLowerCase()}">${category}</span>
-                ${countIndicator}
+                <div style="display:flex; align-items:center; gap:8px;">
+                  ${countIndicator}
+                  <button class="show-toggle" type="button">Show more</button>
+                </div>
               </div>
               <div class="card-ribbon" data-ribbon="${ribbonText}">${ribbonText}</div>
             </div>`;
@@ -110,10 +113,21 @@ async function renderMainPrompts() {
         const card = cards[cardIdx++];
         const modalTitle = prompts.length > 1 ? `${category} - Example ${idx + 1}` : `${category} Example`;
         card.addEventListener('click', (e) => {
-          if (!e.target.closest('.copy-button') && !e.target.closest('.source-link')) {
+          if (!e.target.closest('.copy-button') && !e.target.closest('.source-link') && !e.target.closest('.show-toggle')) {
             showModal(modalTitle, prompt.prompt_text, false);
           }
         });
+
+        // Hook up show more/less toggle
+        const toggleBtn = card.querySelector('.show-toggle');
+        const contentEl = card.querySelector('.prompt-content');
+        if (toggleBtn && contentEl) {
+          toggleBtn.addEventListener('click', (ev) => {
+            ev.stopPropagation();
+            const isExpanded = card.classList.toggle('expanded');
+            toggleBtn.textContent = isExpanded ? 'Show less' : 'Show more';
+          });
+        }
       });
     });
   }
@@ -222,7 +236,10 @@ async function filterByCategory(selectedCategory) {
               <p class="prompt-content">${prompt_text.replace(/\\n/g, '<br>')}</p>
               <div class="card-footer">
                 <span class="category-badge ${category.toLowerCase()}">${category}</span>
-                ${countIndicator}
+                <div style="display:flex; align-items:center; gap:8px;">
+                  ${countIndicator}
+                  <button class="show-toggle" type="button">Show more</button>
+                </div>
               </div>
               <div class="card-ribbon" data-ribbon="${ribbonText}">${ribbonText}</div>
             </div>`;
@@ -251,10 +268,21 @@ async function filterByCategory(selectedCategory) {
         const card = cards[cardIdx++];
         const modalTitle = prompts.length > 1 ? `${category} - Example ${idx + 1}` : `${category} Example`;
         card.addEventListener('click', (e) => {
-          if (!e.target.closest('.copy-button') && !e.target.closest('.source-link')) {
+          if (!e.target.closest('.copy-button') && !e.target.closest('.source-link') && !e.target.closest('.show-toggle')) {
             showModal(modalTitle, prompt.prompt_text, false);
           }
         });
+
+        // Hook up show more/less toggle
+        const toggleBtn = card.querySelector('.show-toggle');
+        const contentEl = card.querySelector('.prompt-content');
+        if (toggleBtn && contentEl) {
+          toggleBtn.addEventListener('click', (ev) => {
+            ev.stopPropagation();
+            const isExpanded = card.classList.toggle('expanded');
+            toggleBtn.textContent = isExpanded ? 'Show less' : 'Show more';
+          });
+        }
       });
     });
   }
@@ -403,6 +431,20 @@ document.addEventListener('DOMContentLoaded', () => {
   setupSearch();
   fetchGitHubStars();
   updateModeIcons();
+
+  // Hide header/footer on scroll with smooth animation
+  let lastScrollTop = 0;
+  const mainContent = document.querySelector('.main-content') || window;
+  const getScrollTop = () => (mainContent === window ? window.pageYOffset : mainContent.scrollTop);
+  const onScroll = () => {
+    const st = getScrollTop();
+    const goingDown = st > lastScrollTop;
+    document.body.classList.toggle('header-hidden', goingDown && st > 10);
+    document.body.classList.toggle('footer-hidden', goingDown && st > 10);
+    document.body.classList.toggle('scrolled', st > 0);
+    lastScrollTop = Math.max(st, 0);
+  };
+  (mainContent === window ? window : mainContent).addEventListener('scroll', onScroll, { passive: true });
 
   // Footer quick action: open last prompt in selected AI
   const footerBtn = document.getElementById('footerRunAIButton');

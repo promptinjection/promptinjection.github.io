@@ -3,7 +3,7 @@
     --bg-color-dark: #1a1a1a;
     --text-color-light: #000000;
     --text-color-dark: #ffffff;
-    --header-height: 145px;
+    --header-height: 80px;
     --footer-height: 145px;
     --sidebar-width: 300px;
     --accent-color: #10b981;
@@ -68,7 +68,7 @@ body.dark-mode {
 }
 
 .site-header {
-    padding: 1rem 2rem;
+    padding: 0.6rem 1rem;
     text-align: left;
     border-bottom: 1px solid #e1e4e8;
     background-color: var(--bg-color-light);
@@ -79,6 +79,7 @@ body.dark-mode {
     justify-content: space-between;
     align-items: center;
     height: var(--header-height);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .dark-mode .site-header {
@@ -193,11 +194,28 @@ body.dark-mode {
     right: 0;
     z-index: 100;
     height: var(--footer-height);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .dark-mode .site-footer {
     background: var(--bg-color-dark);
     border-color: #2d2d2d;
+}
+
+/* Hide-on-scroll animations */
+body.header-hidden .site-header {
+    transform: translateY(-100%);
+}
+
+/* Footer remains visible */
+
+/* Add subtle shadow when content scrolls */
+body.scrolled .site-header {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+body.scrolled .site-footer {
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
 }
 
 .footer-content {
@@ -252,7 +270,7 @@ body.dark-mode {
 
 /* Add padding to main content to prevent overlap with fixed footer */
 .layout-wrapper {
-    padding-bottom: 100px;
+    padding-bottom: calc(var(--footer-height) + 8px);
 }
 
 @media (max-width: 768px) {
@@ -704,17 +722,23 @@ body.dark-mode {
     position: sticky;
     top: 0;
     background-color: var(--bg-color-light);
-    padding: 6px 38px;
+    padding: 4px 20px;
     border-bottom: 1px solid #e1e4e8;
     z-index: 10;
-    margin: -20px -20px 20px -20px;
+    margin: -12px -12px 12px -12px;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
+    transition: transform 0.25s ease;
 }
 
 .dark-mode .main-content-header {
     background-color: var(--bg-color-dark);
     border-color: #2d2d2d;
+}
+
+/* Hide dev/filters header on scroll as well */
+body.header-hidden .main-content-header {
+    transform: translateY(-100%);
 }
 
 .main-content-header .header-content {
@@ -872,10 +896,10 @@ body.dark-mode {
 .prompts-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
+    gap: 12px;
     max-width: 100%;
     margin: 0;
-    padding: 16px;
+    padding: 12px;
 }
 
 .container-lg.markdown-body {
@@ -886,6 +910,12 @@ body.dark-mode {
 @media (max-width: 1600px) {
     .prompts-grid {
         grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1800px) {
+    .prompts-grid {
+        grid-template-columns: repeat(5, 1fr);
     }
 }
 
@@ -916,12 +946,19 @@ body.dark-mode {
     background: var(--bg-color-light);
     border: 1px solid #e1e4e8;
     border-radius: 12px;
-    padding: 16px;
+    padding: 12px;
     position: relative;
     transition: transform 0.2s ease;
     display: flex;
     flex-direction: column;
-    min-height: 200px;
+    min-height: 140px;
+}
+
+.prompt-card.expanded .prompt-content {
+    display: block;
+    -webkit-line-clamp: unset;
+    overflow: visible;
+    max-height: none;
 }
 
 .dark-mode .prompt-card {
@@ -934,9 +971,9 @@ body.dark-mode {
 }
 
 .prompt-title {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
-    margin: 0 0 12px 0;
+    margin: 0 0 8px 0;
     color: var(--text-color-light);
     line-height: 1.4;
     display: flex;
@@ -949,15 +986,30 @@ body.dark-mode {
 }
 
 .prompt-content {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     line-height: 1.5;
     color: var(--text-color-light);
     opacity: 0.8;
     display: -webkit-box;
-    -webkit-line-clamp: 4;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    margin-bottom: 40px;
+    margin-bottom: 32px;
+}
+
+.show-toggle {
+    background: transparent;
+    border: 1px dashed var(--accent-color);
+    color: var(--accent-color);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    opacity: 0.9;
+}
+
+.show-toggle:hover {
+    opacity: 1;
 }
 
 .dark-mode .prompt-content {
