@@ -1,6 +1,6 @@
-name: prompts.chat
-title: prompts.chat
-subtitle: World's First & Most Famous Prompts Directory
+name: Prompt Injection
+title: Prompt Injection
+subtitle: security research database for prompt injection techniques
 
 # Site URL configuration for GitHub Pages
 # For a user/org site (promptinjection.github.io), baseurl must be empty
