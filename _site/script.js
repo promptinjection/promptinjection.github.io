@@ -1,3 +1,32 @@
+// Global variables and configuration
+let allPrompts = [];
+let currentFilter = 'all';
+let isLoading = false;
+let filteredPrompts = [];
+
+const CONFIG = {
+  ANIMATION_DELAY: 100,
+  DEBOUNCE_DELAY: 300,
+  CARDS_PER_ROW: {
+    desktop: 4,
+    tablet: 3,
+    mobile: 1
+  }
+};
+
+// Utility functions
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
 function parseCSV(csv) {
   const lines = csv.split("\n");
   const headers = lines[0]
@@ -35,11 +64,68 @@ function getCategoryIcon(category) {
   return icons[category] || '📝';
 }
 
-// Load prompts from CSV
+// Load prompts from CSV with caching and error handling
 async function loadPrompts() {
-  const response = await fetch('/prompt-injection.csv');
-  const text = await response.text();
-  return parseCSV(text);
+  if (allPrompts.length > 0) {
+    return allPrompts;
+  }
+
+  try {
+    isLoading = true;
+    showLoadingState();
+    
+    const response = await fetch('/prompt-injection.csv');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const text = await response.text();
+    allPrompts = parseCSV(text);
+    
+    // Initialize filtered prompts to show all by default
+    filteredPrompts = [...allPrompts];
+    
+    hideLoadingState();
+    return allPrompts;
+  } catch (error) {
+    console.error("Error loading prompts:", error);
+    showErrorState("Failed to load prompts. Please try again later.");
+    return [];
+  } finally {
+    isLoading = false;
+  }
+}
+
+function showLoadingState() {
+  const container = document.querySelector('#promptContent');
+  if (container) {
+    container.innerHTML = `
+      <div class="loading-container">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">Loading prompts...</p>
+      </div>
+    `;
+  }
+}
+
+function hideLoadingState() {
+  const loadingContainer = document.querySelector('.loading-container');
+  if (loadingContainer) {
+    loadingContainer.remove();
+  }
+}
+
+function showErrorState(message) {
+  const container = document.querySelector('#promptContent');
+  if (container) {
+    container.innerHTML = `
+      <div class="error-container">
+        <div class="error-icon">⚠️</div>
+        <p class="error-text">${message}</p>
+        <button class="retry-button" onclick="location.reload()">Retry</button>
+      </div>
+    `;
+  }
 }
 
 // Update prompt count
@@ -53,9 +139,12 @@ function updatePromptCount(filteredCount, totalCount) {
 
 // Render prompts in the main content area
 async function renderMainPrompts() {
-  const prompts = await loadPrompts();
+  const allPromptsData = await loadPrompts();
   const container = document.querySelector('#promptContent');
   if (container) {
+    // Use filtered prompts if available, otherwise use all prompts
+    const prompts = filteredPrompts.length > 0 ? filteredPrompts : allPromptsData;
+    
     // Group prompts by category
     const grouped = prompts.reduce((acc, prompt) => {
       if (!acc[prompt.categories]) acc[prompt.categories] = [];
@@ -91,10 +180,9 @@ async function renderMainPrompts() {
       ${Object.entries(grouped).map(([category, prompts]) => {
         const categoryPromptsHtml = prompts.map(({ categories, prompt_text }, idx) => {
           globalIndex++;
-          // Simplified titles to avoid overlap - just use numbers for multiple examples
-          const displayTitle = prompts.length > 1 ? `Example ${idx + 1}` : `${category} Example`;
+          // Remove category title for cleaner card view
+          const displayTitle = prompts.length > 1 ? `Example ${idx + 1}` : `Prompt Example`;
           const countIndicator = prompts.length > 1 ? `<span class="example-count">${idx + 1} of ${prompts.length}</span>` : '';
-          const ribbonText = category.toUpperCase();
           
           return `
             <div class="prompt-card" 
@@ -123,30 +211,32 @@ async function renderMainPrompts() {
                           aria-controls="prompt-content-${globalIndex}">Show more</button>
                 </div>
               </div>
-              <div class="card-ribbon" data-ribbon="${ribbonText}" aria-hidden="true">${ribbonText}</div>
             </div>`;
         }).join('');
         
-        return `
-          <div class="category-section">
-            <div class="category-header">
-              <h2 class="category-title">${category}</h2>
-              ${prompts.length > 1 ? `<span class="category-count">${prompts.length} examples</span>` : `<span class="category-count">1 example</span>`}
-            </div>
-            <div class="category-cards">
-              ${categoryPromptsHtml}
-            </div>
-          </div>`;
+        return categoryPromptsHtml;
       }).join('')}</div>`;
 
     // Add click handlers for modal
     const cards = container.querySelectorAll('.prompt-card:not(.contribute-card)');
     let cardIdx = 0;
     
-    // Add loading animation to cards
+    // Add loading animation to cards with improved performance
     cards.forEach((card, index) => {
       card.classList.add('loading');
-      card.style.animationDelay = `${index * 0.1}s`;
+      card.style.animationDelay = `${index * CONFIG.ANIMATION_DELAY}ms`;
+      
+      // Use requestAnimationFrame for better performance
+      requestAnimationFrame(() => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+          card.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, index * CONFIG.ANIMATION_DELAY);
+      });
     });
     
     Object.entries(grouped).forEach(([category, prompts]) => {
@@ -192,7 +282,7 @@ async function renderMainPrompts() {
   updatePromptCount(prompts.length, prompts.length);
 }
 
-// Render prompts in the sidebar
+// Enhanced sidebar prompts rendering
 async function renderSidebarPrompts() {
   const prompts = await loadPrompts();
   const searchResults = document.getElementById('searchResults');
@@ -206,16 +296,25 @@ async function renderSidebarPrompts() {
       return acc;
     }, {});
 
-    // Add "All Categories" option and individual categories
+    // Sort categories alphabetically for better UX
+    const sortedCategories = Object.entries(categoryStats).sort(([a], [b]) => a.localeCompare(b));
+
+    // Add "All Categories" option and individual categories with enhanced styling
     searchResults.innerHTML = `
       <li class="search-result-item category-filter active" data-category="all">
-        <span class="category-name">All Categories</span>
-        <span class="category-count-badge">${prompts.length}</span>
+        <div class="category-item-content">
+          <span class="category-icon">📂</span>
+          <span class="category-name">All Categories</span>
+          <span class="category-count-badge">${prompts.length}</span>
+        </div>
       </li>
-      ${Object.entries(categoryStats).map(([category, count]) => `
+      ${sortedCategories.map(([category, count]) => `
         <li class="search-result-item category-filter" data-category="${category}">
-          <span class="category-name">${category}</span>
-          <span class="category-count-badge">${count}</span>
+          <div class="category-item-content">
+            <span class="category-icon">${getCategoryIcon(category)}</span>
+            <span class="category-name">${category}</span>
+            <span class="category-count-badge">${count}</span>
+          </div>
         </li>
       `).join('')}
     `;
@@ -227,32 +326,37 @@ async function renderSidebarPrompts() {
       searchResults.style.opacity = '1';
     }
     
-    // Add event listeners to category filters
+    // Add enhanced event listeners to category filters
     const categoryFilters = searchResults.querySelectorAll('.category-filter');
-    categoryFilters.forEach(filter => {
+    categoryFilters.forEach((filter, index) => {
+      // Add staggered animation delay
+      filter.style.animationDelay = `${index * 50}ms`;
+      
       filter.addEventListener('click', (e) => {
+        e.preventDefault();
         const category = filter.getAttribute('data-category');
-        filterByCategory(category, filter);
         
-        // Add mobile-specific feedback
-        if (window.innerWidth <= 768) {
-          filter.style.transform = 'scale(0.95)';
-          setTimeout(() => {
-            filter.style.transform = '';
-          }, 150);
-        }
+        // Add visual feedback
+        filter.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          filter.style.transform = '';
+        }, 150);
+        
+        filterByCategory(category, filter);
       });
       
-      // Add touch feedback for mobile
+      // Enhanced touch feedback for mobile
       if (window.innerWidth <= 768) {
         filter.addEventListener('touchstart', (e) => {
           filter.style.backgroundColor = 'rgba(16, 185, 129, 0.2)';
+          filter.style.transform = 'scale(0.98)';
         });
         
         filter.addEventListener('touchend', (e) => {
           setTimeout(() => {
             if (!filter.classList.contains('active')) {
               filter.style.backgroundColor = '';
+              filter.style.transform = '';
             }
           }, 100);
         });
@@ -261,30 +365,173 @@ async function renderSidebarPrompts() {
   }
 }
 
-// Filter prompts by category
+// Enhanced filtering functionality
+function filterAndSearchPrompts(category = currentFilter) {
+  currentFilter = category;
+  
+  let filtered = [...allPrompts];
+  
+  console.log('Filtering with category:', category);
+  console.log('Starting with', filtered.length, 'prompts');
+  
+  // Apply category filter
+  if (category !== 'all') {
+    filtered = filtered.filter(prompt => 
+      prompt.categories.toLowerCase() === category.toLowerCase()
+    );
+    console.log('After category filter:', filtered.length, 'prompts');
+  }
+  
+  filteredPrompts = filtered;
+  console.log('Final filtered count:', filteredPrompts.length);
+  return filtered;
+}
+
+// Clear all filters and show all prompts
+function clearFilters() {
+  currentFilter = 'all';
+  filteredPrompts = [...allPrompts];
+  
+  // Update active states
+  document.querySelectorAll('.dropdown-item, .category-filter').forEach(item => {
+    item.classList.remove('active');
+  });
+  
+  // Activate "All Categories" items
+  document.querySelectorAll('[data-category="all"]').forEach(item => {
+    item.classList.add('active');
+  });
+}
+
+// Debug function to check filtering state
+function debugFiltering() {
+  console.log('=== Filtering Debug Info ===');
+  console.log('Current Filter:', currentFilter);
+  console.log('All Prompts Count:', allPrompts.length);
+  console.log('Filtered Prompts Count:', filteredPrompts.length);
+  console.log('Available Categories:', [...new Set(allPrompts.map(p => p.categories))]);
+  console.log('========================');
+}
+
+// Test filtering functionality
+async function testFiltering() {
+  console.log('=== Testing Filtering ===');
+  
+  // Test 1: Filter by a specific category
+  const categories = [...new Set(allPrompts.map(p => p.categories))];
+  if (categories.length > 0) {
+    const testCategory = categories[0];
+    console.log('Testing filter by category:', testCategory);
+    await filterByCategory(testCategory);
+    debugFiltering();
+  }
+  
+  // Test 2: Clear filters
+  console.log('Testing clear filters');
+  clearFilters();
+  await renderMainPrompts();
+  debugFiltering();
+  
+  console.log('=== Filtering Test Complete ===');
+}
+
+// Sidebar toggle functionality
+function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const toggleButton = document.querySelector('.sidebar-toggle');
+  
+  if (!sidebar || !toggleButton) {
+    console.error('Sidebar or toggle button not found');
+    return;
+  }
+  
+  const isHidden = sidebar.classList.contains('hidden');
+  
+  if (isHidden) {
+    // Show sidebar
+    sidebar.classList.remove('hidden');
+    toggleButton.classList.remove('active');
+    
+    // Update icon
+    const showIcon = toggleButton.querySelector('.sidebar-show-icon');
+    const hideIcon = toggleButton.querySelector('.sidebar-hide-icon');
+    if (showIcon) showIcon.style.display = 'block';
+    if (hideIcon) hideIcon.style.display = 'none';
+    
+    // Save state to localStorage
+    localStorage.setItem('sidebarHidden', 'false');
+    
+    console.log('Sidebar shown');
+  } else {
+    // Hide sidebar
+    sidebar.classList.add('hidden');
+    toggleButton.classList.add('active');
+    
+    // Update icon
+    const showIcon = toggleButton.querySelector('.sidebar-show-icon');
+    const hideIcon = toggleButton.querySelector('.sidebar-hide-icon');
+    if (showIcon) showIcon.style.display = 'none';
+    if (hideIcon) hideIcon.style.display = 'block';
+    
+    // Save state to localStorage
+    localStorage.setItem('sidebarHidden', 'true');
+    
+    console.log('Sidebar hidden');
+  }
+}
+
+// Initialize sidebar state from localStorage
+function initializeSidebarState() {
+  const sidebarHidden = localStorage.getItem('sidebarHidden');
+  const sidebar = document.querySelector('.sidebar');
+  const toggleButton = document.querySelector('.sidebar-toggle');
+  
+  if (sidebarHidden === 'true' && sidebar && toggleButton) {
+    sidebar.classList.add('hidden');
+    toggleButton.classList.add('active');
+    
+    // Update icon
+    const showIcon = toggleButton.querySelector('.sidebar-show-icon');
+    const hideIcon = toggleButton.querySelector('.sidebar-hide-icon');
+    if (showIcon) showIcon.style.display = 'none';
+    if (hideIcon) hideIcon.style.display = 'block';
+    
+    console.log('Sidebar initialized as hidden');
+  }
+}
+
+// Filter prompts by category with improved UX
 async function filterByCategory(selectedCategory, clickedElement = null) {
-  const prompts = await loadPrompts();
+  if (isLoading) return;
+  
+  console.log('Filtering by category:', selectedCategory);
+  
   const container = document.querySelector('#promptContent');
+  if (!container) return;
+  
+  // Update active state in dropdown
+  document.querySelectorAll('.dropdown-item').forEach(item => {
+    item.classList.remove('active');
+  });
   
   // Update active state in sidebar
   document.querySelectorAll('.category-filter').forEach(item => {
     item.classList.remove('active');
   });
   
-  // Find and activate the clicked category filter
-  if (clickedElement) {
-    clickedElement.classList.add('active');
-  } else {
-    // Find the category filter that matches the selected category
-    const categoryFilters = document.querySelectorAll('.category-filter');
-    categoryFilters.forEach(filter => {
-      const categoryName = filter.querySelector('.category-name');
-      if (categoryName && (categoryName.textContent === selectedCategory || 
-          (selectedCategory === 'all' && categoryName.textContent === 'All Categories'))) {
-        filter.classList.add('active');
-      }
-    });
+  const matchingFilter = document.querySelector(`[data-category="${selectedCategory}"]`);
+  if (matchingFilter) {
+    matchingFilter.classList.add('active');
   }
+  
+  // Apply filters
+  const filtered = filterAndSearchPrompts(selectedCategory);
+  
+  // Re-render main content with filtered results
+  await renderMainPrompts();
+  
+  // Update prompt count
+  updatePromptCount(filtered.length, allPrompts.length);
   
   if (container) {
     let filteredPrompts;
@@ -390,10 +637,22 @@ async function filterByCategory(selectedCategory, clickedElement = null) {
     const cards = container.querySelectorAll('.prompt-card:not(.contribute-card)');
     let cardIdx = 0;
     
-    // Add loading animation to cards
+    // Add loading animation to cards with improved performance
     cards.forEach((card, index) => {
       card.classList.add('loading');
-      card.style.animationDelay = `${index * 0.1}s`;
+      card.style.animationDelay = `${index * CONFIG.ANIMATION_DELAY}ms`;
+      
+      // Use requestAnimationFrame for better performance
+      requestAnimationFrame(() => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+          card.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, index * CONFIG.ANIMATION_DELAY);
+      });
     });
     
     Object.entries(grouped).forEach(([category, prompts]) => {
@@ -509,62 +768,7 @@ function scrollToPrompt(title, prompt) {
   }
 }
 
-// Search functionality
-function setupSearch() {
-  const searchInput = document.getElementById('searchInput');
-  const searchResults = document.getElementById('searchResults');
 
-  if (searchInput && searchResults) {
-    searchInput.addEventListener('input', async (e) => {
-      const query = e.target.value.toLowerCase();
-      
-      if (!query.trim()) {
-        // Show category filters when no search query
-        renderSidebarPrompts();
-        return;
-      }
-      
-      const prompts = await loadPrompts();
-      const filtered = prompts.filter(({ categories, prompt_text }) => 
-        categories.toLowerCase().includes(query) || prompt_text.toLowerCase().includes(query)
-      );
-
-      updatePromptCount(filtered.length, prompts.length);
-
-      if (window.innerWidth <= 768 && !query.trim()) {
-        // Show category filters on mobile when no search query
-        renderSidebarPrompts();
-        return;
-      } else {
-        searchResults.innerHTML = filtered.length === 0 
-          ? `<div class="search-result-item add-prompt">
-              <a href="https://github.com/promptinjection/promptinjection.github.io/issues" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 8px;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <line x1="12" y1="8" x2="12" y2="16"></line>
-                  <line x1="8" y1="12" x2="16" y2="12"></line>
-                </svg>
-                Report this example
-              </a>
-            </div>`
-          : filtered.map(({ categories, prompt_text }) => `
-              <li class="search-result-item" data-category="${categories}">
-                ${categories} Example
-              </li>
-            `).join('');
-        
-        // Add event listeners to search result items
-        const searchResultItems = searchResults.querySelectorAll('.search-result-item[data-category]');
-        searchResultItems.forEach(item => {
-          item.addEventListener('click', (e) => {
-            const category = item.getAttribute('data-category');
-            filterByCategory(category, item);
-          });
-        });
-      }
-    });
-  }
-}
 
 // Fetch GitHub stars
 async function fetchGitHubStars() {
@@ -631,9 +835,19 @@ document.addEventListener('DOMContentLoaded', () => {
       if (toggleButton) toggleButton.classList.add('active');
     }
   });
-  setupSearch();
+  
+  
   fetchGitHubStars();
   updateModeIcons();
+  
+  // Initialize sidebar state
+  initializeSidebarState();
+  
+  // Make debug function available globally
+  window.debugFiltering = debugFiltering;
+  window.clearFilters = clearFilters;
+  window.testFiltering = testFiltering;
+  window.toggleSidebar = toggleSidebar;
   
   // Ensure categories dropdown works
   const categoriesToggle = document.querySelector('.categories-toggle');
