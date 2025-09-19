@@ -220,13 +220,43 @@ async function renderSidebarPrompts() {
       `).join('')}
     `;
     
+    // Force visibility on mobile
+    if (window.innerWidth <= 768) {
+      searchResults.style.display = 'block';
+      searchResults.style.visibility = 'visible';
+      searchResults.style.opacity = '1';
+    }
+    
     // Add event listeners to category filters
     const categoryFilters = searchResults.querySelectorAll('.category-filter');
     categoryFilters.forEach(filter => {
       filter.addEventListener('click', (e) => {
         const category = filter.getAttribute('data-category');
         filterByCategory(category, filter);
+        
+        // Add mobile-specific feedback
+        if (window.innerWidth <= 768) {
+          filter.style.transform = 'scale(0.95)';
+          setTimeout(() => {
+            filter.style.transform = '';
+          }, 150);
+        }
       });
+      
+      // Add touch feedback for mobile
+      if (window.innerWidth <= 768) {
+        filter.addEventListener('touchstart', (e) => {
+          filter.style.backgroundColor = 'rgba(16, 185, 129, 0.2)';
+        });
+        
+        filter.addEventListener('touchend', (e) => {
+          setTimeout(() => {
+            if (!filter.classList.contains('active')) {
+              filter.style.backgroundColor = '';
+            }
+          }, 100);
+        });
+      }
     });
   }
 }
@@ -502,7 +532,9 @@ function setupSearch() {
       updatePromptCount(filtered.length, prompts.length);
 
       if (window.innerWidth <= 768 && !query.trim()) {
-        searchResults.innerHTML = '';
+        // Show category filters on mobile when no search query
+        renderSidebarPrompts();
+        return;
       } else {
         searchResults.innerHTML = filtered.length === 0 
           ? `<div class="search-result-item add-prompt">
@@ -557,6 +589,48 @@ async function fetchGitHubStars() {
 document.addEventListener('DOMContentLoaded', () => {
   renderMainPrompts();
   renderSidebarPrompts();
+  
+  // Initialize sidebar visibility based on screen size
+  const sidebar = document.querySelector('.sidebar');
+  const toggleButton = document.querySelector('.categories-toggle');
+  
+  if (window.innerWidth <= 768) {
+    // Hide sidebar by default on mobile
+    if (sidebar) sidebar.classList.add('hidden');
+    if (toggleButton) toggleButton.classList.remove('active');
+  } else {
+    // Show sidebar by default on desktop
+    if (sidebar) sidebar.classList.remove('hidden');
+    if (toggleButton) toggleButton.classList.add('active');
+  }
+  
+  // Ensure category filters are visible on mobile when sidebar is shown
+  if (window.innerWidth <= 768) {
+    setTimeout(() => {
+      renderSidebarPrompts();
+    }, 100);
+  }
+  
+  // Handle window resize to manage sidebar visibility
+  window.addEventListener('resize', () => {
+    const sidebar = document.querySelector('.sidebar');
+    const toggleButton = document.querySelector('.categories-toggle');
+    
+    if (window.innerWidth <= 768) {
+      // Mobile: Hide sidebar by default
+      if (sidebar && !toggleButton.classList.contains('active')) {
+        sidebar.classList.add('hidden');
+      }
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput && !searchInput.value.trim()) {
+        renderSidebarPrompts();
+      }
+    } else {
+      // Desktop: Show sidebar by default
+      if (sidebar) sidebar.classList.remove('hidden');
+      if (toggleButton) toggleButton.classList.add('active');
+    }
+  });
   setupSearch();
   fetchGitHubStars();
   updateModeIcons();
@@ -629,6 +703,31 @@ function toggleDarkMode() {
   const isDark = document.body.classList.contains('dark-mode');
   localStorage.setItem('dark-mode', isDark);
   updateModeIcons();
+}
+
+// Categories toggle functionality
+function toggleCategories() {
+  const sidebar = document.querySelector('.sidebar');
+  const toggleButton = document.querySelector('.categories-toggle');
+  
+  if (sidebar && toggleButton) {
+    const isHidden = sidebar.classList.contains('hidden');
+    
+    if (isHidden) {
+      // Show sidebar
+      sidebar.classList.remove('hidden');
+      toggleButton.classList.add('active');
+      
+      // Ensure category filters are rendered
+      setTimeout(() => {
+        renderSidebarPrompts();
+      }, 100);
+    } else {
+      // Hide sidebar
+      sidebar.classList.add('hidden');
+      toggleButton.classList.remove('active');
+    }
+  }
 }
 
 // Initialize dark mode from localStorage
