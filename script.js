@@ -617,8 +617,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleButton = document.querySelector('.categories-toggle');
     
     if (window.innerWidth <= 768) {
-      // Mobile: Hide sidebar by default
-      if (sidebar && !toggleButton.classList.contains('active')) {
+      // Mobile: Only hide sidebar if toggle button is not active
+      if (sidebar && toggleButton && !toggleButton.classList.contains('active')) {
         sidebar.classList.add('hidden');
       }
       const searchInput = document.getElementById('searchInput');
@@ -634,6 +634,44 @@ document.addEventListener('DOMContentLoaded', () => {
   setupSearch();
   fetchGitHubStars();
   updateModeIcons();
+  
+  // Ensure categories dropdown works
+  const categoriesToggle = document.querySelector('.categories-toggle');
+  if (categoriesToggle) {
+    console.log('Categories toggle button found:', categoriesToggle);
+    
+    // Remove any existing onclick to avoid conflicts
+    categoriesToggle.removeAttribute('onclick');
+    
+    categoriesToggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('Categories dropdown clicked');
+      toggleCategoriesDropdown();
+    });
+    
+    // Add visual feedback
+    categoriesToggle.addEventListener('mousedown', () => {
+      categoriesToggle.style.transform = 'scale(0.95)';
+    });
+    
+    categoriesToggle.addEventListener('mouseup', () => {
+      categoriesToggle.style.transform = 'scale(1)';
+    });
+    
+  } else {
+    console.error('Categories toggle button not found!');
+  }
+  
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    const dropdown = document.getElementById('categoriesDropdown');
+    const toggleButton = document.querySelector('.categories-toggle');
+    
+    if (dropdown && toggleButton && !dropdown.contains(e.target) && !toggleButton.contains(e.target)) {
+      closeDropdown();
+    }
+  });
 
   // Hide header/footer on scroll with smooth animation
   let lastScrollTop = 0;
@@ -705,28 +743,107 @@ function toggleDarkMode() {
   updateModeIcons();
 }
 
-// Categories toggle functionality
-function toggleCategories() {
-  const sidebar = document.querySelector('.sidebar');
+// Categories dropdown functionality
+function toggleCategoriesDropdown() {
+  const dropdown = document.getElementById('categoriesDropdown');
   const toggleButton = document.querySelector('.categories-toggle');
   
-  if (sidebar && toggleButton) {
-    const isHidden = sidebar.classList.contains('hidden');
+  if (dropdown && toggleButton) {
+    const isOpen = dropdown.classList.contains('show');
     
-    if (isHidden) {
-      // Show sidebar
-      sidebar.classList.remove('hidden');
+    if (isOpen) {
+      // Close dropdown
+      dropdown.classList.remove('show');
+      toggleButton.classList.remove('active');
+    } else {
+      // Open dropdown
+      dropdown.classList.add('show');
       toggleButton.classList.add('active');
       
-      // Ensure category filters are rendered
-      setTimeout(() => {
-        renderSidebarPrompts();
-      }, 100);
-    } else {
-      // Hide sidebar
-      sidebar.classList.add('hidden');
-      toggleButton.classList.remove('active');
+      // Populate dropdown if not already done
+      if (!dropdown.dataset.populated) {
+        populateCategoriesDropdown();
+      }
     }
+  }
+}
+
+// Populate the categories dropdown
+async function populateCategoriesDropdown() {
+  const dropdown = document.getElementById('categoriesDropdown');
+  if (!dropdown) return;
+  
+  const prompts = await loadPrompts();
+  const grouped = prompts.reduce((acc, prompt) => {
+    if (!acc[prompt.categories]) acc[prompt.categories] = [];
+    acc[prompt.categories].push(prompt);
+    return acc;
+  }, {});
+  
+  // Update "All Categories" count
+  const allCount = document.getElementById('allCount');
+  if (allCount) {
+    allCount.textContent = prompts.length;
+  }
+  
+  // Add category items
+  const categoryItems = Object.entries(grouped)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([category, categoryPrompts]) => {
+      const icon = getCategoryIcon(category);
+      return `
+        <div class="dropdown-item" data-category="${category}">
+          <span class="category-icon">${icon}</span>
+          <span class="category-name">${category}</span>
+          <span class="category-count">${categoryPrompts.length}</span>
+        </div>
+      `;
+    }).join('');
+  
+  // Insert after the divider
+  const divider = dropdown.querySelector('.dropdown-divider');
+  if (divider) {
+    divider.insertAdjacentHTML('afterend', categoryItems);
+  }
+  
+  // Add click handlers
+  dropdown.querySelectorAll('.dropdown-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const category = item.dataset.category;
+      selectCategory(category);
+      closeDropdown();
+    });
+  });
+  
+  dropdown.dataset.populated = 'true';
+}
+
+// Select a category from dropdown
+function selectCategory(category) {
+  // Update active state
+  document.querySelectorAll('.dropdown-item').forEach(item => {
+    item.classList.remove('active');
+  });
+  
+  const selectedItem = document.querySelector(`[data-category="${category}"]`);
+  if (selectedItem) {
+    selectedItem.classList.add('active');
+  }
+  
+  // Filter prompts by category
+  filterByCategory(category);
+}
+
+// Close dropdown
+function closeDropdown() {
+  const dropdown = document.getElementById('categoriesDropdown');
+  const toggleButton = document.querySelector('.categories-toggle');
+  
+  if (dropdown) {
+    dropdown.classList.remove('show');
+  }
+  if (toggleButton) {
+    toggleButton.classList.remove('active');
   }
 }
 
@@ -735,6 +852,25 @@ const savedDarkMode = localStorage.getItem('dark-mode') === 'true';
 if (savedDarkMode) {
   document.body.classList.add('dark-mode');
 }
+
+// Test function for debugging
+window.testCategoriesDropdown = function() {
+  console.log('Testing categories dropdown...');
+  const dropdown = document.getElementById('categoriesDropdown');
+  const toggleButton = document.querySelector('.categories-toggle');
+  
+  console.log('Elements found:', { dropdown: !!dropdown, toggleButton: !!toggleButton });
+  console.log('Dropdown classes:', dropdown ? dropdown.className : 'not found');
+  console.log('Toggle button classes:', toggleButton ? toggleButton.className : 'not found');
+  console.log('Window width:', window.innerWidth);
+  
+  if (toggleButton) {
+    console.log('Button position:', toggleButton.getBoundingClientRect());
+    console.log('Button styles:', window.getComputedStyle(toggleButton));
+  }
+  
+  toggleCategoriesDropdown();
+};
 
 // Update sun/moon icons based on current mode
 function updateModeIcons() {

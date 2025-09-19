@@ -40,12 +40,26 @@
           
         </div>
         <div class="header-right">
-          <button class="categories-toggle" onclick="toggleCategories()" title="Toggle categories filter">
-            <svg class="categories-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M3 6h18M3 12h18M3 18h18"></path>
-            </svg>
-            <span class="categories-text">Categories</span>
-          </button>
+          <div class="categories-dropdown">
+            <button class="categories-toggle" onclick="toggleCategoriesDropdown()" title="Select category filter">
+              <svg class="categories-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 6h18M3 12h18M3 18h18"></path>
+              </svg>
+              <span class="categories-text">Categories</span>
+              <svg class="dropdown-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6,9 12,15 18,9"></polyline>
+              </svg>
+            </button>
+            <div class="categories-dropdown-menu" id="categoriesDropdown">
+              <div class="dropdown-item" data-category="all">
+                <span class="category-icon">📂</span>
+                <span class="category-name">All Categories</span>
+                <span class="category-count" id="allCount">0</span>
+              </div>
+              <div class="dropdown-divider"></div>
+              <!-- Category items will be populated by JavaScript -->
+            </div>
+          </div>
           <a href="https://cursor.com" target="_blank" class="cursor-logo" title="Built with Cursor AI">
             <svg height="1em" style="flex:none;line-height:1" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg">
               <path d="M11.925 24l10.425-6-10.425-6L1.5 18l10.425 6z" fill="#10b981" class="cursor-logo-path dark-mode-path"></path>
