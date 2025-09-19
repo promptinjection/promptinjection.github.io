@@ -15,7 +15,24 @@ function parseCSV(csv) {
       });
       return entry;
     })
-    .filter((entry) => entry.categories && entry.prompt_text && entry.url);
+    .filter((entry) => entry.categories && entry.prompt_text);
+}
+
+// Get category icon
+function getCategoryIcon(category) {
+  const icons = {
+    'Jailbreak': '🔓',
+    'Override': '⚡',
+    'Exfiltration': '📤',
+    'MaliciousContent': '⚠️',
+    'Obfuscation': '🔀',
+    'RoleHijack': '🎭',
+    'Multistep': '🔄',
+    'HiddenPayload': '📦',
+    'CrossPrompt': '🔗',
+    'Benign': '✅'
+  };
+  return icons[category] || '📝';
 }
 
 // Load prompts from CSV
@@ -49,24 +66,30 @@ async function renderMainPrompts() {
     let globalIndex = 0; // Global counter for unique IDs
 
     container.innerHTML = `<div class="prompts-grid">
-      <div class="prompt-card contribute-card">
-        <a href="https://github.com/promptinjection/promptinjection.github.io/issues" target="_blank" style="text-decoration: none; color: inherit; height: 100%; display: flex; flex-direction: column;">
-          <div class="prompt-title" style="display: flex; align-items: center; gap: 8px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <div class="prompt-card contribute-card" style="grid-column: 1 / -1; max-width: 600px; margin: 0 auto;">
+        <a href="https://github.com/promptinjection/promptinjection.github.io/issues" target="_blank" style="text-decoration: none; color: inherit; height: 100%; display: flex; flex-direction: column; text-align: center; justify-content: center;">
+          <div class="prompt-title" style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 16px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="10"></circle>
               <line x1="12" y1="8" x2="12" y2="16"></line>
               <line x1="8" y1="12" x2="16" y2="12"></line>
             </svg>
-            Report New Example
+            Report New Prompt Injection Example
           </div>
-          <p class="prompt-content" style="flex-grow: 1;">
-            Found a new prompt injection technique? Report it to help improve security awareness.
+          <p class="prompt-content" style="flex-grow: 1; margin-bottom: 20px; font-size: 1rem; line-height: 1.6;">
+            Found a new prompt injection technique? Help improve AI security by reporting it to our research database. Your contribution helps developers build safer AI systems.
           </p>
-          <span class="contributor-badge">Contribute</span>
+          <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <span class="contributor-badge">Submit Example</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 17L17 7"></path>
+              <path d="M7 7h10v10"></path>
+            </svg>
+          </div>
         </a>
       </div>
       ${Object.entries(grouped).map(([category, prompts]) => {
-        const categoryPromptsHtml = prompts.map(({ categories, prompt_text, url }, idx) => {
+        const categoryPromptsHtml = prompts.map(({ categories, prompt_text }, idx) => {
           globalIndex++;
           // Simplified titles to avoid overlap - just use numbers for multiple examples
           const displayTitle = prompts.length > 1 ? `Example ${idx + 1}` : `${category} Example`;
@@ -74,22 +97,33 @@ async function renderMainPrompts() {
           const ribbonText = category.toUpperCase();
           
           return `
-            <div class="prompt-card" data-category="${category}" data-global-id="${globalIndex}">
+            <div class="prompt-card" 
+                 data-category="${category}" 
+                 data-global-id="${globalIndex}"
+                 role="button"
+                 tabindex="0"
+                 aria-label="${displayTitle} - ${category} prompt injection example"
+                 aria-describedby="prompt-content-${globalIndex}">
               <div class="prompt-title">
                 ${displayTitle}
-                <div class="action-buttons">
-                  ${url ? `<a href="${url}" target="_blank" class="source-link" title="View source">🔗</a>` : ''}
-                </div>
+                <div class="action-buttons"></div>
               </div>
-              <p class="prompt-content">${prompt_text.replace(/\\n/g, '<br>')}</p>
+              <p class="prompt-content" id="prompt-content-${globalIndex}">${prompt_text.replace(/\\n/g, '<br>')}</p>
               <div class="card-footer">
-                <span class="category-badge ${category.toLowerCase()}">${category}</span>
+                <span class="category-badge ${category.toLowerCase()}" 
+                      aria-label="Category: ${category}">
+                  ${getCategoryIcon(category)}
+                  ${category}
+                </span>
                 <div style="display:flex; align-items:center; gap:8px;">
                   ${countIndicator}
-                  <button class="show-toggle" type="button">Show more</button>
+                  <button class="show-toggle" 
+                          type="button"
+                          aria-expanded="false"
+                          aria-controls="prompt-content-${globalIndex}">Show more</button>
                 </div>
               </div>
-              <div class="card-ribbon" data-ribbon="${ribbonText}">${ribbonText}</div>
+              <div class="card-ribbon" data-ribbon="${ribbonText}" aria-hidden="true">${ribbonText}</div>
             </div>`;
         }).join('');
         
@@ -108,13 +142,36 @@ async function renderMainPrompts() {
     // Add click handlers for modal
     const cards = container.querySelectorAll('.prompt-card:not(.contribute-card)');
     let cardIdx = 0;
+    
+    // Add loading animation to cards
+    cards.forEach((card, index) => {
+      card.classList.add('loading');
+      card.style.animationDelay = `${index * 0.1}s`;
+    });
+    
     Object.entries(grouped).forEach(([category, prompts]) => {
       prompts.forEach((prompt, idx) => {
         const card = cards[cardIdx++];
         const modalTitle = prompts.length > 1 ? `${category} - Example ${idx + 1}` : `${category} Example`;
+        // Click handler
         card.addEventListener('click', (e) => {
           if (!e.target.closest('.copy-button') && !e.target.closest('.source-link') && !e.target.closest('.show-toggle')) {
+            // Add click animation
+            card.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+              card.style.transform = '';
+            }, 150);
             showModal(modalTitle, prompt.prompt_text, false);
+          }
+        });
+        
+        // Keyboard navigation
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            if (!e.target.closest('.show-toggle')) {
+              showModal(modalTitle, prompt.prompt_text, false);
+            }
           }
         });
 
@@ -126,6 +183,7 @@ async function renderMainPrompts() {
             ev.stopPropagation();
             const isExpanded = card.classList.toggle('expanded');
             toggleBtn.textContent = isExpanded ? 'Show less' : 'Show more';
+            toggleBtn.setAttribute('aria-expanded', isExpanded);
           });
         }
       });
@@ -150,22 +208,31 @@ async function renderSidebarPrompts() {
 
     // Add "All Categories" option and individual categories
     searchResults.innerHTML = `
-      <li class="search-result-item category-filter active" onclick="filterByCategory('all')">
+      <li class="search-result-item category-filter active" data-category="all">
         <span class="category-name">All Categories</span>
         <span class="category-count-badge">${prompts.length}</span>
       </li>
       ${Object.entries(categoryStats).map(([category, count]) => `
-        <li class="search-result-item category-filter" onclick="filterByCategory('${category}')">
+        <li class="search-result-item category-filter" data-category="${category}">
           <span class="category-name">${category}</span>
           <span class="category-count-badge">${count}</span>
         </li>
       `).join('')}
     `;
+    
+    // Add event listeners to category filters
+    const categoryFilters = searchResults.querySelectorAll('.category-filter');
+    categoryFilters.forEach(filter => {
+      filter.addEventListener('click', (e) => {
+        const category = filter.getAttribute('data-category');
+        filterByCategory(category, filter);
+      });
+    });
   }
 }
 
 // Filter prompts by category
-async function filterByCategory(selectedCategory) {
+async function filterByCategory(selectedCategory, clickedElement = null) {
   const prompts = await loadPrompts();
   const container = document.querySelector('#promptContent');
   
@@ -173,7 +240,21 @@ async function filterByCategory(selectedCategory) {
   document.querySelectorAll('.category-filter').forEach(item => {
     item.classList.remove('active');
   });
-  event.target.closest('.category-filter').classList.add('active');
+  
+  // Find and activate the clicked category filter
+  if (clickedElement) {
+    clickedElement.classList.add('active');
+  } else {
+    // Find the category filter that matches the selected category
+    const categoryFilters = document.querySelectorAll('.category-filter');
+    categoryFilters.forEach(filter => {
+      const categoryName = filter.querySelector('.category-name');
+      if (categoryName && (categoryName.textContent === selectedCategory || 
+          (selectedCategory === 'all' && categoryName.textContent === 'All Categories'))) {
+        filter.classList.add('active');
+      }
+    });
+  }
   
   if (container) {
     let filteredPrompts;
@@ -196,56 +277,74 @@ async function filterByCategory(selectedCategory) {
 
     let globalIndex = 0;
 
-    container.innerHTML = `<div class="prompts-grid">
-      <div class="filter-header">
-        <h3>Showing: ${displayTitle}</h3>
-        <span class="filter-count">${filteredPrompts.length} example${filteredPrompts.length !== 1 ? 's' : ''}</span>
-      </div>
-      ${selectedCategory === 'all' ? `
-      <div class="prompt-card contribute-card">
-        <a href="https://github.com/promptinjection/promptinjection.github.io/issues" target="_blank" style="text-decoration: none; color: inherit; height: 100%; display: flex; flex-direction: column;">
-          <div class="prompt-title" style="display: flex; align-items: center; gap: 8px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="8" x2="12" y2="16"></line>
-              <line x1="8" y1="12" x2="16" y2="12"></line>
-            </svg>
-            Report New Example
-          </div>
-          <p class="prompt-content" style="flex-grow: 1;">
-            Found a new prompt injection technique? Report it to help improve security awareness.
-          </p>
-          <span class="contributor-badge">Contribute</span>
-        </a>
-      </div>` : ''}
-      ${Object.entries(grouped).map(([category, prompts]) => {
-        const categoryPromptsHtml = prompts.map(({ categories, prompt_text, url }, idx) => {
+     container.innerHTML = `<div class="prompts-grid">
+       ${selectedCategory !== 'all' ? `
+       <div class="filter-header">
+         <h3>Showing: ${displayTitle}</h3>
+         <span class="filter-count">${filteredPrompts.length} example${filteredPrompts.length !== 1 ? 's' : ''}</span>
+       </div>` : ''}
+       ${selectedCategory === 'all' ? `
+       <div class="prompt-card contribute-card" style="grid-column: 1 / -1; max-width: 600px; margin: 0 auto;">
+         <a href="https://github.com/promptinjection/promptinjection.github.io/issues" target="_blank" style="text-decoration: none; color: inherit; height: 100%; display: flex; flex-direction: column; text-align: center; justify-content: center;">
+           <div class="prompt-title" style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 16px;">
+             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+               <circle cx="12" cy="12" r="10"></circle>
+               <line x1="12" y1="8" x2="12" y2="16"></line>
+               <line x1="8" y1="12" x2="16" y2="12"></line>
+             </svg>
+             Report New Prompt Injection Example
+           </div>
+           <p class="prompt-content" style="flex-grow: 1; margin-bottom: 20px; font-size: 1rem; line-height: 1.6;">
+             Found a new prompt injection technique? Help improve AI security by reporting it to our research database. Your contribution helps developers build safer AI systems.
+           </p>
+           <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+             <span class="contributor-badge">Submit Example</span>
+             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+               <path d="M7 17L17 7"></path>
+               <path d="M7 7h10v10"></path>
+             </svg>
+           </div>
+         </a>
+       </div>` : ''}
+       ${Object.entries(grouped).map(([category, prompts]) => {
+        const categoryPromptsHtml = prompts.map(({ categories, prompt_text }, idx) => {
           globalIndex++;
           const displayTitle = prompts.length > 1 ? `Example ${idx + 1}` : `${category} Example`;
           const countIndicator = prompts.length > 1 ? `<span class="example-count">${idx + 1} of ${prompts.length}</span>` : '';
           const ribbonText = category.toUpperCase();
           
           return `
-            <div class="prompt-card" data-category="${category}" data-global-id="${globalIndex}">
+            <div class="prompt-card" 
+                 data-category="${category}" 
+                 data-global-id="${globalIndex}"
+                 role="button"
+                 tabindex="0"
+                 aria-label="${displayTitle} - ${category} prompt injection example"
+                 aria-describedby="prompt-content-${globalIndex}">
               <div class="prompt-title">
                 ${displayTitle}
-                <div class="action-buttons">
-                  ${url ? `<a href="${url}" target="_blank" class="source-link" title="View source">🔗</a>` : ''}
-                </div>
+                <div class="action-buttons"></div>
               </div>
-              <p class="prompt-content">${prompt_text.replace(/\\n/g, '<br>')}</p>
+              <p class="prompt-content" id="prompt-content-${globalIndex}">${prompt_text.replace(/\\n/g, '<br>')}</p>
               <div class="card-footer">
-                <span class="category-badge ${category.toLowerCase()}">${category}</span>
+                <span class="category-badge ${category.toLowerCase()}" 
+                      aria-label="Category: ${category}">
+                  ${getCategoryIcon(category)}
+                  ${category}
+                </span>
                 <div style="display:flex; align-items:center; gap:8px;">
                   ${countIndicator}
-                  <button class="show-toggle" type="button">Show more</button>
+                  <button class="show-toggle" 
+                          type="button"
+                          aria-expanded="false"
+                          aria-controls="prompt-content-${globalIndex}">Show more</button>
                 </div>
               </div>
-              <div class="card-ribbon" data-ribbon="${ribbonText}">${ribbonText}</div>
+              <div class="card-ribbon" data-ribbon="${ribbonText}" aria-hidden="true">${ribbonText}</div>
             </div>`;
         }).join('');
         
-        return selectedCategory === 'all' ? `
+        return `
           <div class="category-section">
             <div class="category-header">
               <h2 class="category-title">${category}</h2>
@@ -254,22 +353,42 @@ async function filterByCategory(selectedCategory) {
             <div class="category-cards">
               ${categoryPromptsHtml}
             </div>
-          </div>` : `
-          <div class="category-cards">
-            ${categoryPromptsHtml}
           </div>`;
       }).join('')}</div>`;
 
     // Add click handlers for modal
     const cards = container.querySelectorAll('.prompt-card:not(.contribute-card)');
     let cardIdx = 0;
+    
+    // Add loading animation to cards
+    cards.forEach((card, index) => {
+      card.classList.add('loading');
+      card.style.animationDelay = `${index * 0.1}s`;
+    });
+    
     Object.entries(grouped).forEach(([category, prompts]) => {
       prompts.forEach((prompt, idx) => {
         const card = cards[cardIdx++];
         const modalTitle = prompts.length > 1 ? `${category} - Example ${idx + 1}` : `${category} Example`;
+        // Click handler
         card.addEventListener('click', (e) => {
           if (!e.target.closest('.copy-button') && !e.target.closest('.source-link') && !e.target.closest('.show-toggle')) {
+            // Add click animation
+            card.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+              card.style.transform = '';
+            }, 150);
             showModal(modalTitle, prompt.prompt_text, false);
+          }
+        });
+        
+        // Keyboard navigation
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            if (!e.target.closest('.show-toggle')) {
+              showModal(modalTitle, prompt.prompt_text, false);
+            }
           }
         });
 
@@ -281,6 +400,7 @@ async function filterByCategory(selectedCategory) {
             ev.stopPropagation();
             const isExpanded = card.classList.toggle('expanded');
             toggleBtn.textContent = isExpanded ? 'Show less' : 'Show more';
+            toggleBtn.setAttribute('aria-expanded', isExpanded);
           });
         }
       });
@@ -396,10 +516,19 @@ function setupSearch() {
               </a>
             </div>`
           : filtered.map(({ categories, prompt_text }) => `
-              <li class="search-result-item" onclick="filterByCategory('${categories}')">
+              <li class="search-result-item" data-category="${categories}">
                 ${categories} Example
               </li>
             `).join('');
+        
+        // Add event listeners to search result items
+        const searchResultItems = searchResults.querySelectorAll('.search-result-item[data-category]');
+        searchResultItems.forEach(item => {
+          item.addEventListener('click', (e) => {
+            const category = item.getAttribute('data-category');
+            filterByCategory(category, item);
+          });
+        });
       }
     });
   }
