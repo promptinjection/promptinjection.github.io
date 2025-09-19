@@ -1,0 +1,70 @@
+---
+layout: default
+---
+
+<div class="blog-container">
+  <div class="blog-header">
+    <h1 class="blog-title">{{ page.title }}</h1>
+    {% if page.date %}
+    <div class="blog-meta">
+      <span class="blog-date">
+        <svg class="meta-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        {{ page.date | date: "%B %d, %Y" }}
+      </span>
+      {% if page.author %}
+      <span class="blog-author">
+        <svg class="meta-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        {{ page.author }}
+      </span>
+      {% endif %}
+      {% if page.tags %}
+      <div class="blog-tags">
+        {% for tag in page.tags %}
+        <span class="blog-tag">{{ tag }}</span>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+  
+  <div class="blog-content">
+    {{ content }}
+  </div>
+  
+  <div class="blog-footer">
+    <div class="blog-navigation">
+      {% if page.previous.url %}
+      <a href="{{ page.previous.url }}" class="blog-nav-link prev">
+        <svg class="nav-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15,18 9,12 15,6"></polyline>
+        </svg>
+        <div class="nav-content">
+          <span class="nav-label">Previous</span>
+          <span class="nav-title">{{ page.previous.title }}</span>
+        </div>
+      </a>
+      {% endif %}
+      
+      {% if page.next.url %}
+      <a href="{{ page.next.url }}" class="blog-nav-link next">
+        <div class="nav-content">
+          <span class="nav-label">Next</span>
+          <span class="nav-title">{{ page.next.title }}</span>
+        </div>
+        <svg class="nav-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9,18 15,12 9,6"></polyline>
+        </svg>
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</div>

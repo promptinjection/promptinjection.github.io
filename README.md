@@ -1,5 +1,7 @@
+![](/myimg-removebg-preview.png)
+
 <div align="center">
-  <h1>🚨 Prompt Injection Database</h1>
+  <h1>🚨 Prompt Injection Dataset</h1>
   <p><strong>The Ultimate Collection of Prompt Injection Attacks</strong></p>
   
   <p>

@@ -27,19 +27,35 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/blog-styles.css">
   </head>
   <body class="vibe">
     <div class="layout-wrapper">
       
       <header class="site-header">
         <div class="header-left">
-          <h1 class="site-title">Prompt Injection</h1>
+          <div class="logo-container">
+            <img src="/myimg-bg.png" alt="Prompt Injection Logo" class="site-logo">
+            <h1 class="site-title">Prompt Injection</h1>
+          </div>
           <p class="site-slogan">security research database for prompt injection techniques
             
           </p>
           
         </div>
         <div class="header-right">
+          <nav class="main-nav">
+            <a href="/blog" class="nav-link">
+              <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14,2 14,8 20,8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10,9 9,9 8,9"></polyline>
+              </svg>
+              <span class="nav-text">Blog</span>
+            </a>
+          </nav>
           <div class="categories-dropdown">
             <button class="categories-toggle" onclick="toggleCategoriesDropdown()" title="Select category filter">
               <svg class="categories-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

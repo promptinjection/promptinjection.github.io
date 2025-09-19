@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en-US" }}">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{{ page.title | default: site.title }} — Security Research Blog</title>
+    {% seo %}
+
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/blog-styles.css">
+  </head>
+  <body class="{{ page.body_class | default: '' }}">
+    <div class="layout-wrapper">
+      
+      <header class="site-header">
+        <div class="header-left">
+          <div class="logo-container">
+            <img src="/myimg-bg.png" alt="Prompt Injection Logo" class="site-logo">
+            <h1 class="site-title">{{ page.title | default: site.title }}</h1>
+          </div>
+          <p class="site-slogan">{{ page.subtitle | default: site.subtitle }}</p>
+        </div>
+        <div class="header-right">
+          <nav class="main-nav">
+            <a href="/blog" class="nav-link">
+              <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14,2 14,8 20,8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10,9 9,9 8,9"></polyline>
+              </svg>
+              <span class="nav-text">Blog</span>
+            </a>
+          </nav>
+          <a href="/" class="nav-link">
+            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9,22 9,12 15,12 15,22"></polyline>
+            </svg>
+            <span class="nav-text">Home</span>
+          </a>
+          <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">
+            <svg class="mode-icon sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            <svg class="mode-icon moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="content-wrapper">
+        <div class="main-content">
+          <div class="container-lg markdown-body">
+            <div id="blogContent">
+              {{ content }}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer class="site-footer">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>About</h3>
+            <p>A curated gallery of prompt injection patterns for security research and AI safety education. Created by <a href="https://github.com/sangam14" target="_blank">@sangam14</a>. This collection includes examples of jailbreaks, overrides, exfiltration attempts, and other injection techniques to help researchers understand and defend against prompt injection attacks.</p>
+          </div>
+          <div class="footer-section">
+            <h3>Blog</h3>
+            <p>Our security research blog provides in-depth analysis, latest discoveries, and practical insights into prompt injection vulnerabilities and defense strategies.</p>
+          </div>
+          <div class="footer-section">
+            <h3>Resources</h3>
+            <div class="book-links">
+              <a href="https://github.com/promptinjection/promptinjection.github.io" target="_blank" class="book-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                GitHub Repository
+              </a>
+              <a href="https://arxiv.org/abs/2302.12173" target="_blank" class="book-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                  <line x1="7" y1="15" x2="7" y2="19"></line>
+                  <line x1="11" y1="15" x2="11" y2="19"></line>
+                  <line x1="15" y1="15" x2="15" y2="19"></line>
+                </svg>
+                Prompt Injection Research
+              </a>
+            </div>
+          </div>
+          <div class="footer-section">
+            <h3>Categories</h3>
+            <div class="book-links">
+              <span class="category-tag">Jailbreak</span>
+              <span class="category-tag">Override</span>
+              <span class="category-tag">Exfiltration</span>
+              <span class="category-tag">MaliciousContent</span>
+              <span class="category-tag">Obfuscation</span>
+              <span class="category-tag">RoleHijack</span>
+              <span class="category-tag">Multistep</span>
+              <span class="category-tag">HiddenPayload</span>
+              <span class="category-tag">CrossPrompt</span>
+              <span class="category-tag">Benign</span>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script>
+      // Dark mode functionality
+      function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDark);
+        
+        // Update icons
+        const sunIcon = document.querySelector('.sun-icon');
+        const moonIcon = document.querySelector('.moon-icon');
+        
+        if (isDark) {
+          sunIcon.style.display = 'none';
+          moonIcon.style.display = 'block';
+        } else {
+          sunIcon.style.display = 'block';
+          moonIcon.style.display = 'none';
+        }
+      }
+      
+      // Initialize dark mode on page load
+      document.addEventListener('DOMContentLoaded', function() {
+        const savedDarkMode = localStorage.getItem('darkMode');
+        const isDark = savedDarkMode === 'true';
+        
+        if (isDark) {
+          document.body.classList.add('dark-mode');
+          document.querySelector('.sun-icon').style.display = 'none';
+          document.querySelector('.moon-icon').style.display = 'block';
+        }
+      });
+    </script>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MSNHFWTE77"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-MSNHFWTE77');
+    </script>
+  </body>
+</html>
