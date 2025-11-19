@@ -222,7 +222,6 @@ The more people who understand AI security, the safer our AI future becomes.
     <a href="https://github.com/promptinjection/promptinjection.github.io/stargazers" target="_blank">⭐ Give us a Star</a>
   </p>
 </div>
-
 ---
 
 **🔥 Ready to explore the dark side of AI? [Click here to start!](https://promptinjection.github.io)**
