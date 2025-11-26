@@ -24,8 +24,8 @@ jobs:
           gem update --system
           bundle update --bundler
 
-      - name: Unfreeze Gemfile.lock
-        run: bundle config set frozen false    
+      - name: Disable Bundler frozen mode
+        run: bundle config set frozen false   
 
       - name: Install dependencies
         run: |
