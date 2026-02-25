@@ -111,7 +111,7 @@ gem install bundler jekyll
 bundle install
 
 # Run locally
-bundle exec jekyll serve
+eval "$(rbenv init -)" && bundle exec jekyll serve
 
 # Open http://127.0.0.1:4000
 
