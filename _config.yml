@@ -7,6 +7,9 @@ subtitle: security research database for prompt injection techniques
 url: "https://promptinjection.github.io"
 baseurl: ""
 
+# GitHub repository (required for jekyll-github-metadata plugin)
+repository: promptinjection/promptinjection.github.io
+
 # Build settings
 markdown: kramdown
 theme: null
