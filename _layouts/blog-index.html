@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
   <title>{{ page.title | default: site.title }} — Security Research Blog</title>
   {% seo %}
@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="/blog-styles.css">
 </head>
 
-<body class="{{ page.body_class | default: '' }}">
+<body class="blog-layout {{ page.body_class | default: '' }}">
   <div class="layout-wrapper">
 
     <header class="site-header">
@@ -72,8 +72,8 @@
       </div>
     </header>
 
-    <div class="content-wrapper" style="flex-direction: column;">
-      <div class="main-content" style="height: auto; overflow: visible;">
+    <div class="content-wrapper">
+      <div class="main-content">
         <div class="container-lg markdown-body">
           <div id="blogContent">
             {{ content }}

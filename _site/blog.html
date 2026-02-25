@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
   <title>Blog — Security Research Blog</title>
   <!-- Begin Jekyll SEO tag v2.8.0 -->
@@ -14,14 +14,14 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Contributed by Community" />
 <meta property="og:description" content="Contributed by Community" />
-<link rel="canonical" href="https://promptinjection.github.io/blog.html" />
-<meta property="og:url" content="https://promptinjection.github.io/blog.html" />
+<link rel="canonical" href="http://localhost:4000/blog.html" />
+<meta property="og:url" content="http://localhost:4000/blog.html" />
 <meta property="og:site_name" content="Prompt Injection" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Blog" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","description":"Contributed by Community","headline":"Blog","url":"https://promptinjection.github.io/blog.html"}</script>
+{"@context":"https://schema.org","@type":"WebPage","description":"Contributed by Community","headline":"Blog","url":"http://localhost:4000/blog.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -33,7 +33,7 @@
   <link rel="stylesheet" href="/blog-styles.css">
 </head>
 
-<body class="">
+<body class="blog-layout ">
   <div class="layout-wrapper">
 
     <header class="site-header">
@@ -88,19 +88,68 @@
       </div>
     </header>
 
-    <div class="content-wrapper" style="flex-direction: column;">
-      <div class="main-content" style="height: auto; overflow: visible;">
+    <div class="content-wrapper">
+      <div class="main-content">
         <div class="container-lg markdown-body">
           <div id="blogContent">
             <div class="blog-index">
   <div class="blog-hero">
+    <div class="blog-hero-badge">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+      Security Research
+    </div>
     <h1 class="blog-hero-title">Security Research Blog</h1>
-    <p class="blog-hero-subtitle">Insights, analysis, and discoveries in prompt injection security research</p>
+    <p class="blog-hero-subtitle">In-depth analysis, latest discoveries, and practical insights into prompt injection vulnerabilities and AI safety</p>
+    <div class="blog-hero-stats">
+      <span class="hero-stat">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14,2 14,8 20,8"></polyline></svg>
+        3 Articles
+      </span>
+      <span class="hero-stat">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        12 Topics
+      </span>
+    </div>
   </div>
+
+  
+  
+
+  
+  <div class="blog-tag-filter">
+    <button class="blog-filter-tag active" data-tag="all">All Posts</button>
+    
+    <button class="blog-filter-tag" data-tag="defense">defense</button>
+    
+    <button class="blog-filter-tag" data-tag="security">security</button>
+    
+    <button class="blog-filter-tag" data-tag="owasp">owasp</button>
+    
+    <button class="blog-filter-tag" data-tag="implementation">implementation</button>
+    
+    <button class="blog-filter-tag" data-tag="best-practices">best-practices</button>
+    
+    <button class="blog-filter-tag" data-tag="advanced">advanced</button>
+    
+    <button class="blog-filter-tag" data-tag="techniques">techniques</button>
+    
+    <button class="blog-filter-tag" data-tag="multimodal">multimodal</button>
+    
+    <button class="blog-filter-tag" data-tag="research">research</button>
+    
+    <button class="blog-filter-tag" data-tag="prompt-injection">prompt-injection</button>
+    
+    <button class="blog-filter-tag" data-tag="llm01">llm01</button>
+    
+    <button class="blog-filter-tag" data-tag="ai-safety">ai-safety</button>
+    
+  </div>
+  
 
   <div class="blog-posts-grid">
     
-    <article class="blog-post-card">
+    <article class="blog-post-card" data-tags="defense,security,owasp,implementation,best-practices">
+      <div class="post-card-number">01</div>
       <div class="post-header">
         <h2 class="post-title">
           <a href="/2024/01/25/defensive-measures.html">Building Robust Defenses Against Prompt Injection: OWASP Guidelines</a>
@@ -124,6 +173,13 @@
             Security Research Team
           </span>
           
+          <span class="post-reading-time">
+            <svg class="meta-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12,6 12,12 16,14"></polyline>
+            </svg>
+            9 min read
+          </span>
         </div>
       </div>
       
@@ -151,15 +207,17 @@
       
       <div class="post-footer">
         <a href="/2024/01/25/defensive-measures.html" class="read-more">
-          Read More
+          Read Article
           <svg class="read-more-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9,18 15,12 9,6"></polyline>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12,5 19,12 12,19"></polyline>
           </svg>
         </a>
       </div>
     </article>
     
-    <article class="blog-post-card">
+    <article class="blog-post-card" data-tags="advanced,techniques,owasp,multimodal,research">
+      <div class="post-card-number">02</div>
       <div class="post-header">
         <h2 class="post-title">
           <a href="/2024/01/20/advanced-injection-techniques.html">Advanced Prompt Injection Techniques: Beyond Basic Attacks</a>
@@ -183,6 +241,13 @@
             Security Research Team
           </span>
           
+          <span class="post-reading-time">
+            <svg class="meta-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12,6 12,12 16,14"></polyline>
+            </svg>
+            4 min read
+          </span>
         </div>
       </div>
       
@@ -210,15 +275,17 @@
       
       <div class="post-footer">
         <a href="/2024/01/20/advanced-injection-techniques.html" class="read-more">
-          Read More
+          Read Article
           <svg class="read-more-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9,18 15,12 9,6"></polyline>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12,5 19,12 12,19"></polyline>
           </svg>
         </a>
       </div>
     </article>
     
-    <article class="blog-post-card">
+    <article class="blog-post-card" data-tags="security,prompt-injection,owasp,llm01,ai-safety">
+      <div class="post-card-number">03</div>
       <div class="post-header">
         <h2 class="post-title">
           <a href="/2024/01/15/understanding-prompt-injection.html">Understanding Prompt Injection Vulnerabilities: OWASP LLM01:2025</a>
@@ -242,6 +309,13 @@
             Security Research Team
           </span>
           
+          <span class="post-reading-time">
+            <svg class="meta-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12,6 12,12 16,14"></polyline>
+            </svg>
+            5 min read
+          </span>
         </div>
       </div>
       
@@ -269,9 +343,10 @@
       
       <div class="post-footer">
         <a href="/2024/01/15/understanding-prompt-injection.html" class="read-more">
-          Read More
+          Read Article
           <svg class="read-more-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9,18 15,12 9,6"></polyline>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12,5 19,12 12,19"></polyline>
           </svg>
         </a>
       </div>
@@ -281,6 +356,33 @@
 
   
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const filterTags = document.querySelectorAll('.blog-filter-tag');
+  const postCards = document.querySelectorAll('.blog-post-card');
+  
+  filterTags.forEach(function(tag) {
+    tag.addEventListener('click', function() {
+      const selectedTag = this.getAttribute('data-tag');
+      
+      filterTags.forEach(function(t) { t.classList.remove('active'); });
+      this.classList.add('active');
+      
+      postCards.forEach(function(card) {
+        const cardTags = card.getAttribute('data-tags') || '';
+        if (selectedTag === 'all' || cardTags.split(',').indexOf(selectedTag) !== -1) {
+          card.style.display = '';
+          card.style.animation = 'blogCardFadeIn 0.3s ease forwards';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+});
+</script>
+
 
           </div>
         </div>
