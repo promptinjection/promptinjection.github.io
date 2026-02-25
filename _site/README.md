@@ -96,7 +96,17 @@
 git clone https://github.com/promptinjection/promptinjection.github.io.git
 cd promptinjection.github.io
 
-# Install dependencies
+# Recommended: use Ruby >= 3.2 (rbenv or asdf)
+# macOS (homebrew + rbenv):
+# 1) Install rbenv and ruby-build
+#    brew install rbenv ruby-build
+# 2) Install Ruby and set local version
+#    rbenv install 3.2.2
+#    rbenv local 3.2.2
+# 3) Make sure shims are available
+#    eval "$(rbenv init -)"
+
+# Install dependencies and build the site
 gem install bundler jekyll
 bundle install
 
@@ -104,6 +114,9 @@ bundle install
 bundle exec jekyll serve
 
 # Open http://127.0.0.1:4000
+
+# Alternative: use Docker to build with a modern Ruby image
+# docker build -t jekyll-site . && docker run --rm -p 4000:4000 -v "$PWD":/srv/jekyll jekyll-site
 ```
 
 ---
