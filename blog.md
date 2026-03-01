@@ -2,6 +2,7 @@
 title: Blog
 subtitle: Security research insights and prompt injection analysis
 layout: blog-index
+permalink: /blog/
 ---
 
 <div class="blog-index">

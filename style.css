@@ -4757,3 +4757,186 @@ input:checked+.slider:before {
 .create-yaml-button:hover {
     background-color: #0e9f71;
 }
+
+/* ===== Blog Promo Section on Main Page ===== */
+.blog-promo-section {
+    max-width: 1200px;
+    margin: 40px auto 0;
+    padding: 40px 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.dark-mode .blog-promo-section {
+    border-top-color: var(--border-color-dark);
+}
+
+.blog-promo-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.blog-promo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    margin-bottom: 14px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.dark-mode .blog-promo-badge {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+.blog-promo-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin: 0 0 8px 0;
+    background: linear-gradient(135deg, var(--accent-color) 0%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.blog-promo-subtitle {
+    font-size: 0.95rem;
+    opacity: 0.7;
+    margin: 0;
+}
+
+.blog-promo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.blog-promo-card {
+    position: relative;
+    display: block;
+    padding: 24px;
+    background: rgba(16, 185, 129, 0.04);
+    border: 1px solid rgba(16, 185, 129, 0.12);
+    border-radius: 14px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.25s ease;
+    overflow: hidden;
+}
+
+.blog-promo-card:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.12);
+}
+
+.dark-mode .blog-promo-card {
+    background: rgba(16, 185, 129, 0.06);
+    border-color: rgba(16, 185, 129, 0.15);
+}
+
+.dark-mode .blog-promo-card:hover {
+    border-color: var(--accent-color);
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.15);
+}
+
+.blog-promo-card-number {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 2.5rem;
+    font-weight: 900;
+    opacity: 0.06;
+    line-height: 1;
+    pointer-events: none;
+}
+
+.blog-promo-card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    line-height: 1.4;
+    color: var(--text-color-light);
+}
+
+.dark-mode .blog-promo-card-title {
+    color: var(--text-color-dark);
+}
+
+.blog-promo-card-excerpt {
+    font-size: 0.85rem;
+    opacity: 0.65;
+    margin: 0 0 14px 0;
+    line-height: 1.5;
+}
+
+.blog-promo-card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+}
+
+.blog-promo-date {
+    opacity: 0.5;
+}
+
+.blog-promo-read {
+    color: var(--accent-color);
+    font-weight: 600;
+    transition: transform 0.2s ease;
+    display: inline-block;
+}
+
+.blog-promo-card:hover .blog-promo-read {
+    transform: translateX(3px);
+}
+
+.blog-promo-cta {
+    text-align: center;
+}
+
+.blog-promo-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    background: linear-gradient(135deg, var(--accent-color), #059669);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+
+.blog-promo-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    color: white;
+}
+
+@media (max-width: 640px) {
+    .blog-promo-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .blog-promo-section {
+        padding: 24px 16px;
+    }
+
+    .blog-promo-title {
+        font-size: 1.4rem;
+    }
+}

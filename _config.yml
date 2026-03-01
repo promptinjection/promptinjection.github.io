@@ -13,5 +13,19 @@ repository: promptinjection/promptinjection.github.io
 # Build settings
 markdown: kramdown
 theme: null
+future: true
+show_excerpts: true
+
 plugins:
   - jekyll-seo-tag
+
+# Permalink structure for blog posts
+permalink: /:year/:month/:day/:title:output_ext
+
+# Default front matter
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
