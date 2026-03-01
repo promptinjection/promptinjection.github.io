@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang=" en-US">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <title>OpenFang vs OpenClaw: Which Agent Framework Is More Secure Against Prompt Injection? — Security Research Blog</title>
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>OpenFang vs OpenClaw: Which Agent Framework Is More Secure Against Prompt Injection? | Prompt Injection</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="OpenFang vs OpenClaw: Which Agent Framework Is More Secure Against Prompt Injection?" />
+<meta name="author" content="Security Research Team" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A deep-dive comparison of OpenFang and OpenClaw — two open-source AI agent platforms — examining their architectures, security models, and resilience against prompt injection attacks." />
+<meta property="og:description" content="A deep-dive comparison of OpenFang and OpenClaw — two open-source AI agent platforms — examining their architectures, security models, and resilience against prompt injection attacks." />
+<link rel="canonical" href="http://localhost:4000/2026/03/02/openfang-vs-openclaw-security-comparison.html" />
+<meta property="og:url" content="http://localhost:4000/2026/03/02/openfang-vs-openclaw-security-comparison.html" />
+<meta property="og:site_name" content="Prompt Injection" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-02T00:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="OpenFang vs OpenClaw: Which Agent Framework Is More Secure Against Prompt Injection?" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Security Research Team"},"dateModified":"2026-03-02T00:00:00+05:30","datePublished":"2026-03-02T00:00:00+05:30","description":"A deep-dive comparison of OpenFang and OpenClaw — two open-source AI agent platforms — examining their architectures, security models, and resilience against prompt injection attacks.","headline":"OpenFang vs OpenClaw: Which Agent Framework Is More Secure Against Prompt Injection?","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2026/03/02/openfang-vs-openclaw-security-comparison.html"},"url":"http://localhost:4000/2026/03/02/openfang-vs-openclaw-security-comparison.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/blog-styles.css">
+  <style>
+    /* Reading progress bar */
+    .reading-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-color), #3b82f6, #8b5cf6);
+      z-index: 9999;
+      transition: width 0.1s linear;
+    }
+  </style>
+</head>
+
+<body class="blog-layout ">
+  <div class="reading-progress" id="readingProgress"></div>
+  <div class="layout-wrapper">
+
+    <header class="site-header">
+      <div class="header-left">
+        <div class="logo-container">
+          <img src="/myimg-bg.png" alt="Prompt Injection Logo" class="site-logo">
+          <h1 class="site-title">OpenFang vs OpenClaw: Which Agent Framework Is More Secure Against Prompt Injection?</h1>
+        </div>
+        <p class="site-slogan">security research database for prompt injection techniques</p>
+      </div>
+      <div class="header-right">
+        <nav class="main-nav">
+          <a href="/blog" class="nav-link">
+            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14,2 14,8 20,8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10,9 9,9 8,9"></polyline>
+            </svg>
+            <span class="nav-text">Blog</span>
+          </a>
+        </nav>
+        <a href="/" class="nav-link">
+          <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9,22 9,12 15,12 15,22"></polyline>
+          </svg>
+          <span class="nav-text">Home</span>
+        </a>
+        <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">
+          <svg class="mode-icon sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="mode-icon moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            style="display: none;">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="content-wrapper">
+      <div class="main-content">
+        <div class="container-lg markdown-body">
+          <div id="blogContent">
+            <div class="blog-container">
+              <!-- Breadcrumb Navigation -->
+              <nav class="blog-breadcrumb">
+                <a href="/" class="breadcrumb-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9,22 9,12 15,12 15,22"></polyline>
+                  </svg>
+                  Home
+                </a>
+                <span class="breadcrumb-sep">/</span>
+                <a href="/blog" class="breadcrumb-link">Blog</a>
+                <span class="breadcrumb-sep">/</span>
+                <span class="breadcrumb-current">OpenFang vs OpenClaw: Which Agent Framework...</span>
+              </nav>
+
+              <div class="blog-header">
+                
+                <div class="blog-tags" style="margin-bottom: 16px;">
+                  
+                  <span class="blog-tag">openfang</span>
+                  
+                  <span class="blog-tag">openclaw</span>
+                  
+                  <span class="blog-tag">prompt-injection</span>
+                  
+                  <span class="blog-tag">ai-security</span>
+                  
+                  <span class="blog-tag">agent-frameworks</span>
+                  
+                  <span class="blog-tag">rust</span>
+                  
+                  <span class="blog-tag">llm-attacks</span>
+                  
+                </div>
+                
+                <h1 class="blog-title">OpenFang vs OpenClaw: Which Agent Framework Is More Secure Against Prompt Injection?</h1>
+                
+                <div class="blog-meta">
+                  <span class="blog-date">
+                    <svg class="meta-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    March 02, 2026
+                  </span>
+                  
+                  <span class="blog-author">
+                    <svg class="meta-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    Security Research Team
+                  </span>
+                  
+                  <span class="blog-reading-time" id="readingTime">
+                    <svg class="meta-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12,6 12,12 16,14"></polyline>
+                    </svg>
+                    <span id="readingTimeText"></span>
+                  </span>
+                </div>
+                
+              </div>
+
+              <div class="blog-content" id="blogArticleContent">
+                <h1 id="openfang-vs-openclaw-which-agent-framework-is-more-secure-against-prompt-injection">OpenFang vs OpenClaw: Which Agent Framework Is More Secure Against Prompt Injection?</h1>
+
+<p>In our <a href="/2026/02/26/openclaw-prompt-injection-risks.html">previous post</a>, we examined how prompt injection attacks can target OpenClaw deployments. Since then, a new contender has entered the arena: <strong><a href="https://github.com/RightNow-AI/openfang">OpenFang</a></strong>, an open-source Agent Operating System built from the ground up in Rust by <a href="https://www.rightnowai.co/">RightNow AI</a>. With 7,300+ GitHub stars in just days and a fundamentally different approach to agent security, it demands a serious look.</p>
+
+<p>This post compares the two platforms head-to-head — not just on features, but specifically on <strong>how well they defend against prompt injection and related LLM attacks</strong>.</p>
+
+<h2 id="what-is-openfang">What Is OpenFang?</h2>
+
+<p>OpenFang is not a chatbot framework or a Python wrapper around an LLM. It is a full <strong>Agent Operating System</strong> — 137,728 lines of Rust across 14 crates, compiling to a single ~32 MB binary. Where OpenClaw provides a flexible LLM-powered platform with plugin support, OpenFang provides autonomous <strong>Hands</strong> — pre-built agent capability packages that run independently on schedules, 24/7, without human prompting.</p>
+
+<p>Key highlights:</p>
+<ul>
+  <li><strong>Language</strong>: Rust (87.9%) — memory-safe by default</li>
+  <li><strong>Test suite</strong>: 1,767+ tests, zero clippy warnings</li>
+  <li><strong>Architecture</strong>: 14 modular crates (kernel, runtime, API, channels, memory, security types, etc.)</li>
+  <li><strong>Agents</strong>: 7 bundled autonomous Hands (Clip, Lead, Collector, Predictor, Researcher, Twitter, Browser)</li>
+  <li><strong>Integrations</strong>: 40 channel adapters, 27 LLM providers, 53 built-in tools, MCP + A2A support</li>
+  <li><strong>Install</strong>: Single binary, one-command setup</li>
+</ul>
+
+<h2 id="the-security-comparison-16-layers-vs-3">The Security Comparison: 16 Layers vs 3</h2>
+
+<p>This is where the gap is stark. OpenFang ships with <strong>16 discrete, independently testable security systems</strong>. OpenClaw has approximately <strong>3 basic security measures</strong> according to publicly available benchmarks.</p>
+
+<h3 id="openfangs-16-security-systems">OpenFang’s 16 Security Systems</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>System</th>
+      <th>What It Does</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td><strong>WASM Dual-Metered Sandbox</strong></td>
+      <td>Tool code runs in WebAssembly with fuel metering + epoch interruption. A watchdog thread kills runaway code.</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><strong>Merkle Hash-Chain Audit Trail</strong></td>
+      <td>Every action is cryptographically linked to the previous one. Tamper with one entry and the entire chain breaks.</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><strong>Information Flow Taint Tracking</strong></td>
+      <td>Labels propagate through execution — secrets are tracked from source to sink. Prevents accidental data leakage.</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><strong>Ed25519 Signed Agent Manifests</strong></td>
+      <td>Every agent identity and capability set is cryptographically signed. No unsigned agent can run.</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><strong>SSRF Protection</strong></td>
+      <td>Blocks private IPs, cloud metadata endpoints, and DNS rebinding attacks.</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><strong>Secret Zeroization</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">Zeroizing&lt;String&gt;</code> auto-wipes API keys from memory the instant they’re no longer needed.</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><strong>OFP Mutual Authentication</strong></td>
+      <td>HMAC-SHA256 nonce-based, constant-time verification for P2P networking.</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td><strong>Capability Gates (RBAC)</strong></td>
+      <td>Role-based access control — agents declare required tools, the kernel enforces it. An agent cannot use a tool it wasn’t granted.</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td><strong>Security Headers</strong></td>
+      <td>CSP, X-Frame-Options, HSTS, X-Content-Type-Options on every HTTP response.</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td><strong>Health Endpoint Redaction</strong></td>
+      <td>Public health check returns minimal info. Full diagnostics require authentication.</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td><strong>Subprocess Sandbox</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">env_clear()</code> + selective variable passthrough. Process tree isolation with cross-platform kill.</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td><strong>Prompt Injection Scanner</strong></td>
+      <td>Detects override attempts, data exfiltration patterns, and shell reference injection in skills.</td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td><strong>Loop Guard</strong></td>
+      <td>SHA256-based tool call loop detection with circuit breaker. Handles ping-pong patterns between agents.</td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td><strong>Session Repair</strong></td>
+      <td>7-phase message history validation and automatic recovery from corruption — prevents context poisoning.</td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td><strong>Path Traversal Prevention</strong></td>
+      <td>Canonicalization with symlink escape prevention. <code class="language-plaintext highlighter-rouge">../</code> doesn’t work.</td>
+    </tr>
+    <tr>
+      <td>16</td>
+      <td><strong>GCRA Rate Limiter</strong></td>
+      <td>Cost-aware token bucket rate limiting with per-IP tracking.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="openclaws-security-model">OpenClaw’s Security Model</h3>
+
+<p>OpenClaw relies on:</p>
+<ol>
+  <li><strong>Input sanitization</strong> (regex-based pattern matching against known injection phrases)</li>
+  <li><strong>System prompt hardening</strong> (explicit instructions to reject overrides)</li>
+  <li><strong>Basic logging and monitoring</strong></li>
+</ol>
+
+<p>These are standard best-practice mitigations, but they operate primarily at the <strong>application layer</strong> and depend heavily on the LLM’s own compliance with instructions — which, as we demonstrated in our previous post, is unreliable.</p>
+
+<h2 id="how-each-platform-handles-the-7-openclaw-attack-vectors">How Each Platform Handles the 7 OpenClaw Attack Vectors</h2>
+
+<p>Let’s revisit the 7 attack vectors we identified against OpenClaw and see how OpenFang addresses each one:</p>
+
+<h3 id="1-direct-prompt-injection-via-chat-input">1. Direct Prompt Injection via Chat Input</h3>
+
+<p><strong>OpenClaw</strong>: Relies on regex-based input sanitization and system prompt instructions to reject overrides. Easily bypassed with encoding tricks or novel phrasing.</p>
+
+<p><strong>OpenFang</strong>: Ships a dedicated <strong>Prompt Injection Scanner</strong> (security layer #12) that goes beyond string matching — it detects override attempts, data exfiltration patterns, and shell reference injection. Combined with <strong>Capability Gates</strong> (#8), even if an injection succeeds at the LLM level, the agent literally cannot call tools it wasn’t granted access to.</p>
+
+<p><strong>Winner</strong>: OpenFang — multi-layered defense vs. single-layer regex.</p>
+
+<h3 id="2-indirect-injection-through-ingested-documents">2. Indirect Injection Through Ingested Documents</h3>
+
+<p><strong>OpenClaw</strong>: Recommends tagging and delimiting external content. No built-in enforcement.</p>
+
+<p><strong>OpenFang</strong>: <strong>Information Flow Taint Tracking</strong> (#3) propagates labels through the entire execution pipeline. Content from external sources carries a taint label from ingestion to output. The system can enforce policies like “tainted content cannot trigger tool calls” at the kernel level — not just as a suggestion to the LLM.</p>
+
+<p><strong>Winner</strong>: OpenFang — cryptographic taint tracking vs. documentation-level guidance.</p>
+
+<h3 id="3-plugin-and-tool-use-exploitation">3. Plugin and Tool-Use Exploitation</h3>
+
+<p><strong>OpenClaw</strong>: Recommends requiring user confirmation for sensitive operations. Implementation is left to the developer.</p>
+
+<p><strong>OpenFang</strong>: <strong>Approval gates are built into the Hand architecture</strong>. The Browser Hand, for example, has a mandatory purchase approval gate — it will never spend money without explicit user confirmation. This is enforced at the kernel level via <strong>Capability Gates</strong> (#8) and the <strong>WASM Sandbox</strong> (#1), not via LLM instructions. Tools run inside WebAssembly with fuel metering — a compromised tool literally runs out of execution budget before it can do damage.</p>
+
+<p><strong>Winner</strong>: OpenFang — kernel-enforced approval gates + sandboxed execution vs. developer-optional confirmation.</p>
+
+<h3 id="4-system-prompt-extraction">4. System Prompt Extraction</h3>
+
+<p><strong>OpenClaw</strong>: System prompts are part of the conversation context and can be extracted through standard techniques (translation, paraphrasing, encoding).</p>
+
+<p><strong>OpenFang</strong>: Agent configurations are defined in <strong>HAND.toml</strong> manifests and <strong>SKILL.md</strong> files that are compiled into the binary and signed with <strong>Ed25519</strong> (#4). While the LLM still processes system instructions, the separation of agent identity (cryptographically signed) from conversation context makes extraction attempts less impactful — knowing the prompt doesn’t help you forge an agent manifest.</p>
+
+<p><strong>Winner</strong>: OpenFang — signed manifests reduce the value of extracted prompts.</p>
+
+<h3 id="5-multi-turn-conversation-manipulation-context-poisoning">5. Multi-Turn Conversation Manipulation (Context Poisoning)</h3>
+
+<p><strong>OpenClaw</strong>: No specific protection. Standard conversation context window allows gradual manipulation.</p>
+
+<p><strong>OpenFang</strong>: <strong>Session Repair</strong> (#14) performs 7-phase message history validation. It detects and automatically recovers from conversation corruption, including gradual context shifts. The <strong>Merkle Hash-Chain Audit Trail</strong> (#2) means every action is immutably logged — post-hoc forensics can trace exactly where a manipulation attempt began.</p>
+
+<p><strong>Winner</strong>: OpenFang — active session repair + immutable audit trail vs. no protection.</p>
+
+<h3 id="6-encoding-and-obfuscation-attacks">6. Encoding and Obfuscation Attacks</h3>
+
+<p><strong>OpenClaw</strong>: Input sanitization with regex patterns. Easily circumvented with Base64, leetspeak, Unicode tricks, or multilingual payloads.</p>
+
+<p><strong>OpenFang</strong>: The <strong>Prompt Injection Scanner</strong> (#12) is designed to detect obfuscated patterns, not just literal string matches. More importantly, the defense-in-depth model means that even if an encoding attack bypasses the scanner, the <strong>WASM Sandbox</strong> (#1), <strong>Capability Gates</strong> (#8), and <strong>Taint Tracking</strong> (#3) provide independent fallback protection.</p>
+
+<p><strong>Winner</strong>: OpenFang — defense-in-depth vs. single regex layer.</p>
+
+<h3 id="7-multimodal-injection-image--file-uploads">7. Multimodal Injection (Image &amp; File Uploads)</h3>
+
+<p><strong>OpenClaw</strong>: No built-in protection for embedded instructions in images or file metadata.</p>
+
+<p><strong>OpenFang</strong>: Files processed by Hands go through the <strong>taint tracking</strong> pipeline. The <strong>Subprocess Sandbox</strong> (#11) isolates file processing with <code class="language-plaintext highlighter-rouge">env_clear()</code> and selective variable passthrough. Combined with the <strong>SSRF Protection</strong> (#5), even if an embedded instruction attempts to contact an external endpoint, the request is blocked at the network layer.</p>
+
+<p><strong>Winner</strong>: OpenFang — sandboxed file processing + network-level blocking vs. no protection.</p>
+
+<h2 id="performance-comparison">Performance Comparison</h2>
+
+<p>Security aside, the performance gap is also significant:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th>OpenFang</th>
+      <th>OpenClaw</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Cold Start</strong></td>
+      <td>~180 ms</td>
+      <td>~5.98 sec</td>
+    </tr>
+    <tr>
+      <td><strong>Idle Memory</strong></td>
+      <td>~40 MB</td>
+      <td>~394 MB</td>
+    </tr>
+    <tr>
+      <td><strong>Install Size</strong></td>
+      <td>~32 MB</td>
+      <td>~500 MB</td>
+    </tr>
+    <tr>
+      <td><strong>Language</strong></td>
+      <td>Rust</td>
+      <td>TypeScript</td>
+    </tr>
+    <tr>
+      <td><strong>Security Layers</strong></td>
+      <td>16</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td><strong>Channel Adapters</strong></td>
+      <td>40</td>
+      <td>13</td>
+    </tr>
+    <tr>
+      <td><strong>LLM Providers</strong></td>
+      <td>27</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <td><strong>Agent Sandbox</strong></td>
+      <td>WASM dual-metered</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td><strong>Audit Trail</strong></td>
+      <td>Merkle hash-chain</td>
+      <td>Logs</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>OpenFang starts <strong>33× faster</strong>, uses <strong>10× less memory</strong>, and is <strong>15× smaller</strong> on disk — while providing <strong>5× more security systems</strong>.</p>
+
+<h2 id="what-openclaw-does-better">What OpenClaw Does Better</h2>
+
+<p>To be fair, OpenClaw has advantages in specific scenarios:</p>
+
+<ul>
+  <li><strong>Maturity</strong>: OpenClaw has been available longer and has a more established ecosystem of plugins and community content.</li>
+  <li><strong>Simplicity</strong>: For developers who want a quick LLM-powered chat interface without autonomous agents, OpenClaw’s simpler architecture may be easier to get started with.</li>
+  <li><strong>TypeScript ecosystem</strong>: Teams already deep in the Node.js/TypeScript ecosystem may find OpenClaw more accessible than Rust.</li>
+  <li><strong>Flexibility</strong>: OpenClaw’s looser architecture allows more customization (at the cost of security being opt-in rather than built-in).</li>
+</ul>
+
+<h2 id="the-verdict-openfang-is-significantly-more-secure">The Verdict: OpenFang Is Significantly More Secure</h2>
+
+<p><strong>OpenFang is the more secure platform</strong> — and it’s not close. The comparison is not between two similar approaches with different trade-offs; it’s between a purpose-built security architecture and an application that leaves security as an exercise for the developer.</p>
+
+<p>Here’s why:</p>
+
+<ol>
+  <li>
+    <p><strong>Defense-in-depth</strong>: OpenFang’s 16 independent security layers mean no single bypass compromises the system. OpenClaw’s 3 measures all operate at the same application layer.</p>
+  </li>
+  <li>
+    <p><strong>Kernel-level enforcement</strong>: OpenFang enforces security at the OS kernel level via WASM sandboxing, capability gates, and cryptographic signing. OpenClaw relies on the LLM following instructions — which is fundamentally unreliable against prompt injection.</p>
+  </li>
+  <li>
+    <p><strong>Built-in prompt injection scanning</strong>: OpenFang has a dedicated scanner; OpenClaw provides sample code for developers to implement themselves.</p>
+  </li>
+  <li>
+    <p><strong>Memory safety</strong>: Rust eliminates entire classes of memory corruption vulnerabilities that could be chained with prompt injection attacks.</p>
+  </li>
+  <li>
+    <p><strong>Cryptographic integrity</strong>: Merkle hash-chain audit trails, Ed25519 signed manifests, and HMAC-SHA256 mutual authentication provide guarantees that log-based systems cannot match.</p>
+  </li>
+  <li>
+    <p><strong>Secret protection</strong>: <code class="language-plaintext highlighter-rouge">Zeroizing&lt;String&gt;</code> ensures API keys are wiped from memory — even a successful memory-disclosure prompt injection finds nothing.</p>
+  </li>
+</ol>
+
+<h3 id="migration-path">Migration Path</h3>
+
+<p>Already running OpenClaw? OpenFang includes a built-in migration engine:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Dry run first</span>
+openfang migrate <span class="nt">--from</span> openclaw <span class="nt">--dry-run</span>
+
+<span class="c"># Migrate everything — agents, memory, skills, configs</span>
+openfang migrate <span class="nt">--from</span> openclaw
+</code></pre></div></div>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>OpenClaw served as an important early platform for LLM-powered agents, but its security model was designed for an era when prompt injection was less understood. OpenFang represents the next generation — an Agent Operating System where security is not an afterthought but a foundational principle, enforced at every layer from network to memory to execution.</p>
+
+<p>For any deployment handling sensitive data, executing real-world actions, or operating autonomously, <strong>OpenFang’s 16-layer security architecture makes it the clear choice</strong>.</p>
+
+<p>The prompt injection threat isn’t going away. The question is whether your agent framework was built to handle it.</p>
+
+<hr />
+
+<p><em>For more on prompt injection attacks and defenses, explore our <a href="https://promptinjection.github.io">security research database</a>. OpenFang is available at <a href="https://github.com/RightNow-AI/openfang">github.com/RightNow-AI/openfang</a> and <a href="https://openfang.sh">openfang.sh</a>.</em></p>
+
+
+              </div>
+
+              <!-- Share Section -->
+              <div class="blog-share">
+                <span class="share-label">Share this article</span>
+                <div class="share-buttons">
+                  <a href="https://twitter.com/intent/tweet?text=OpenFang+vs+OpenClaw%3A+Which+Agent+Framework+Is+More+Secure+Against+Prompt+Injection%3F&url=http://localhost:4000%2F2026%2F03%2F02%2Fopenfang-vs-openclaw-security-comparison.html"
+                    target="_blank" rel="noopener" class="share-btn share-twitter" title="Share on Twitter">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                      <path
+                        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                    </svg>
+                  </a>
+                  <a href="https://www.linkedin.com/sharing/share-offsite/?url=http://localhost:4000%2F2026%2F03%2F02%2Fopenfang-vs-openclaw-security-comparison.html"
+                    target="_blank" rel="noopener" class="share-btn share-linkedin" title="Share on LinkedIn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                      <path
+                        d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                    </svg>
+                  </a>
+                  <button class="share-btn share-copy" title="Copy link"
+                    onclick="navigator.clipboard.writeText(window.location.href).then(function(){this.classList.add('copied');setTimeout(function(){document.querySelector('.share-copy').classList.remove('copied')},2000)}.bind(this))">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="blog-footer">
+                <div class="blog-navigation">
+                  
+                  <a href="/2026/02/26/openclaw-prompt-injection-risks.html" class="blog-nav-link prev">
+                    <svg class="nav-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="15,18 9,12 15,6"></polyline>
+                    </svg>
+                    <div class="nav-content">
+                      <span class="nav-label">Previous</span>
+                      <span class="nav-title">OpenClaw and Prompt Injection: How Attacks Can Happen</span>
+                    </div>
+                  </a>
+                  
+
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>About</h3>
+          <p>A curated gallery of prompt injection patterns for security research and AI safety education. Created by <a
+              href="https://github.com/sangam14" target="_blank">@sangam14</a>. This collection includes examples of
+            jailbreaks, overrides, exfiltration attempts, and other injection techniques to help researchers understand
+            and defend against prompt injection attacks.</p>
+        </div>
+        <div class="footer-section">
+          <h3>Blog</h3>
+          <p>Our security research blog provides in-depth analysis, latest discoveries, and practical insights into
+            prompt injection vulnerabilities and defense strategies.</p>
+        </div>
+        <div class="footer-section">
+          <h3>Resources</h3>
+          <div class="book-links">
+            <a href="https://github.com/promptinjection/promptinjection.github.io" target="_blank" class="book-link">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                </path>
+              </svg>
+              GitHub Repository
+            </a>
+            <a href="https://arxiv.org/abs/2302.12173" target="_blank" class="book-link">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+                <line x1="7" y1="15" x2="7" y2="19"></line>
+                <line x1="11" y1="15" x2="11" y2="19"></line>
+                <line x1="15" y1="15" x2="15" y2="19"></line>
+              </svg>
+              Prompt Injection Research
+            </a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h3>Categories</h3>
+          <div class="book-links">
+            <span class="category-tag">Jailbreak</span>
+            <span class="category-tag">Override</span>
+            <span class="category-tag">Exfiltration</span>
+            <span class="category-tag">MaliciousContent</span>
+            <span class="category-tag">Obfuscation</span>
+            <span class="category-tag">RoleHijack</span>
+            <span class="category-tag">Multistep</span>
+            <span class="category-tag">HiddenPayload</span>
+            <span class="category-tag">CrossPrompt</span>
+            <span class="category-tag">Benign</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Dark mode functionality
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      localStorage.setItem('darkMode', isDark);
+
+      // Update icons
+      const sunIcon = document.querySelector('.sun-icon');
+      const moonIcon = document.querySelector('.moon-icon');
+
+      if (isDark) {
+        sunIcon.style.display = 'none';
+        moonIcon.style.display = 'block';
+      } else {
+        sunIcon.style.display = 'block';
+        moonIcon.style.display = 'none';
+      }
+    }
+
+    // Initialize dark mode on page load
+    document.addEventListener('DOMContentLoaded', function () {
+      const savedDarkMode = localStorage.getItem('darkMode');
+      const isDark = savedDarkMode === 'true';
+
+      if (isDark) {
+        document.body.classList.add('dark-mode');
+        document.querySelector('.sun-icon').style.display = 'none';
+        document.querySelector('.moon-icon').style.display = 'block';
+      }
+
+      // Calculate reading time
+      var content = document.getElementById('blogArticleContent');
+      if (content) {
+        var text = content.innerText || content.textContent;
+        var words = text.trim().split(/\s+/).length;
+        var minutes = Math.max(1, Math.round(words / 200));
+        var el = document.getElementById('readingTimeText');
+        if (el) el.textContent = minutes + ' min read';
+      }
+
+      // Reading progress bar
+      var progressBar = document.getElementById('readingProgress');
+      if (progressBar && content) {
+        window.addEventListener('scroll', function () {
+          var rect = content.getBoundingClientRect();
+          var contentTop = rect.top + window.scrollY;
+          var contentHeight = rect.height;
+          var scrolled = window.scrollY - contentTop;
+          var progress = Math.min(100, Math.max(0, (scrolled / (contentHeight - window.innerHeight)) * 100));
+          progressBar.style.width = progress + '%';
+        });
+      }
+    });
+  </script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MSNHFWTE77"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-MSNHFWTE77');
+  </script>
+</body>
+
+</html>
