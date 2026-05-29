@@ -4,6 +4,9 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   lint_and_check_trailing_whitespaces:
     runs-on: ubuntu-latest
