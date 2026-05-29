@@ -500,6 +500,15 @@ function initializeSidebarState() {
   }
 }
 
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 // Filter prompts by category with improved UX
 async function filterByCategory(selectedCategory, clickedElement = null) {
   if (isLoading) return;
@@ -542,7 +551,7 @@ async function filterByCategory(selectedCategory, clickedElement = null) {
       displayTitle = 'All Categories';
     } else {
       filteredPrompts = prompts.filter(prompt => prompt.categories === selectedCategory);
-      displayTitle = selectedCategory;
+      displayTitle = escapeHtml(selectedCategory);
     }
     
     // Group filtered prompts by category
