@@ -500,6 +500,15 @@ function initializeSidebarState() {
   }
 }
 
+function escapeHTML(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 // Filter prompts by category with improved UX
 async function filterByCategory(selectedCategory, clickedElement = null) {
   if (isLoading) return;
@@ -553,11 +562,12 @@ async function filterByCategory(selectedCategory, clickedElement = null) {
     }, {});
 
     let globalIndex = 0;
+    const safeDisplayTitle = escapeHTML(displayTitle);
 
      container.innerHTML = `<div class="prompts-grid">
        ${selectedCategory !== 'all' ? `
        <div class="filter-header">
-         <h3>Showing: ${displayTitle}</h3>
+         <h3>Showing: ${safeDisplayTitle}</h3>
          <span class="filter-count">${filteredPrompts.length} example${filteredPrompts.length !== 1 ? 's' : ''}</span>
        </div>` : ''}
        ${selectedCategory === 'all' ? `
