@@ -500,7 +500,7 @@ function initializeSidebarState() {
   }
 }
 
-function escapeHtml(value) {
+function escapeHTML(value) {
   return String(value)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -551,7 +551,7 @@ async function filterByCategory(selectedCategory, clickedElement = null) {
       displayTitle = 'All Categories';
     } else {
       filteredPrompts = prompts.filter(prompt => prompt.categories === selectedCategory);
-      displayTitle = escapeHtml(selectedCategory);
+      displayTitle = selectedCategory;
     }
     
     // Group filtered prompts by category
@@ -562,11 +562,12 @@ async function filterByCategory(selectedCategory, clickedElement = null) {
     }, {});
 
     let globalIndex = 0;
+    const safeDisplayTitle = escapeHTML(displayTitle);
 
      container.innerHTML = `<div class="prompts-grid">
        ${selectedCategory !== 'all' ? `
        <div class="filter-header">
-         <h3>Showing: ${displayTitle}</h3>
+         <h3>Showing: ${safeDisplayTitle}</h3>
          <span class="filter-count">${filteredPrompts.length} example${filteredPrompts.length !== 1 ? 's' : ''}</span>
        </div>` : ''}
        ${selectedCategory === 'all' ? `

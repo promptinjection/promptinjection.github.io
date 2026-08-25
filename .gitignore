@@ -1,2 +1,7 @@
 # Ignore all CSV files
 *.csv
+
+# Jekyll / Bundler
+vendor/
+.bundle/
+_site/

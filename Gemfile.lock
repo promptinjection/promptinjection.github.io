@@ -36,6 +36,7 @@ GEM
     em-websocket (0.5.3)
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0)
+    erb (6.0.7)
     ethon (0.16.0)
       ffi (>= 1.15.0)
     eventmachine (1.2.7)
@@ -303,6 +304,7 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
+  erb
   github-pages
   jekyll
   jekyll-seo-tag
