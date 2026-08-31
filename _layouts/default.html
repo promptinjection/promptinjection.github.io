@@ -59,6 +59,14 @@
       </div>
       <div class="header-right">
         <nav class="main-nav">
+          <a href="/prompt-injection.csv" download="prompt-injection.csv" class="nav-link nav-download" title="Download the prompt injection dataset as CSV">
+            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3v12"></path>
+              <path d="m7 10 5 5 5-5"></path>
+              <path d="M5 21h14"></path>
+            </svg>
+            <span class="nav-text">Dataset</span>
+          </a>
           <a href="/blog" class="nav-link">
             <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -143,10 +151,10 @@
     <div class="content-wrapper">
       <div class="sidebar">
         <div class="search-container">
-          <div class="prompt-count" id="promptCount">
+          <div class="prompt-count" data-prompt-count-container>
             <span class="count-label">All Prompts</span>
             <span class="prompts-count-label">Developer Prompts</span>
-            <span class="count-number">0</span>
+            <span class="count-number" data-prompt-count>0</span>
           </div>
           <ul id="searchResults"></ul>
         </div>

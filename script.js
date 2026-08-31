@@ -3,6 +3,9 @@ let allPrompts = [];
 let currentFilter = 'all';
 let isLoading = false;
 let filteredPrompts = [];
+let promptsRequest = null;
+
+const DATASET_URL = '/prompt-injection.csv';
 
 const CONFIG = {
   ANIMATION_DELAY: 100,
@@ -28,22 +31,53 @@ function debounce(func, wait) {
 }
 
 function parseCSV(csv) {
-  const lines = csv.split("\n");
-  const headers = lines[0]
-    .split(",")
-    .map((header) => header.replace(/"/g, "").trim());
+  const rows = [];
+  let row = [];
+  let value = '';
+  let inQuotes = false;
 
-  return lines
-    .slice(1)
-    .map((line) => {
-      const values = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || [];
-      const entry = {};
-      headers.forEach((header, index) => {
-        let value = values[index] ? values[index].replace(/"/g, "").trim() : "";
-        entry[header] = value;
-      });
+  for (let index = 0; index < csv.length; index += 1) {
+    const character = csv[index];
+
+    if (inQuotes) {
+      if (character === '"' && csv[index + 1] === '"') {
+        value += '"';
+        index += 1;
+      } else if (character === '"') {
+        inQuotes = false;
+      } else {
+        value += character;
+      }
+      continue;
+    }
+
+    if (character === '"') {
+      inQuotes = true;
+    } else if (character === ',') {
+      row.push(value);
+      value = '';
+    } else if (character === '\n') {
+      row.push(value);
+      rows.push(row);
+      row = [];
+      value = '';
+    } else if (character !== '\r') {
+      value += character;
+    }
+  }
+
+  if (value || row.length > 0) {
+    row.push(value);
+    rows.push(row);
+  }
+
+  const headers = rows.shift() || [];
+
+  return rows
+    .map((values) => headers.reduce((entry, header, index) => {
+      entry[header.trim()] = values[index] || '';
       return entry;
-    })
+    }, {}))
     .filter((entry) => entry.categories && entry.prompt_text);
 }
 
@@ -70,30 +104,35 @@ async function loadPrompts() {
     return allPrompts;
   }
 
-  try {
+  if (promptsRequest) {
+    return promptsRequest;
+  }
+
+  promptsRequest = (async () => {
     isLoading = true;
     showLoadingState();
-    
-    const response = await fetch('/prompt-injection.csv');
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+
+    try {
+      const response = await fetch(DATASET_URL, { cache: 'no-cache' });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      allPrompts = parseCSV(await response.text());
+      filteredPrompts = [...allPrompts];
+      hideLoadingState();
+      return allPrompts;
+    } catch (error) {
+      console.error('Error loading prompts:', error);
+      showErrorState('Failed to load prompts. Please try again later.');
+      return [];
+    } finally {
+      isLoading = false;
+      promptsRequest = null;
     }
-    
-    const text = await response.text();
-    allPrompts = parseCSV(text);
-    
-    // Initialize filtered prompts to show all by default
-    filteredPrompts = [...allPrompts];
-    
-    hideLoadingState();
-    return allPrompts;
-  } catch (error) {
-    console.error("Error loading prompts:", error);
-    showErrorState("Failed to load prompts. Please try again later.");
-    return [];
-  } finally {
-    isLoading = false;
-  }
+  })();
+
+  return promptsRequest;
 }
 
 function showLoadingState() {
@@ -130,20 +169,55 @@ function showErrorState(message) {
 
 // Update prompt count
 function updatePromptCount(filteredCount, totalCount) {
-  const countElement = document.getElementById('promptCount');
-  const countNumber = countElement.getElementsByClassName('count-number')[0];
-  if (countElement) {
-    countNumber.textContent = `${filteredCount}`;
-  }
+  document.querySelectorAll('[data-prompt-count]').forEach((countNumber) => {
+    countNumber.textContent = filteredCount.toLocaleString();
+  });
+  document.querySelectorAll('[data-prompt-count-container]').forEach((countElement) => {
+    countElement.classList.toggle('filtered', filteredCount !== totalCount);
+  });
+}
+
+function datasetHeroMarkup(filteredCount, totalCount) {
+  const isFiltered = filteredCount !== totalCount;
+  const examplesLabel = `${filteredCount.toLocaleString()} ${filteredCount === 1 ? 'example' : 'examples'}`;
+  const filterLabel = isFiltered ? 'Filtered results' : 'Open research dataset';
+
+  return `
+    <section class="dataset-hero" aria-labelledby="dataset-title">
+      <div class="dataset-hero-copy">
+        <p class="dataset-eyebrow">${filterLabel}</p>
+        <h2 id="dataset-title">Prompt injection examples, ready for research.</h2>
+        <p class="dataset-summary">Browse real-world examples, filter by technique, or take the full dataset into your own safety workflow.</p>
+      </div>
+      <div class="dataset-hero-actions">
+        <div class="dataset-stat" data-prompt-count-container aria-live="polite">
+          <span class="count-number" data-prompt-count>${filteredCount.toLocaleString()}</span>
+          <span>${isFiltered ? `${examplesLabel} shown of ${totalCount.toLocaleString()}` : examplesLabel}</span>
+        </div>
+        <div class="dataset-actions">
+          <a class="dataset-download" href="${DATASET_URL}" download="prompt-injection.csv">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>
+            Download CSV
+          </a>
+          <a class="dataset-raw-link" href="${DATASET_URL}">Open raw file</a>
+        </div>
+      </div>
+      <p class="dataset-fetch"><span>Fetch it directly</span><code>curl -L https://promptinjection.github.io${DATASET_URL} -o prompt-injection.csv</code></p>
+    </section>`;
 }
 
 // Render prompts in the main content area
 async function renderMainPrompts() {
   const allPromptsData = await loadPrompts();
   const container = document.querySelector('#promptContent');
+  if (!container || (allPromptsData.length === 0 && allPrompts.length === 0)) {
+    return;
+  }
+
+  // Preserve an empty result when a filter does not match anything.
+  const prompts = currentFilter === 'all' ? allPromptsData : filteredPrompts;
+
   if (container) {
-    // Use filtered prompts if available, otherwise use all prompts
-    const prompts = filteredPrompts.length > 0 ? filteredPrompts : allPromptsData;
     
     // Group prompts by category
     const grouped = prompts.reduce((acc, prompt) => {
@@ -154,7 +228,7 @@ async function renderMainPrompts() {
 
     let globalIndex = 0; // Global counter for unique IDs
 
-    container.innerHTML = `<div class="prompts-grid">
+    container.innerHTML = `${datasetHeroMarkup(prompts.length, allPromptsData.length)}<div class="prompts-grid">
       <div class="prompt-card contribute-card" style="grid-column: 1 / -1; max-width: 600px; margin: 0 auto;">
         <a href="https://github.com/promptinjection/promptinjection.github.io/issues" target="_blank" style="text-decoration: none; color: inherit; height: 100%; display: flex; flex-direction: column; text-align: center; justify-content: center;">
           <div class="prompt-title" style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 16px;">
@@ -183,25 +257,28 @@ async function renderMainPrompts() {
           // Remove category title for cleaner card view
           const displayTitle = prompts.length > 1 ? `Example ${idx + 1}` : `Prompt Example`;
           const countIndicator = prompts.length > 1 ? `<span class="example-count">${idx + 1} of ${prompts.length}</span>` : '';
+          const safeCategory = escapeHTML(categories);
+          const categoryClass = categories.toLowerCase().replace(/[^a-z0-9_-]/g, '');
+          const safePromptText = escapeHTML(prompt_text).replace(/\r?\n/g, '<br>');
           
           return `
             <div class="prompt-card" 
-                 data-category="${category}" 
+                 data-category="${safeCategory}"
                  data-global-id="${globalIndex}"
                  role="button"
                  tabindex="0"
-                 aria-label="${displayTitle} - ${category} prompt injection example"
+                 aria-label="${displayTitle} - ${safeCategory} prompt injection example"
                  aria-describedby="prompt-content-${globalIndex}">
               <div class="prompt-title">
                 ${displayTitle}
                 <div class="action-buttons"></div>
               </div>
-              <p class="prompt-content" id="prompt-content-${globalIndex}">${prompt_text.replace(/\\n/g, '<br>')}</p>
+              <p class="prompt-content" id="prompt-content-${globalIndex}">${safePromptText}</p>
               <div class="card-footer">
-                <span class="category-badge ${category.toLowerCase()}" 
-                      aria-label="Category: ${category}">
+                <span class="category-badge ${categoryClass}"
+                      aria-label="Category: ${safeCategory}">
                   ${getCategoryIcon(category)}
-                  ${category}
+                  ${safeCategory}
                 </span>
                 <div style="display:flex; align-items:center; gap:8px;">
                   ${countIndicator}
@@ -279,7 +356,7 @@ async function renderMainPrompts() {
       });
     });
   }
-  updatePromptCount(prompts.length, prompts.length);
+  updatePromptCount(prompts.length, allPromptsData.length);
 }
 
 // Enhanced sidebar prompts rendering
@@ -541,172 +618,6 @@ async function filterByCategory(selectedCategory, clickedElement = null) {
   
   // Update prompt count
   updatePromptCount(filtered.length, allPrompts.length);
-  
-  if (container) {
-    let filteredPrompts;
-    let displayTitle;
-    
-    if (selectedCategory === 'all') {
-      filteredPrompts = prompts;
-      displayTitle = 'All Categories';
-    } else {
-      filteredPrompts = prompts.filter(prompt => prompt.categories === selectedCategory);
-      displayTitle = selectedCategory;
-    }
-    
-    // Group filtered prompts by category
-    const grouped = filteredPrompts.reduce((acc, prompt) => {
-      if (!acc[prompt.categories]) acc[prompt.categories] = [];
-      acc[prompt.categories].push(prompt);
-      return acc;
-    }, {});
-
-    let globalIndex = 0;
-    const safeDisplayTitle = escapeHTML(displayTitle);
-
-     container.innerHTML = `<div class="prompts-grid">
-       ${selectedCategory !== 'all' ? `
-       <div class="filter-header">
-         <h3>Showing: ${safeDisplayTitle}</h3>
-         <span class="filter-count">${filteredPrompts.length} example${filteredPrompts.length !== 1 ? 's' : ''}</span>
-       </div>` : ''}
-       ${selectedCategory === 'all' ? `
-       <div class="prompt-card contribute-card" style="grid-column: 1 / -1; max-width: 600px; margin: 0 auto;">
-         <a href="https://github.com/promptinjection/promptinjection.github.io/issues" target="_blank" style="text-decoration: none; color: inherit; height: 100%; display: flex; flex-direction: column; text-align: center; justify-content: center;">
-           <div class="prompt-title" style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 16px;">
-             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-               <circle cx="12" cy="12" r="10"></circle>
-               <line x1="12" y1="8" x2="12" y2="16"></line>
-               <line x1="8" y1="12" x2="16" y2="12"></line>
-             </svg>
-             Report New Prompt Injection Example
-           </div>
-           <p class="prompt-content" style="flex-grow: 1; margin-bottom: 20px; font-size: 1rem; line-height: 1.6;">
-             Found a new prompt injection technique? Help improve AI security by reporting it to our research database. Your contribution helps developers build safer AI systems.
-           </p>
-           <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-             <span class="contributor-badge">Submit Example</span>
-             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-               <path d="M7 17L17 7"></path>
-               <path d="M7 7h10v10"></path>
-             </svg>
-           </div>
-         </a>
-       </div>` : ''}
-       ${Object.entries(grouped).map(([category, prompts]) => {
-        const categoryPromptsHtml = prompts.map(({ categories, prompt_text }, idx) => {
-          globalIndex++;
-          const displayTitle = prompts.length > 1 ? `Example ${idx + 1}` : `${category} Example`;
-          const countIndicator = prompts.length > 1 ? `<span class="example-count">${idx + 1} of ${prompts.length}</span>` : '';
-          const ribbonText = category.toUpperCase();
-          
-          return `
-            <div class="prompt-card" 
-                 data-category="${category}" 
-                 data-global-id="${globalIndex}"
-                 role="button"
-                 tabindex="0"
-                 aria-label="${displayTitle} - ${category} prompt injection example"
-                 aria-describedby="prompt-content-${globalIndex}">
-              <div class="prompt-title">
-                ${displayTitle}
-                <div class="action-buttons"></div>
-              </div>
-              <p class="prompt-content" id="prompt-content-${globalIndex}">${prompt_text.replace(/\\n/g, '<br>')}</p>
-              <div class="card-footer">
-                <span class="category-badge ${category.toLowerCase()}" 
-                      aria-label="Category: ${category}">
-                  ${getCategoryIcon(category)}
-                  ${category}
-                </span>
-                <div style="display:flex; align-items:center; gap:8px;">
-                  ${countIndicator}
-                  <button class="show-toggle" 
-                          type="button"
-                          aria-expanded="false"
-                          aria-controls="prompt-content-${globalIndex}">Show more</button>
-                </div>
-              </div>
-              <div class="card-ribbon" data-ribbon="${ribbonText}" aria-hidden="true">${ribbonText}</div>
-            </div>`;
-        }).join('');
-        
-        return `
-          <div class="category-section">
-            <div class="category-header">
-              <h2 class="category-title">${category}</h2>
-              ${prompts.length > 1 ? `<span class="category-count">${prompts.length} examples</span>` : `<span class="category-count">1 example</span>`}
-            </div>
-            <div class="category-cards">
-              ${categoryPromptsHtml}
-            </div>
-          </div>`;
-      }).join('')}</div>`;
-
-    // Add click handlers for modal
-    const cards = container.querySelectorAll('.prompt-card:not(.contribute-card)');
-    let cardIdx = 0;
-    
-    // Add loading animation to cards with improved performance
-    cards.forEach((card, index) => {
-      card.classList.add('loading');
-      card.style.animationDelay = `${index * CONFIG.ANIMATION_DELAY}ms`;
-      
-      // Use requestAnimationFrame for better performance
-      requestAnimationFrame(() => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-        
-        setTimeout(() => {
-          card.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-          card.style.opacity = '1';
-          card.style.transform = 'translateY(0)';
-        }, index * CONFIG.ANIMATION_DELAY);
-      });
-    });
-    
-    Object.entries(grouped).forEach(([category, prompts]) => {
-      prompts.forEach((prompt, idx) => {
-        const card = cards[cardIdx++];
-        const modalTitle = prompts.length > 1 ? `${category} - Example ${idx + 1}` : `${category} Example`;
-        // Click handler
-        card.addEventListener('click', (e) => {
-          if (!e.target.closest('.copy-button') && !e.target.closest('.source-link') && !e.target.closest('.show-toggle')) {
-            // Add click animation
-            card.style.transform = 'scale(0.98)';
-            setTimeout(() => {
-              card.style.transform = '';
-            }, 150);
-            showModal(modalTitle, prompt.prompt_text, false);
-          }
-        });
-        
-        // Keyboard navigation
-        card.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            if (!e.target.closest('.show-toggle')) {
-              showModal(modalTitle, prompt.prompt_text, false);
-            }
-          }
-        });
-
-        // Hook up show more/less toggle
-        const toggleBtn = card.querySelector('.show-toggle');
-        const contentEl = card.querySelector('.prompt-content');
-        if (toggleBtn && contentEl) {
-          toggleBtn.addEventListener('click', (ev) => {
-            ev.stopPropagation();
-            const isExpanded = card.classList.toggle('expanded');
-            toggleBtn.textContent = isExpanded ? 'Show less' : 'Show more';
-            toggleBtn.setAttribute('aria-expanded', isExpanded);
-          });
-        }
-      });
-    });
-  }
-  
-  updatePromptCount(filteredPrompts.length, prompts.length);
 }
 
 // Scroll to prompt card function

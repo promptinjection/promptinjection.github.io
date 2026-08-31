@@ -8,24 +8,14 @@ body_class: vibe
 layout: default
 ---
 
-<!-- Prompt Injection Examples Main Page -->
-<div id="vibe-app">
-  <h2 class="cyber-terminal">
-    <span class="terminal-prompt">root@security:/# </span>
-    <span class="command">cat prompt_injection.db</span>
-    <span class="cursor">_</span>
-  </h2>
-  <div class="warning-banner">
-    <span class="warning-icon">⚠️</span> 
-    <strong>CLASSIFIED:</strong> Security research data - Authorized personnel only
-  </div>
-  <div id="promptCount">
-    <span class="terminal-text">RECORDS FOUND: </span>
-    <span class="count-number">0</span>
-    <span class="terminal-text"> entries in database</span>
-  </div>
-  <div id="prompts-list"></div>
-</div>
+<!-- Accessible fallback while the dataset is loading or JavaScript is unavailable. -->
+<section class="dataset-fallback" aria-labelledby="fallback-dataset-title">
+  <p class="dataset-eyebrow">Open research dataset</p>
+  <h2 id="fallback-dataset-title">Prompt injection examples, ready for research.</h2>
+  <p>Download the complete dataset to use it in your own AI safety workflow.</p>
+  <a class="dataset-download" href="/prompt-injection.csv" download="prompt-injection.csv">Download CSV</a>
+  <a class="dataset-raw-link" href="/prompt-injection.csv">Open raw file</a>
+</section>
 
 <!-- Latest Blog Posts Section -->
 <div class="blog-promo-section">
