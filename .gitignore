@@ -1,7 +1,11 @@
 # Ignore all CSV files
 *.csv
+<<<<<<< HEAD
 
 # Jekyll / Bundler
 vendor/
 .bundle/
 _site/
+=======
+.DS_Store
+>>>>>>> bca848e (updated new csv)
