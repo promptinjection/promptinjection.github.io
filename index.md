@@ -13,8 +13,10 @@ layout: default
   <p class="dataset-eyebrow">Open research dataset</p>
   <h2 id="fallback-dataset-title">Prompt injection examples, ready for research.</h2>
   <p>Download the complete dataset to use it in your own AI safety workflow.</p>
-  <a class="dataset-download" href="/prompt-injection-v3.csv" download="prompt-injection.csv">Download CSV</a>
-  <a class="dataset-raw-link" href="/prompt-injection-v3.csv">Open raw file</a>
+  <p><strong>Dataset v3 - Split into 3 parts (LFS):</strong></p>
+  <a class="dataset-download" href="/prompt-injection-v3-part-1.csv" download="part-1.csv">Part 1 (95MB)</a> · 
+  <a href="/prompt-injection-v3-part-2.csv" download="part-2.csv">Part 2 (95MB)</a> · 
+  <a href="/prompt-injection-v3-part-3.csv" download="part-3.csv">Part 3 (95MB)</a>
 </section>
 
 <!-- Latest Blog Posts Section -->
