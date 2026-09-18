@@ -13,8 +13,8 @@ layout: default
   <p class="dataset-eyebrow">Open research dataset</p>
   <h2 id="fallback-dataset-title">Prompt injection examples, ready for research.</h2>
   <p>Download the complete dataset to use it in your own AI safety workflow.</p>
-  <a class="dataset-download" href="/prompt-injection.csv" download="prompt-injection.csv">Download CSV</a>
-  <a class="dataset-raw-link" href="/prompt-injection.csv">Open raw file</a>
+  <a class="dataset-download" href="/prompt-injection-v3.csv" download="prompt-injection.csv">Download CSV</a>
+  <a class="dataset-raw-link" href="/prompt-injection-v3.csv">Open raw file</a>
 </section>
 
 <!-- Latest Blog Posts Section -->
