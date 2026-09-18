@@ -19,6 +19,65 @@ layout: default
   <a href="/prompt-injection-v3-part-3.csv" download="part-3.csv">Part 3 (95MB)</a>
 </section>
 
+<section class="category-showcase">
+<h2>Dataset Categories (v3)</h2>
+<div class="category-grid">
+<div class="category-card">
+<h3>Benign</h3>
+<p>Normal, safe prompts without injection attempts.</p>
+</div>
+<div class="category-card">
+<h3>Jailbreak</h3>
+<p>Attempts to bypass safety filters and constraints.</p>
+</div>
+<div class="category-card">
+<h3>RoleHijack</h3>
+<p>Manipulating the AI to adopt unauthorized roles.</p>
+</div>
+<div class="category-card">
+<h3>Override</h3>
+<p>Direct instruction overrides and system overrides.</p>
+</div>
+<div class="category-card">
+<h3>Obfuscation</h3>
+<p>Hidden or encoded malicious instructions.</p>
+</div>
+<div class="category-card">
+<h3>CrossPrompt</h3>
+<p>Indirect injection via documents or contexts.</p>
+</div>
+<div class="category-card">
+<h3>Multistep</h3>
+<p>Multi-turn manipulation and phased attacks.</p>
+</div>
+<div class="category-card">
+<h3>HiddenPayload</h3>
+<p>Payload splitting and hidden text techniques.</p>
+</div>
+<div class="category-card">
+<h3>MaliciousContent</h3>
+<p>Code execution or harmful content generation.</p>
+</div>
+<div class="category-card">
+<h3>SystemPromptContext</h3>
+<p>System prompt extraction and leakage.</p>
+</div>
+<div class="category-card">
+<h3>Exfiltration</h3>
+<p>Data exfiltration and credential leakage attempts.</p>
+</div>
+<div class="category-card">
+<h3>PhishingEmail</h3>
+<p>Phishing via email content.</p>
+</div>
+<div class="category-card">
+<h3>PhishingURL</h3>
+<p>Malicious URL injection.</p>
+</div>
+</div>
+<p><em>Full dataset: <a href="/prompt-injection-v3-part-1.csv">Part 1</a>, <a href="/prompt-injection-v3-part-2.csv">Part 2</a>, <a href="/prompt-injection-v3-part-3.csv">Part 3</a></em></p>
+</section>
+
 <!-- Latest Blog Posts Section -->
 <div class="blog-promo-section">
   <div class="blog-promo-header">
