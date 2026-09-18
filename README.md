@@ -1,240 +1,224 @@
-![](/myimg-removebg-preview.png)
-
 <div align="center">
-  <h1>🚨 Prompt Injection Dataset</h1>
-  <p><strong>The Ultimate Collection of Prompt Injection Attacks</strong></p>
+  <h1>🚨 Prompt Injection v3</h1>
+  <p><strong>The Open Benchmark for AI Security, Red-Teaming & Guardrail Evaluation</strong></p>
   
   <p>
-    <a href="https://promptinjection.github.io" target="_blank"><b>🔗 Live Demo</b></a>
+    <a href="https://promptinjection.github.io" target="_blank"><b>🌐 Live Benchmark Platform</b></a>
     ·
-    <a href="https://github.com/promptinjection/promptinjection.github.io/issues" target="_blank">🐛 Report Bug</a>
+    <a href="https://promptinjection.github.io/#ai-kill-chain" target="_blank"><b>⚡ AI Kill Chain Matrix</b></a>
     ·
-    <a href="https://github.com/promptinjection/promptinjection.github.io/issues" target="_blank">💡 Request Feature</a>
+    <a href="https://huggingface.co/datasets/AIDataFdn/promptinjection" target="_blank"><b>🤗 Hugging Face Dataset</b></a>
     ·
-    <a href="https://github.com/promptinjection/promptinjection.github.io/stargazers" target="_blank">⭐ Star Us</a>
+    <a href="https://github.com/promptinjection/promptinjection.github.io/issues" target="_blank">🐛 Report Novel Attack</a>
+    ·
+    <a href="https://github.com/promptinjection/promptinjection.github.io/stargazers" target="_blank">⭐ Star on GitHub</a>
   </p>
   
   <p>
-    <img src="https://img.shields.io/github/stars/promptinjection/promptinjection.github.io?style=social" alt="GitHub stars">
-    <img src="https://img.shields.io/github/forks/promptinjection/promptinjection.github.io?style=social" alt="GitHub forks">
-    <img src="https://img.shields.io/github/issues/promptinjection/promptinjection.github.io" alt="GitHub issues">
+    <a href="https://huggingface.co/datasets/AIDataFdn/promptinjection"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-AIDataFdn%2Fpromptinjection-ffbe3b?style=for-the-badge" alt="Hugging Face"></a>
+    <img src="https://img.shields.io/badge/Dataset%20Size-731%2C908%20Prompts-10b981?style=for-the-badge" alt="Dataset Size">
+    <img src="https://img.shields.io/badge/Taxonomy-13%20Categories-3b82f6?style=for-the-badge" alt="Taxonomy">
+    <img src="https://img.shields.io/badge/Framework-10--Stage%20AI%20Kill%20Chain-8b5cf6?style=for-the-badge" alt="AI Kill Chain">
+    <img src="https://img.shields.io/badge/License-MIT-emerald?style=for-the-badge" alt="License">
+  </p>
+
+  <p>
+    <a href="https://github.com/promptinjection/promptinjection.github.io/stargazers"><img src="https://img.shields.io/github/stars/promptinjection/promptinjection.github.io?style=social" alt="GitHub stars"></a>
+    <a href="https://github.com/promptinjection/promptinjection.github.io/network/members"><img src="https://img.shields.io/github/forks/promptinjection/promptinjection.github.io?style=social" alt="GitHub forks"></a>
+    <a href="https://github.com/promptinjection/promptinjection.github.io/issues"><img src="https://img.shields.io/github/issues/promptinjection/promptinjection.github.io" alt="GitHub issues"></a>
   </p>
 </div>
 
 ---
 
-## 🎯 About This Project
+## 🎯 Overview
 
-**This is the most comprehensive database of prompt injection attacks** ever compiled - and it's completely open source! 
+**Prompt Injection v3** is the world's largest open-source security benchmark engineered specifically for testing LLM vulnerabilities, guardrail robustness, agent security, and red-teaming defenses.
 
-### ✨ Key Features:
+Reviewed with **Cleanlab curation**, this v3 release scales the corpus to **731,908 total prompts**, featuring **107,156 adversarial attack payloads** mapped across **13 standardized attack categories** and the **10-stage AI Kill Chain™ framework**.
 
-- **🛡️ Security Research Goldmine**: 500+ real-world prompt injection examples
-- **🎨 Beautiful UI**: Modern, responsive design with dark mode
-- **📱 Mobile-First**: Works perfectly on any device
-- **🔍 Advanced Filtering**: Find exactly what you need instantly
-- **⚡ Lightning Fast**: Optimized for performance
-- **🌍 Open Source**: Contribute to AI safety research
+### 📊 Dataset Scale & Metrics
 
----
-
-## 🚀 What You'll Find Here
-
-### 🎭 Attack Categories:
-- **Jailbreak** - Breaking AI safety guardrails
-- **Override** - Command injection techniques  
-- **Exfiltration** - Data extraction methods
-- **Role Hijack** - Identity manipulation
-- **Obfuscation** - Hidden payload techniques
-- **Multistep** - Complex attack chains
-- **Cross-Prompt** - Multi-conversation attacks
-- **Hidden Payload** - Steganographic techniques
-
-### 🎯 Perfect For:
-- **🔬 Security Researchers** - Study attack patterns
-- **👨‍💻 AI Developers** - Build better defenses
-- **🎓 Students** - Learn about AI vulnerabilities
-- **🏢 Companies** - Test your AI systems
-- **📰 Journalists** - Understand AI risks
-- **🤖 AI Enthusiasts** - Explore the dark side of AI
+| Metric | Details |
+| :--- | :--- |
+| **Total Prompts** | **731,908** verified prompts |
+| **Adversarial Injections** | **107,156** active jailbreaks & attack payloads |
+| **Benign Baselines** | **624,752** clean conversational and safety control prompts |
+| **Taxonomy Categories** | **13** standardized vulnerability classes |
+| **System Framework** | **10** sequential attack stages · **58** granular techniques |
+| **Format** | Apache Parquet / Arrow on Hugging Face Hub + Interactive Web Explorer |
+| **License** | Open Source (MIT) |
 
 ---
 
-## 🌟 Features That Will Blow Your Mind
+## 🚀 Quick Start with Python (Hugging Face)
 
-### 🎨 **Stunning Visual Design**
-- Glassmorphism effects and smooth animations
-- Responsive cards with hover effects
-- Professional dark/light mode toggle
-- Mobile-optimized interface
+Stream or load all 731,908 prompts directly in Python with one line of code using the `datasets` library:
 
-### ⚡ **Lightning Performance**
-- Debounced search and filtering
-- Optimized rendering with requestAnimationFrame
-- Smooth transitions and micro-interactions
-- Lazy loading for better UX
+```bash
+pip install datasets pandas
+```
 
-### 🔧 **Developer-Friendly**
-- Clean, documented code
-- Modular architecture
-- Easy to contribute and extend
-- GitHub Pages ready
+```python
+from datasets import load_dataset
+
+# 1. Load the full Prompt Injection v3 dataset
+dataset = load_dataset("AIDataFdn/promptinjection")
+print(f"Total samples: {len(dataset['train'])}")
+
+# 2. Inspect a sample attack payload
+sample = dataset["train"][0]
+print("Prompt:", sample["prompt"])
+print("Category:", sample["category"])
+
+# 3. Stream on-the-fly without downloading the full dataset locally
+streamed = load_dataset("AIDataFdn/promptinjection", streaming=True)
+for item in streamed["train"]:
+    if item["category"] == "Jailbreak":
+        print("Adversarial Payload:", item["prompt"][:100])
+        break
+```
 
 ---
 
-## 🚀 Quick Start
+## 🛡️ The AI Kill Chain™ 10-Stage Security Matrix
 
-### For Users:
-1. **Visit**: [promptinjection.github.io](https://promptinjection.github.io)
-2. **Browse**: Use category filters to explore
-3. **Learn**: Study real attack examples
-4. **Share**: Help spread AI security awareness
+Modeled after the enterprise AI governance framework, Prompt Injection v3 organizes threats into a sequential **10-Stage Matrix across 58 techniques**:
 
-### For Developers:
+```
+[01 Recon] ➔ [02 Trust & Manipulation] ➔ [03 Weaponization] ➔ [04 Reasoning Execution] ➔ [05 Tool Interaction]
+                                                                                               │
+[10 Actions on Objectives]  [09 AI C&C]  [08 Persistence]  [07 Lateral Movement]  [06 Privilege Escalation]
+```
+
+| Stage | Focus Area | Techniques Included |
+| :--- | :--- | :--- |
+| **01 AI Recon** | Model surface discovery & boundary mapping | Prompt Probing, Tool Surface Discovery, Boundary Mapping, Context Pressure, RAG Inference, State Detection |
+| **02 Trust & Manipulation** | Social engineering & safety erosion | Authority Impersonation, Alignment Erosion, Persona Rebinding, Urgency Shaping, Policy Shadowing |
+| **03 Instruction & Weaponization** | Payload injection & evasion | Direct Prompt Injection, Indirect RAG Injection, Instruction Smuggling, Tool Argument Poisoning |
+| **04 Reasoning Time Execution** | Thinking process hijacking | Goal Substitution, Instruction Flooding, Recursive Task Expansion, False-Premise Anchoring |
+| **05 Tool & Environment** | Autonomous action exploitation | Unauthorized Tool Invocation, Over-Privileged Chaining, Workflow Abuse, Tool Result Poisoning |
+| **06 Privilege Escalation** | Scope expansion & credential theft | Tool Scope Escalation, Agent Delegation Abuse, Credential Overreach, Accumulated Privilege |
+| **07 Lateral Movement** | Multi-agent infiltration | Inter-Agent Prompt Injection, Shared Memory Poisoning, Agent Impersonation, Context Leakage |
+| **08 Persistence** | Long-term memory compromise | Memory Poisoning, RAG Knowledge Poisoning, Feedback Loop Exploitation, Cached Context Abuse |
+| **09 AI C&C** | Covert control & orchestration | Human-in-the-Loop C&C, Scheduled Control, Encoded Output Signaling, Context Rehydration |
+| **10 Actions on Objectives** | High-impact adversarial goals | Data Exfiltration via AI, Autonomous Fraud, Supply-Chain Propagation, Operational Disruption |
+
+> 💡 **Explore the Full Matrix**: Visit [promptinjection.github.io/#ai-kill-chain](https://promptinjection.github.io/#ai-kill-chain) for the interactive 10-column chart with 1-click payload testing.
+
+---
+
+## 🏷️ Standardized Attack Taxonomy (13 Categories)
+
+Every prompt in the dataset is labeled under our standardized 13-category taxonomy:
+
+| Category | Description | Primary Threat Vector |
+| :--- | :--- | :--- |
+| `Jailbreak` | Refusal boundary bypasses (DAN, hypothetical framing, fictional personas) | Safety guardrail bypass |
+| `Override` | Direct instructions overriding developer system directives | Command hijacking |
+| `RoleHijack` | Forcing models into unconstrained personas or authority roles | Trust manipulation |
+| `Indirect / CrossPrompt` | Payloads ingested via external documents, emails, and RAG vector stores | Supply-chain & RAG poisoning |
+| `Obfuscation` | Base64, hex encoding, ciphers, markdown tricks, and unicode smuggling | Filter evasion |
+| `Exfiltration` | Techniques coercing models into leaking private system prompts or keys | Confidentiality breach |
+| `MaliciousContent` | Generation of exploit payloads, malware logic, or harmful instructions | Abuse generation |
+| `Multistep` | Incremental alignment erosion across multi-turn dialogues | Complex attack chains |
+| `SystemPromptContext` | Extraction of developer instructions, hidden guardrails, and environment variables | Reconnaissance |
+| `HiddenPayload` | Steganography and hidden token sequences inside benign text | Covert execution |
+| `PhishingEmail` | AI-generated social engineering, spear-phishing, and credential harvesting | Social engineering |
+| `PhishingURL` | Generating deceptive URLs, redirects, and spoofed authentication links | Infrastructure abuse |
+| `Benign` | High-quality conversational baselines for false-positive evaluation | Baseline control |
+
+---
+
+## 💻 Local Development
+
+### 1. Prerequisites
+- Python 3.8+
+- (Optional) Ruby 3.2+ with Bundler if building with Jekyll directly
+
+### 2. Clone & Run Local Preview
 ```bash
 # Clone the repository
 git clone https://github.com/promptinjection/promptinjection.github.io.git
 cd promptinjection.github.io
 
-# Recommended: use Ruby >= 3.2 (rbenv or asdf)
-# macOS (homebrew + rbenv):
-# 1) Install rbenv and ruby-build
-#    brew install rbenv ruby-build
-# 2) Install Ruby and set local version
-#    rbenv install 3.2.2
-#    rbenv local 3.2.2
-# 3) Make sure shims are available
-#    eval "$(rbenv init -)"
+# Build the complete site & sync all datasets
+python3 scripts/build_site.py
 
-# Install dependencies and build the site
-gem install bundler jekyll
+# Start local preview server on port 4000
+python3 -m http.server 4000 --directory _site
+```
+
+Open your browser at `http://localhost:4000`.
+
+### 3. Alternative: Run with Jekyll
+```bash
 bundle install
-
-# Run locally
-eval "$(rbenv init -)" && bundle exec jekyll serve
-
-# Open http://127.0.0.1:4000
-
-# Alternative: use Docker to build with a modern Ruby image
-# docker build -t jekyll-site . && docker run --rm -p 4000:4000 -v "$PWD":/srv/jekyll jekyll-site
+bundle exec jekyll serve --future
 ```
 
 ---
 
-## 📊 The Numbers Don't Lie
-
-- **500+** Real-world prompt injection examples
-- **10+** Attack categories covered
-- **100%** Open source and free
-- **0** Registration required
-- **∞** Learning potential
-
----
-
-## 🎯 Why This Matters
-
-**AI is everywhere** - from ChatGPT to autonomous vehicles. But with great power comes great responsibility. This database helps us:
-
-- **🛡️ Build Better Defenses**: Understand attacks to prevent them
-- **🎓 Educate the Community**: Share knowledge about AI risks
-- **🔬 Advance Research**: Contribute to AI safety science
-- **⚖️ Ensure Responsible AI**: Make AI systems more secure
-
----
-
-## 🤝 Join the Movement
-
-### 🌟 **Star This Repo**
-Help us reach 1,000+ stars and make AI security mainstream!
-
-### 🐛 **Report Issues**
-Found a bug? Have an idea? We want to hear from you!
-
-### 💡 **Contribute**
-- Add new prompt injection examples
-- Improve the UI/UX
-- Fix bugs and optimize performance
-- Write documentation
-
-### 📢 **Share the Word**
-- Tweet about it: `#PromptInjection #AISecurity #OpenSource`
-- Share on LinkedIn: Tag AI researchers and developers
-- Post on Reddit: r/MachineLearning, r/artificial, r/cybersecurity
-- Write blog posts: Help educate the community
-
----
-
-## 🏆 Recognition
-
-This project is part of the global effort to make AI safer and more secure. Every contribution helps build a better future for AI.
-
-**Featured in:**
-- AI Security Research Papers
-- Cybersecurity Conferences
-- Developer Communities
-- Educational Institutions
-
----
-
-## 📁 Project Structure
+## 📁 Repository Structure
 
 ```
 promptinjection.github.io/
-├── 📄 _layouts/default.html    # Main layout and navigation
-├── 🎨 style.css               # Beautiful styling and animations
-├── ⚡ script.js               # Interactive functionality
-├── 📊 prompt-injection.csv    # The treasure trove of examples
-├── ⚙️ _config.yml             # Site configuration
-└── 📖 README.md               # This amazing file!
+├── index.md                     # Main research portal & landing page
+├── manage.md                    # Dedicated AI Kill Chain matrix page
+├── style.css                    # Modern design system, dark mode & full-screen matrix
+├── script.js                    # Search engine, category filters & Kill Chain interactive logic
+├── data/                        # Live JSON datasets for client-side search
+│   ├── manifest.json            # 731,908 prompt index & metadata
+│   ├── ai-kill-chain.json       # 10 stages & 58 techniques specification
+│   └── categories/*.json        # Filtered category chunks
+├── scripts/                     # Automation & build pipelines
+│   ├── build_site.py            # Static compiler & route synchronizer
+│   └── process_dataset.exs      # Elixir dataset processor & CSV parser
+├── _layouts/                    # Jekyll template layouts
+│   └── default.html             # Base shell, header nav & modals
+├── _posts/                      # Security research & comparison blog articles
+├── .github/workflows/           # Automated CI/CD
+│   └── jekyll.yml               # Automated GitHub Pages build & deployment
+└── README.md                    # Project documentation
 ```
 
 ---
 
-## 🚀 Deploy Your Own
+## 📚 Citation & Academic Use
 
-This repository is **GitHub Pages ready**! Just:
+If you use this benchmark or the AI Kill Chain matrix in your academic research, papers, or security audits, please cite:
 
-1. Fork this repository
-2. Enable GitHub Pages in settings
-3. Your site will be live at `https://yourusername.github.io/promptinjection.github.io`
-
-**Custom domain?** Update the `CNAME` file and `_config.yml`!
-
----
-
-## 📜 License
-
-**MIT License** - Use it, modify it, share it! 
-
-The more people who understand AI security, the safer our AI future becomes.
+```bibtex
+@dataset{promptinjection2026,
+  title={Prompt Injection v3: Open Benchmark for AI Security, Red-Teaming, and LLM Guardrails},
+  author={AI Data Foundation and Contributors},
+  year={2026},
+  publisher={GitHub and Hugging Face},
+  howpublished={\url{https://promptinjection.github.io}},
+  note={Hugging Face Dataset: AIDataFdn/promptinjection}
+}
+```
 
 ---
 
-## 🙏 Acknowledgments
+## 🤝 Community & Contributions
 
-- **OpenAI** for raising awareness about prompt injection
-- **OWASP** for security guidelines and best practices
-- **The AI Safety Community** for ongoing research
-- **All Contributors** who help make this project better
+We welcome contributions from researchers, red-teams, and AI developers:
+
+- **Submit Novel Attacks**: Open a Pull Request or [File an Issue](https://github.com/promptinjection/promptinjection.github.io/issues) with real-world failure cases.
+- **Improve Defenses**: Suggest defensive heuristics, regex patterns, or classifier rules.
+- **Community Star**: Give this repo a ⭐ to help advance open-source AI defense research!
 
 ---
 
 <div align="center">
-  <h3>🌟 Star this repo if you believe in AI safety! 🌟</h3>
-  
   <p>
-    <strong>Made with ❤️ for the AI community</strong><br>
-    <em>Because secure AI is better AI</em>
+    <strong>Built with ❤️ for the Global AI Safety & Security Community</strong><br>
+    <em>Advancing safe, trustworthy, and robust artificial intelligence.</em>
   </p>
-  
   <p>
-    <a href="https://promptinjection.github.io" target="_blank">🔗 Try the Live Demo</a>
-    ·
-    <a href="https://github.com/promptinjection/promptinjection.github.io/issues" target="_blank">💬 Join the Discussion</a>
-    ·
-    <a href="https://github.com/promptinjection/promptinjection.github.io/stargazers" target="_blank">⭐ Give us a Star</a>
+    <a href="https://promptinjection.github.io">🌐 Live Site</a> · 
+    <a href="https://huggingface.co/datasets/AIDataFdn/promptinjection">🤗 Hugging Face</a> · 
+    <a href="https://github.com/promptinjection/promptinjection.github.io">⭐ Star on GitHub</a>
   </p>
 </div>
----
-
-**🔥 Ready to explore the dark side of AI? [Click here to start!](https://promptinjection.github.io)**
