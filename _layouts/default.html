@@ -10,8 +10,10 @@
   {% seo %}
 
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code:wght@400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/blog-styles.css">
@@ -59,13 +61,34 @@
       </div>
       <div class="header-right">
         <nav class="main-nav">
-          <a href="/prompt-injection-v3.csv" download="prompt-injection-v3.csv" class="nav-link nav-download" title="Download the prompt injection dataset as CSV">
-            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 3v12"></path>
-              <path d="m7 10 5 5 5-5"></path>
-              <path d="M5 21h14"></path>
+          <a href="/#community" class="nav-link nav-download" title="Star on GitHub & Access Hugging Face Dataset">
+            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="color: #fbbf24;">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
             </svg>
-            <span class="nav-text">Dataset</span>
+            <span class="nav-text">Star &amp; HF</span>
+          </a>
+          <a href="/#categories" class="nav-link" title="Explore 13 attack categories">
+            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <span class="nav-text">Taxonomy</span>
+          </a>
+          <a href="/#ai-kill-chain" class="nav-link" title="AI Kill Chain 10-Stage Matrix">
+            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+            </svg>
+            <span class="nav-text">Kill Chain</span>
+          </a>
+          <a href="/#explorer" class="nav-link" title="Live Prompt Explorer">
+            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <span class="nav-text">Explorer</span>
           </a>
           <a href="/blog" class="nav-link">
             <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
@@ -111,21 +134,6 @@
           </svg>
           <span id="starCount">...</span>
         </a>
-        <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar">
-          <svg class="sidebar-icon sidebar-show-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-            <line x1="9" y1="9" x2="15" y2="9"></line>
-            <line x1="9" y1="15" x2="15" y2="15"></line>
-          </svg>
-          <svg class="sidebar-icon sidebar-hide-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            style="display: none;">
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
         <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">
           <svg class="mode-icon sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -149,16 +157,6 @@
     </header>
 
     <div class="content-wrapper">
-      <div class="sidebar">
-        <div class="search-container">
-          <div class="prompt-count" data-prompt-count-container>
-            <span class="count-label">All Prompts</span>
-            <span class="prompts-count-label">Developer Prompts</span>
-            <span class="count-number" data-prompt-count>0</span>
-          </div>
-          <ul id="searchResults"></ul>
-        </div>
-      </div>
       <div class="main-content">
         {% if page.hide_platform_selector != true %}
         <div class="main-content-header">

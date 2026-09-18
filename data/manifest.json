@@ -1,0 +1,86 @@
+{
+  "categories": [
+    {
+      "file": "data/categories/benign.json",
+      "name": "Benign",
+      "slug": "benign",
+      "total": 624752
+    },
+    {
+      "file": "data/categories/override.json",
+      "name": "Override",
+      "slug": "override",
+      "total": 19230
+    },
+    {
+      "file": "data/categories/rolehijack.json",
+      "name": "RoleHijack",
+      "slug": "rolehijack",
+      "total": 15994
+    },
+    {
+      "file": "data/categories/jailbreak.json",
+      "name": "Jailbreak",
+      "slug": "jailbreak",
+      "total": 13177
+    },
+    {
+      "file": "data/categories/obfuscation.json",
+      "name": "Obfuscation",
+      "slug": "obfuscation",
+      "total": 12451
+    },
+    {
+      "file": "data/categories/maliciouscontent.json",
+      "name": "MaliciousContent",
+      "slug": "maliciouscontent",
+      "total": 10965
+    },
+    {
+      "file": "data/categories/exfiltration.json",
+      "name": "Exfiltration",
+      "slug": "exfiltration",
+      "total": 10439
+    },
+    {
+      "file": "data/categories/multistep.json",
+      "name": "Multistep",
+      "slug": "multistep",
+      "total": 8284
+    },
+    {
+      "file": "data/categories/crossprompt.json",
+      "name": "CrossPrompt",
+      "slug": "crossprompt",
+      "total": 8180
+    },
+    {
+      "file": "data/categories/systempromptcontext.json",
+      "name": "SystemPromptContext",
+      "slug": "systempromptcontext",
+      "total": 6167
+    },
+    {
+      "file": "data/categories/hiddenpayload.json",
+      "name": "HiddenPayload",
+      "slug": "hiddenpayload",
+      "total": 2267
+    },
+    {
+      "file": "data/categories/phishingemail.json",
+      "name": "PhishingEmail",
+      "slug": "phishingemail",
+      "total": 1
+    },
+    {
+      "file": "data/categories/phishingurl.json",
+      "name": "PhishingURL",
+      "slug": "phishingurl",
+      "total": 1
+    }
+  ],
+  "categories_count": 13,
+  "total_prompts": 731908,
+  "updated_at": "2026-09-18T22:04:58.375525Z",
+  "version": "v3"
+}

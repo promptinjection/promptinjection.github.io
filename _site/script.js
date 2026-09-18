@@ -1,17 +1,26 @@
-// Global variables and configuration
-let allPrompts = [];
-let currentFilter = 'all';
-let isLoading = false;
+// ==========================================================================
+// Prompt Injection v3 Dataset & Interactive Explorer
+// Data processed by Elixir streaming pipeline
+// ==========================================================================
+
+const DATASET_MANIFEST_URL = '/data/manifest.json';
+const DATASET_FEATURED_URL = '/data/featured.json';
+const DATASET_CATEGORY_BASE = '/data/categories/';
+
+let datasetManifest = null;
+let featuredPrompts = [];
+let categoryCache = {};
+let currentCategory = 'all';
+let currentPrompts = [];
 let filteredPrompts = [];
+let searchQuery = '';
+let currentPage = 1;
+const pageSize = 24;
+let isLoadingData = false;
 
 const CONFIG = {
-  ANIMATION_DELAY: 100,
-  DEBOUNCE_DELAY: 300,
-  CARDS_PER_ROW: {
-    desktop: 4,
-    tablet: 3,
-    mobile: 1
-  }
+  ANIMATION_DELAY: 50,
+  DEBOUNCE_DELAY: 250
 };
 
 // Utility functions
@@ -27,27 +36,16 @@ function debounce(func, wait) {
   };
 }
 
-function parseCSV(csv) {
-  const lines = csv.split("\n");
-  const headers = lines[0]
-    .split(",")
-    .map((header) => header.replace(/"/g, "").trim());
-
-  return lines
-    .slice(1)
-    .map((line) => {
-      const values = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || [];
-      const entry = {};
-      headers.forEach((header, index) => {
-        let value = values[index] ? values[index].replace(/"/g, "").trim() : "";
-        entry[header] = value;
-      });
-      return entry;
-    })
-    .filter((entry) => entry.categories && entry.prompt_text);
+function escapeHTML(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
-// Get category icon
+// Category icons for all 13 attack types
 function getCategoryIcon(category) {
   const icons = {
     'Jailbreak': '🔓',
@@ -59,805 +57,541 @@ function getCategoryIcon(category) {
     'Multistep': '🔄',
     'HiddenPayload': '📦',
     'CrossPrompt': '🔗',
+    'SystemPromptContext': '🔍',
+    'PhishingEmail': '📧',
+    'PhishingURL': '🌐',
     'Benign': '✅'
   };
   return icons[category] || '📝';
 }
 
-// Load prompts from CSV with caching and error handling
-async function loadPrompts() {
-  if (allPrompts.length > 0) {
-    return allPrompts;
-  }
+// Copy prompt text to clipboard with animated state
+function copyPromptText(text, buttonEl) {
+  const doFeedback = () => {
+    buttonEl.classList.add('copied');
+    const span = buttonEl.querySelector('span');
+    const origText = span ? span.textContent : '';
+    if (span) span.textContent = 'Copied!';
+    setTimeout(() => {
+      buttonEl.classList.remove('copied');
+      if (span) span.textContent = origText;
+    }, 1800);
+  };
 
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(doFeedback).catch(() => {
+      fallbackCopy(text, doFeedback);
+    });
+  } else {
+    fallbackCopy(text, doFeedback);
+  }
+}
+
+function fallbackCopy(text, callback) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.select();
   try {
-    isLoading = true;
-    showLoadingState();
-    
-    const response = await fetch('/prompt-injection.csv');
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    
-    const text = await response.text();
-    allPrompts = parseCSV(text);
-    
-    // Initialize filtered prompts to show all by default
-    filteredPrompts = [...allPrompts];
-    
-    hideLoadingState();
-    return allPrompts;
-  } catch (error) {
-    console.error("Error loading prompts:", error);
-    showErrorState("Failed to load prompts. Please try again later.");
+    document.execCommand('copy');
+    if (callback) callback();
+  } catch (err) {
+    console.error('Fallback copy failed:', err);
+  }
+  document.body.removeChild(textarea);
+}
+
+// Load manifest metadata (categories & counts)
+async function loadManifest() {
+  if (datasetManifest) return datasetManifest;
+  try {
+    const res = await fetch(DATASET_MANIFEST_URL);
+    if (!res.ok) throw new Error('Failed to load dataset manifest');
+    datasetManifest = await res.json();
+    return datasetManifest;
+  } catch (err) {
+    console.error('Manifest loading error:', err);
+    return null;
+  }
+}
+
+// Load initial featured prompts batch
+async function loadFeaturedPrompts() {
+  if (featuredPrompts.length > 0) return featuredPrompts;
+  try {
+    const res = await fetch(DATASET_FEATURED_URL);
+    if (!res.ok) throw new Error('Failed to load featured prompts');
+    const data = await res.json();
+    featuredPrompts = (data.prompts || []).map(p => ({
+      categories: p.category,
+      prompt_text: p.prompt_text
+    }));
+    return featuredPrompts;
+  } catch (err) {
+    console.error('Featured prompts loading error:', err);
     return [];
-  } finally {
-    isLoading = false;
   }
 }
 
-function showLoadingState() {
-  const container = document.querySelector('#promptContent');
-  if (container) {
-    container.innerHTML = `
-      <div class="loading-container">
-        <div class="loading-spinner"></div>
-        <p class="loading-text">Loading prompts...</p>
-      </div>
-    `;
+// Load category prompts from on-demand JSON file
+async function loadCategoryPrompts(slug) {
+  if (categoryCache[slug]) return categoryCache[slug];
+  try {
+    const res = await fetch(`${DATASET_CATEGORY_BASE}${slug}.json`);
+    if (!res.ok) throw new Error(`Failed to load ${slug} category`);
+    const data = await res.json();
+    const categoryName = data.category || slug;
+    const prompts = (data.prompts || []).map(p => ({
+      categories: categoryName,
+      prompt_text: typeof p === 'string' ? p : (p.prompt_text || '')
+    }));
+    categoryCache[slug] = prompts;
+    return prompts;
+  } catch (err) {
+    console.error(`Category ${slug} loading error:`, err);
+    return [];
   }
 }
 
-function hideLoadingState() {
-  const loadingContainer = document.querySelector('.loading-container');
-  if (loadingContainer) {
-    loadingContainer.remove();
-  }
-}
-
-function showErrorState(message) {
-  const container = document.querySelector('#promptContent');
-  if (container) {
-    container.innerHTML = `
-      <div class="error-container">
-        <div class="error-icon">⚠️</div>
-        <p class="error-text">${message}</p>
-        <button class="retry-button" onclick="location.reload()">Retry</button>
-      </div>
-    `;
-  }
-}
-
-// Update prompt count
-function updatePromptCount(filteredCount, totalCount) {
-  const countElement = document.getElementById('promptCount');
-  const countNumber = countElement.getElementsByClassName('count-number')[0];
-  if (countElement) {
-    countNumber.textContent = `${filteredCount}`;
-  }
-}
-
-// Render prompts in the main content area
-async function renderMainPrompts() {
-  const allPromptsData = await loadPrompts();
-  const container = document.querySelector('#promptContent');
-  if (container) {
-    // Use filtered prompts if available, otherwise use all prompts
-    const prompts = filteredPrompts.length > 0 ? filteredPrompts : allPromptsData;
-    
-    // Group prompts by category
-    const grouped = prompts.reduce((acc, prompt) => {
-      if (!acc[prompt.categories]) acc[prompt.categories] = [];
-      acc[prompt.categories].push(prompt);
-      return acc;
-    }, {});
-
-    let globalIndex = 0; // Global counter for unique IDs
-
-    container.innerHTML = `<div class="prompts-grid">
-      <div class="prompt-card contribute-card" style="grid-column: 1 / -1; max-width: 600px; margin: 0 auto;">
-        <a href="https://github.com/promptinjection/promptinjection.github.io/issues" target="_blank" style="text-decoration: none; color: inherit; height: 100%; display: flex; flex-direction: column; text-align: center; justify-content: center;">
-          <div class="prompt-title" style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 16px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="8" x2="12" y2="16"></line>
-              <line x1="8" y1="12" x2="16" y2="12"></line>
-            </svg>
-            Report New Prompt Injection Example
-          </div>
-          <p class="prompt-content" style="flex-grow: 1; margin-bottom: 20px; font-size: 1rem; line-height: 1.6;">
-            Found a new prompt injection technique? Help improve AI security by reporting it to our research database. Your contribution helps developers build safer AI systems.
-          </p>
-          <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-            <span class="contributor-badge">Submit Example</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M7 17L17 7"></path>
-              <path d="M7 7h10v10"></path>
-            </svg>
-          </div>
-        </a>
-      </div>
-      ${Object.entries(grouped).map(([category, prompts]) => {
-        const categoryPromptsHtml = prompts.map(({ categories, prompt_text }, idx) => {
-          globalIndex++;
-          // Remove category title for cleaner card view
-          const displayTitle = prompts.length > 1 ? `Example ${idx + 1}` : `Prompt Example`;
-          const countIndicator = prompts.length > 1 ? `<span class="example-count">${idx + 1} of ${prompts.length}</span>` : '';
-          
-          return `
-            <div class="prompt-card" 
-                 data-category="${category}" 
-                 data-global-id="${globalIndex}"
-                 role="button"
-                 tabindex="0"
-                 aria-label="${displayTitle} - ${category} prompt injection example"
-                 aria-describedby="prompt-content-${globalIndex}">
-              <div class="prompt-title">
-                ${displayTitle}
-                <div class="action-buttons"></div>
-              </div>
-              <p class="prompt-content" id="prompt-content-${globalIndex}">${prompt_text.replace(/\\n/g, '<br>')}</p>
-              <div class="card-footer">
-                <span class="category-badge ${category.toLowerCase()}" 
-                      aria-label="Category: ${category}">
-                  ${getCategoryIcon(category)}
-                  ${category}
-                </span>
-                <div style="display:flex; align-items:center; gap:8px;">
-                  ${countIndicator}
-                  <button class="show-toggle" 
-                          type="button"
-                          aria-expanded="false"
-                          aria-controls="prompt-content-${globalIndex}">Show more</button>
-                </div>
-              </div>
-            </div>`;
-        }).join('');
-        
-        return categoryPromptsHtml;
-      }).join('')}</div>`;
-
-    // Add click handlers for modal
-    const cards = container.querySelectorAll('.prompt-card:not(.contribute-card)');
-    let cardIdx = 0;
-    
-    // Add loading animation to cards with improved performance
-    cards.forEach((card, index) => {
-      card.classList.add('loading');
-      card.style.animationDelay = `${index * CONFIG.ANIMATION_DELAY}ms`;
-      
-      // Use requestAnimationFrame for better performance
-      requestAnimationFrame(() => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-        
-        setTimeout(() => {
-          card.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-          card.style.opacity = '1';
-          card.style.transform = 'translateY(0)';
-        }, index * CONFIG.ANIMATION_DELAY);
-      });
+// Main initialization function
+async function initPromptDataset() {
+  const manifest = await loadManifest();
+  if (manifest) {
+    // Update count labels across page
+    const formattedTotal = manifest.total_prompts.toLocaleString();
+    document.querySelectorAll('[data-prompt-count]').forEach(el => {
+      el.textContent = formattedTotal;
     });
-    
-    Object.entries(grouped).forEach(([category, prompts]) => {
-      prompts.forEach((prompt, idx) => {
-        const card = cards[cardIdx++];
-        const modalTitle = prompts.length > 1 ? `${category} - Example ${idx + 1}` : `${category} Example`;
-        // Click handler
-        card.addEventListener('click', (e) => {
-          if (!e.target.closest('.copy-button') && !e.target.closest('.source-link') && !e.target.closest('.show-toggle')) {
-            // Add click animation
-            card.style.transform = 'scale(0.98)';
-            setTimeout(() => {
-              card.style.transform = '';
-            }, 150);
-            showModal(modalTitle, prompt.prompt_text, false);
-          }
-        });
-        
-        // Keyboard navigation
-        card.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            if (!e.target.closest('.show-toggle')) {
-              showModal(modalTitle, prompt.prompt_text, false);
-            }
-          }
-        });
+    const totalAvailEl = document.getElementById('totalAvailableCount');
+    if (totalAvailEl) totalAvailEl.textContent = formattedTotal;
 
-        // Hook up show more/less toggle
-        const toggleBtn = card.querySelector('.show-toggle');
-        const contentEl = card.querySelector('.prompt-content');
-        if (toggleBtn && contentEl) {
-          toggleBtn.addEventListener('click', (ev) => {
-            ev.stopPropagation();
-            const isExpanded = card.classList.toggle('expanded');
-            toggleBtn.textContent = isExpanded ? 'Show less' : 'Show more';
-            toggleBtn.setAttribute('aria-expanded', isExpanded);
-          });
-        }
-      });
-    });
+    // Populate category pills and sidebar
+    populateCategoryPills(manifest.categories || []);
+    populateSidebar(manifest.categories || []);
   }
-  updatePromptCount(prompts.length, prompts.length);
+
+  // Load featured prompts for instant display
+  const featured = await loadFeaturedPrompts();
+  currentPrompts = [...featured];
+  filteredPrompts = [...featured];
+
+  renderExplorer();
+  setupExplorerEventListeners();
 }
 
-// Enhanced sidebar prompts rendering
-async function renderSidebarPrompts() {
-  const prompts = await loadPrompts();
+// Populate category pill buttons
+function populateCategoryPills(categories) {
+  const pillBar = document.getElementById('categoryPillBar');
+  if (!pillBar) return;
+
+  let html = `
+    <button class="cat-pill active" data-category="all" role="tab" aria-selected="true">
+      <span>Featured Prompts</span>
+      <span class="pill-count">57</span>
+    </button>
+  `;
+
+  categories.forEach(cat => {
+    const icon = getCategoryIcon(cat.name);
+    html += `
+      <button class="cat-pill" data-category="${cat.slug}" role="tab" aria-selected="false">
+        <span>${icon} ${cat.name}</span>
+        <span class="pill-count">${cat.total.toLocaleString()}</span>
+      </button>
+    `;
+  });
+
+  pillBar.innerHTML = html;
+
+  pillBar.querySelectorAll('.cat-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      const slug = pill.dataset.category;
+      selectExplorerCategory(slug);
+    });
+  });
+}
+
+// Populate sidebar categories list
+function populateSidebar(categories) {
   const searchResults = document.getElementById('searchResults');
-  if (searchResults) {
-    // Get unique categories and their counts
-    const categoryStats = prompts.reduce((acc, prompt) => {
-      if (!acc[prompt.categories]) {
-        acc[prompt.categories] = 0;
-      }
-      acc[prompt.categories]++;
-      return acc;
-    }, {});
+  if (!searchResults) return;
 
-    // Sort categories alphabetically for better UX
-    const sortedCategories = Object.entries(categoryStats).sort(([a], [b]) => a.localeCompare(b));
+  let html = `
+    <li class="search-result-item category-filter active" data-category="all">
+      <div class="category-item-content">
+        <span class="category-icon">📂</span>
+        <span class="category-name">Featured Prompts</span>
+        <span class="category-count-badge">57</span>
+      </div>
+    </li>
+  `;
 
-    // Add "All Categories" option and individual categories with enhanced styling
-    searchResults.innerHTML = `
-      <li class="search-result-item category-filter active" data-category="all">
+  categories.forEach(cat => {
+    const icon = getCategoryIcon(cat.name);
+    html += `
+      <li class="search-result-item category-filter" data-category="${cat.slug}">
         <div class="category-item-content">
-          <span class="category-icon">📂</span>
-          <span class="category-name">All Categories</span>
-          <span class="category-count-badge">${prompts.length}</span>
+          <span class="category-icon">${icon}</span>
+          <span class="category-name">${cat.name}</span>
+          <span class="category-count-badge">${cat.total.toLocaleString()}</span>
         </div>
       </li>
-      ${sortedCategories.map(([category, count]) => `
-        <li class="search-result-item category-filter" data-category="${category}">
-          <div class="category-item-content">
-            <span class="category-icon">${getCategoryIcon(category)}</span>
-            <span class="category-name">${category}</span>
-            <span class="category-count-badge">${count}</span>
-          </div>
-        </li>
-      `).join('')}
     `;
-    
-    // Force visibility on mobile
-    if (window.innerWidth <= 768) {
-      searchResults.style.display = 'block';
-      searchResults.style.visibility = 'visible';
-      searchResults.style.opacity = '1';
-    }
-    
-    // Add enhanced event listeners to category filters
-    const categoryFilters = searchResults.querySelectorAll('.category-filter');
-    categoryFilters.forEach((filter, index) => {
-      // Add staggered animation delay
-      filter.style.animationDelay = `${index * 50}ms`;
-      
-      filter.addEventListener('click', (e) => {
+  });
+
+  searchResults.innerHTML = html;
+
+  searchResults.querySelectorAll('.category-filter').forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.preventDefault();
+      const slug = item.dataset.category;
+      selectExplorerCategory(slug);
+      const explorerEl = document.getElementById('explorer');
+      if (explorerEl) explorerEl.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+}
+
+// Category switcher
+async function selectExplorerCategory(slug) {
+  if (isLoadingData) return;
+  currentCategory = slug;
+  currentPage = 1;
+
+  // Update pills UI
+  document.querySelectorAll('.cat-pill').forEach(pill => {
+    const isActive = pill.dataset.category === slug;
+    pill.classList.toggle('active', isActive);
+    pill.setAttribute('aria-selected', isActive ? 'true' : 'false');
+  });
+
+  // Update sidebar UI
+  document.querySelectorAll('.category-filter').forEach(item => {
+    item.classList.toggle('active', item.dataset.category === slug);
+  });
+
+  const grid = document.getElementById('explorerGrid');
+  if (grid) {
+    grid.innerHTML = `
+      <div class="loading-container">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">Loading ${slug === 'all' ? 'featured prompts' : slug}...</p>
+      </div>
+    `;
+  }
+
+  isLoadingData = true;
+  if (slug === 'all') {
+    currentPrompts = [...featuredPrompts];
+  } else {
+    currentPrompts = await loadCategoryPrompts(slug);
+  }
+  isLoadingData = false;
+
+  applyFilterAndSearch();
+}
+
+// Live search and filter
+function applyFilterAndSearch() {
+  const query = (searchQuery || '').trim().toLowerCase();
+  if (!query) {
+    filteredPrompts = [...currentPrompts];
+  } else {
+    filteredPrompts = currentPrompts.filter(p => {
+      const text = (p.prompt_text || '').toLowerCase();
+      const cat = (p.categories || '').toLowerCase();
+      return text.includes(query) || cat.includes(query);
+    });
+  }
+  renderExplorer();
+}
+
+// Render explorer grid and pagination
+function renderExplorer() {
+  const container = document.getElementById('explorerGrid');
+  if (!container) return;
+
+  const totalFiltered = filteredPrompts.length;
+  const totalPages = Math.max(1, Math.ceil(totalFiltered / pageSize));
+
+  if (currentPage > totalPages) currentPage = totalPages;
+  if (currentPage < 1) currentPage = 1;
+
+  const startIndex = (currentPage - 1) * pageSize;
+  const pageItems = filteredPrompts.slice(startIndex, startIndex + pageSize);
+
+  // Update counts
+  const showingCountEl = document.getElementById('currentShowingCount');
+  if (showingCountEl) {
+    showingCountEl.textContent = totalFiltered.toLocaleString();
+  }
+
+  // Update pagination UI
+  const paginationWrapper = document.getElementById('paginationWrapper');
+  const pageIndicator = document.getElementById('pageIndicator');
+  const prevBtn = document.getElementById('prevPageBtn');
+  const nextBtn = document.getElementById('nextPageBtn');
+
+  if (paginationWrapper) {
+    paginationWrapper.style.display = totalPages > 1 ? 'flex' : 'none';
+  }
+  if (pageIndicator) {
+    pageIndicator.textContent = `Page ${currentPage} of ${totalPages.toLocaleString()} (${totalFiltered.toLocaleString()} prompts)`;
+  }
+  if (prevBtn) {
+    prevBtn.disabled = currentPage <= 1;
+  }
+  if (nextBtn) {
+    nextBtn.disabled = currentPage >= totalPages;
+  }
+
+  if (pageItems.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 3rem 1rem;">
+        <div style="font-size: 2.5rem; margin-bottom: 1rem;">🔍</div>
+        <h3 style="margin-bottom: 0.5rem;">No prompts found</h3>
+        <p style="color: #6b7280; margin-bottom: 1.5rem;">No prompt injection payloads match "${escapeHTML(searchQuery)}".</p>
+        <button class="btn-download" onclick="clearSearchAndReset()" style="cursor: pointer; border: none;">Reset Search</button>
+      </div>
+    `;
+    return;
+  }
+
+  let html = '';
+  pageItems.forEach((prompt, idx) => {
+    const globalIdx = startIndex + idx + 1;
+    const catName = prompt.categories || 'Payload';
+    const safeCategory = escapeHTML(catName);
+    const categoryClass = catName.toLowerCase().replace(/[^a-z0-9_-]/g, '');
+    const safePromptText = escapeHTML(prompt.prompt_text).replace(/\r?\n/g, '<br>');
+    const icon = getCategoryIcon(catName);
+
+    html += `
+      <div class="prompt-card"
+           data-category="${safeCategory}"
+           data-global-id="${globalIdx}"
+           role="button"
+           tabindex="0"
+           aria-label="${safeCategory} prompt injection example"
+           aria-describedby="prompt-content-${globalIdx}">
+        <div class="prompt-title">
+          <span style="font-size: 0.9rem; font-weight: 600;">${safeCategory} #${globalIdx}</span>
+          <div class="action-buttons">
+            <button class="copy-button" type="button" title="Copy prompt payload" aria-label="Copy prompt">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copy</span>
+            </button>
+          </div>
+        </div>
+        <p class="prompt-content" id="prompt-content-${globalIdx}">${safePromptText}</p>
+        <div class="card-footer">
+          <span class="category-badge ${categoryClass}" aria-label="Category: ${safeCategory}">
+            ${icon}
+            ${safeCategory}
+          </span>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <button class="show-toggle" type="button" aria-expanded="false">Show more</button>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+
+  // Setup interactions
+  const cards = container.querySelectorAll('.prompt-card');
+  cards.forEach((card, idx) => {
+    const promptObj = pageItems[idx];
+    if (!promptObj) return;
+
+    card.addEventListener('click', (e) => {
+      if (!e.target.closest('.copy-button') && !e.target.closest('.show-toggle')) {
+        showModal(`${promptObj.categories} Payload`, promptObj.prompt_text, false);
+      }
+    });
+
+    card.addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && !e.target.closest('.show-toggle') && !e.target.closest('.copy-button')) {
         e.preventDefault();
-        const category = filter.getAttribute('data-category');
-        
-        // Add visual feedback
-        filter.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-          filter.style.transform = '';
-        }, 150);
-        
-        filterByCategory(category, filter);
+        showModal(`${promptObj.categories} Payload`, promptObj.prompt_text, false);
+      }
+    });
+
+    const toggleBtn = card.querySelector('.show-toggle');
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isExpanded = card.classList.toggle('expanded');
+        toggleBtn.textContent = isExpanded ? 'Show less' : 'Show more';
+        toggleBtn.setAttribute('aria-expanded', isExpanded);
       });
-      
-      // Enhanced touch feedback for mobile
-      if (window.innerWidth <= 768) {
-        filter.addEventListener('touchstart', (e) => {
-          filter.style.backgroundColor = 'rgba(16, 185, 129, 0.2)';
-          filter.style.transform = 'scale(0.98)';
-        });
-        
-        filter.addEventListener('touchend', (e) => {
-          setTimeout(() => {
-            if (!filter.classList.contains('active')) {
-              filter.style.backgroundColor = '';
-              filter.style.transform = '';
-            }
-          }, 100);
-        });
+    }
+
+    const copyBtn = card.querySelector('.copy-button');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        copyPromptText(promptObj.prompt_text, copyBtn);
+      });
+    }
+  });
+}
+
+// Setup search, pagination, and category card events
+function setupExplorerEventListeners() {
+  const onSearch = debounce((query) => {
+    searchQuery = query;
+    currentPage = 1;
+    const clearBtn = document.getElementById('clearSearchBtn');
+    if (clearBtn) clearBtn.style.display = query ? 'block' : 'none';
+
+    // Synchronize inputs
+    const headerSearch = document.getElementById('searchInput');
+    const explorerSearch = document.getElementById('explorerSearchInput');
+    if (headerSearch && headerSearch.value !== query) headerSearch.value = query;
+    if (explorerSearch && explorerSearch.value !== query) explorerSearch.value = query;
+
+    applyFilterAndSearch();
+  }, CONFIG.DEBOUNCE_DELAY);
+
+  const explorerInput = document.getElementById('explorerSearchInput');
+  if (explorerInput) {
+    explorerInput.addEventListener('input', (e) => onSearch(e.target.value));
+  }
+
+  const headerInput = document.getElementById('searchInput');
+  if (headerInput) {
+    headerInput.addEventListener('input', (e) => onSearch(e.target.value));
+  }
+
+  const clearBtn = document.getElementById('clearSearchBtn');
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      clearSearchAndReset();
+    });
+  }
+
+  // Pagination buttons
+  const prevBtn = document.getElementById('prevPageBtn');
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderExplorer();
+        const explorerEl = document.getElementById('explorer');
+        if (explorerEl) explorerEl.scrollIntoView({ behavior: 'smooth' });
       }
     });
   }
-}
 
-// Enhanced filtering functionality
-function filterAndSearchPrompts(category = currentFilter) {
-  currentFilter = category;
-  
-  let filtered = [...allPrompts];
-  
-  console.log('Filtering with category:', category);
-  console.log('Starting with', filtered.length, 'prompts');
-  
-  // Apply category filter
-  if (category !== 'all') {
-    filtered = filtered.filter(prompt => 
-      prompt.categories.toLowerCase() === category.toLowerCase()
-    );
-    console.log('After category filter:', filtered.length, 'prompts');
-  }
-  
-  filteredPrompts = filtered;
-  console.log('Final filtered count:', filteredPrompts.length);
-  return filtered;
-}
-
-// Clear all filters and show all prompts
-function clearFilters() {
-  currentFilter = 'all';
-  filteredPrompts = [...allPrompts];
-  
-  // Update active states
-  document.querySelectorAll('.dropdown-item, .category-filter').forEach(item => {
-    item.classList.remove('active');
-  });
-  
-  // Activate "All Categories" items
-  document.querySelectorAll('[data-category="all"]').forEach(item => {
-    item.classList.add('active');
-  });
-}
-
-// Debug function to check filtering state
-function debugFiltering() {
-  console.log('=== Filtering Debug Info ===');
-  console.log('Current Filter:', currentFilter);
-  console.log('All Prompts Count:', allPrompts.length);
-  console.log('Filtered Prompts Count:', filteredPrompts.length);
-  console.log('Available Categories:', [...new Set(allPrompts.map(p => p.categories))]);
-  console.log('========================');
-}
-
-// Test filtering functionality
-async function testFiltering() {
-  console.log('=== Testing Filtering ===');
-  
-  // Test 1: Filter by a specific category
-  const categories = [...new Set(allPrompts.map(p => p.categories))];
-  if (categories.length > 0) {
-    const testCategory = categories[0];
-    console.log('Testing filter by category:', testCategory);
-    await filterByCategory(testCategory);
-    debugFiltering();
-  }
-  
-  // Test 2: Clear filters
-  console.log('Testing clear filters');
-  clearFilters();
-  await renderMainPrompts();
-  debugFiltering();
-  
-  console.log('=== Filtering Test Complete ===');
-}
-
-// Sidebar toggle functionality
-function toggleSidebar() {
-  const sidebar = document.querySelector('.sidebar');
-  const toggleButton = document.querySelector('.sidebar-toggle');
-  
-  if (!sidebar || !toggleButton) {
-    console.error('Sidebar or toggle button not found');
-    return;
-  }
-  
-  const isHidden = sidebar.classList.contains('hidden');
-  
-  if (isHidden) {
-    // Show sidebar
-    sidebar.classList.remove('hidden');
-    toggleButton.classList.remove('active');
-    
-    // Update icon
-    const showIcon = toggleButton.querySelector('.sidebar-show-icon');
-    const hideIcon = toggleButton.querySelector('.sidebar-hide-icon');
-    if (showIcon) showIcon.style.display = 'block';
-    if (hideIcon) hideIcon.style.display = 'none';
-    
-    // Save state to localStorage
-    localStorage.setItem('sidebarHidden', 'false');
-    
-    console.log('Sidebar shown');
-  } else {
-    // Hide sidebar
-    sidebar.classList.add('hidden');
-    toggleButton.classList.add('active');
-    
-    // Update icon
-    const showIcon = toggleButton.querySelector('.sidebar-show-icon');
-    const hideIcon = toggleButton.querySelector('.sidebar-hide-icon');
-    if (showIcon) showIcon.style.display = 'none';
-    if (hideIcon) hideIcon.style.display = 'block';
-    
-    // Save state to localStorage
-    localStorage.setItem('sidebarHidden', 'true');
-    
-    console.log('Sidebar hidden');
-  }
-}
-
-// Initialize sidebar state from localStorage
-function initializeSidebarState() {
-  const sidebarHidden = localStorage.getItem('sidebarHidden');
-  const sidebar = document.querySelector('.sidebar');
-  const toggleButton = document.querySelector('.sidebar-toggle');
-  
-  if (sidebarHidden === 'true' && sidebar && toggleButton) {
-    sidebar.classList.add('hidden');
-    toggleButton.classList.add('active');
-    
-    // Update icon
-    const showIcon = toggleButton.querySelector('.sidebar-show-icon');
-    const hideIcon = toggleButton.querySelector('.sidebar-hide-icon');
-    if (showIcon) showIcon.style.display = 'none';
-    if (hideIcon) hideIcon.style.display = 'block';
-    
-    console.log('Sidebar initialized as hidden');
-  }
-}
-
-function escapeHTML(value) {
-  return String(value)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
-// Filter prompts by category with improved UX
-async function filterByCategory(selectedCategory, clickedElement = null) {
-  if (isLoading) return;
-  
-  console.log('Filtering by category:', selectedCategory);
-  
-  const container = document.querySelector('#promptContent');
-  if (!container) return;
-  
-  // Update active state in dropdown
-  document.querySelectorAll('.dropdown-item').forEach(item => {
-    item.classList.remove('active');
-  });
-  
-  // Update active state in sidebar
-  document.querySelectorAll('.category-filter').forEach(item => {
-    item.classList.remove('active');
-  });
-  
-  const matchingFilter = document.querySelector(`[data-category="${selectedCategory}"]`);
-  if (matchingFilter) {
-    matchingFilter.classList.add('active');
-  }
-  
-  // Apply filters
-  const filtered = filterAndSearchPrompts(selectedCategory);
-  
-  // Re-render main content with filtered results
-  await renderMainPrompts();
-  
-  // Update prompt count
-  updatePromptCount(filtered.length, allPrompts.length);
-  
-  if (container) {
-    let filteredPrompts;
-    let displayTitle;
-    
-    if (selectedCategory === 'all') {
-      filteredPrompts = prompts;
-      displayTitle = 'All Categories';
-    } else {
-      filteredPrompts = prompts.filter(prompt => prompt.categories === selectedCategory);
-      displayTitle = selectedCategory;
-    }
-    
-    // Group filtered prompts by category
-    const grouped = filteredPrompts.reduce((acc, prompt) => {
-      if (!acc[prompt.categories]) acc[prompt.categories] = [];
-      acc[prompt.categories].push(prompt);
-      return acc;
-    }, {});
-
-    let globalIndex = 0;
-    const safeDisplayTitle = escapeHTML(displayTitle);
-
-     container.innerHTML = `<div class="prompts-grid">
-       ${selectedCategory !== 'all' ? `
-       <div class="filter-header">
-         <h3>Showing: ${safeDisplayTitle}</h3>
-         <span class="filter-count">${filteredPrompts.length} example${filteredPrompts.length !== 1 ? 's' : ''}</span>
-       </div>` : ''}
-       ${selectedCategory === 'all' ? `
-       <div class="prompt-card contribute-card" style="grid-column: 1 / -1; max-width: 600px; margin: 0 auto;">
-         <a href="https://github.com/promptinjection/promptinjection.github.io/issues" target="_blank" style="text-decoration: none; color: inherit; height: 100%; display: flex; flex-direction: column; text-align: center; justify-content: center;">
-           <div class="prompt-title" style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 16px;">
-             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-               <circle cx="12" cy="12" r="10"></circle>
-               <line x1="12" y1="8" x2="12" y2="16"></line>
-               <line x1="8" y1="12" x2="16" y2="12"></line>
-             </svg>
-             Report New Prompt Injection Example
-           </div>
-           <p class="prompt-content" style="flex-grow: 1; margin-bottom: 20px; font-size: 1rem; line-height: 1.6;">
-             Found a new prompt injection technique? Help improve AI security by reporting it to our research database. Your contribution helps developers build safer AI systems.
-           </p>
-           <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-             <span class="contributor-badge">Submit Example</span>
-             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-               <path d="M7 17L17 7"></path>
-               <path d="M7 7h10v10"></path>
-             </svg>
-           </div>
-         </a>
-       </div>` : ''}
-       ${Object.entries(grouped).map(([category, prompts]) => {
-        const categoryPromptsHtml = prompts.map(({ categories, prompt_text }, idx) => {
-          globalIndex++;
-          const displayTitle = prompts.length > 1 ? `Example ${idx + 1}` : `${category} Example`;
-          const countIndicator = prompts.length > 1 ? `<span class="example-count">${idx + 1} of ${prompts.length}</span>` : '';
-          const ribbonText = category.toUpperCase();
-          
-          return `
-            <div class="prompt-card" 
-                 data-category="${category}" 
-                 data-global-id="${globalIndex}"
-                 role="button"
-                 tabindex="0"
-                 aria-label="${displayTitle} - ${category} prompt injection example"
-                 aria-describedby="prompt-content-${globalIndex}">
-              <div class="prompt-title">
-                ${displayTitle}
-                <div class="action-buttons"></div>
-              </div>
-              <p class="prompt-content" id="prompt-content-${globalIndex}">${prompt_text.replace(/\\n/g, '<br>')}</p>
-              <div class="card-footer">
-                <span class="category-badge ${category.toLowerCase()}" 
-                      aria-label="Category: ${category}">
-                  ${getCategoryIcon(category)}
-                  ${category}
-                </span>
-                <div style="display:flex; align-items:center; gap:8px;">
-                  ${countIndicator}
-                  <button class="show-toggle" 
-                          type="button"
-                          aria-expanded="false"
-                          aria-controls="prompt-content-${globalIndex}">Show more</button>
-                </div>
-              </div>
-              <div class="card-ribbon" data-ribbon="${ribbonText}" aria-hidden="true">${ribbonText}</div>
-            </div>`;
-        }).join('');
-        
-        return `
-          <div class="category-section">
-            <div class="category-header">
-              <h2 class="category-title">${category}</h2>
-              ${prompts.length > 1 ? `<span class="category-count">${prompts.length} examples</span>` : `<span class="category-count">1 example</span>`}
-            </div>
-            <div class="category-cards">
-              ${categoryPromptsHtml}
-            </div>
-          </div>`;
-      }).join('')}</div>`;
-
-    // Add click handlers for modal
-    const cards = container.querySelectorAll('.prompt-card:not(.contribute-card)');
-    let cardIdx = 0;
-    
-    // Add loading animation to cards with improved performance
-    cards.forEach((card, index) => {
-      card.classList.add('loading');
-      card.style.animationDelay = `${index * CONFIG.ANIMATION_DELAY}ms`;
-      
-      // Use requestAnimationFrame for better performance
-      requestAnimationFrame(() => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-        
-        setTimeout(() => {
-          card.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-          card.style.opacity = '1';
-          card.style.transform = 'translateY(0)';
-        }, index * CONFIG.ANIMATION_DELAY);
-      });
+  const nextBtn = document.getElementById('nextPageBtn');
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      const totalPages = Math.ceil(filteredPrompts.length / pageSize);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderExplorer();
+        const explorerEl = document.getElementById('explorer');
+        if (explorerEl) explorerEl.scrollIntoView({ behavior: 'smooth' });
+      }
     });
-    
-    Object.entries(grouped).forEach(([category, prompts]) => {
-      prompts.forEach((prompt, idx) => {
-        const card = cards[cardIdx++];
-        const modalTitle = prompts.length > 1 ? `${category} - Example ${idx + 1}` : `${category} Example`;
-        // Click handler
-        card.addEventListener('click', (e) => {
-          if (!e.target.closest('.copy-button') && !e.target.closest('.source-link') && !e.target.closest('.show-toggle')) {
-            // Add click animation
-            card.style.transform = 'scale(0.98)';
-            setTimeout(() => {
-              card.style.transform = '';
-            }, 150);
-            showModal(modalTitle, prompt.prompt_text, false);
-          }
-        });
-        
-        // Keyboard navigation
-        card.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            if (!e.target.closest('.show-toggle')) {
-              showModal(modalTitle, prompt.prompt_text, false);
-            }
-          }
-        });
+  }
 
-        // Hook up show more/less toggle
-        const toggleBtn = card.querySelector('.show-toggle');
-        const contentEl = card.querySelector('.prompt-content');
-        if (toggleBtn && contentEl) {
-          toggleBtn.addEventListener('click', (ev) => {
-            ev.stopPropagation();
-            const isExpanded = card.classList.toggle('expanded');
-            toggleBtn.textContent = isExpanded ? 'Show less' : 'Show more';
-            toggleBtn.setAttribute('aria-expanded', isExpanded);
-          });
+  // Connect category cards in categories section
+  document.querySelectorAll('[data-cat-select]').forEach(card => {
+    const onActivate = () => {
+      const slug = card.getAttribute('data-cat-select');
+      selectExplorerCategory(slug);
+      const explorerEl = document.getElementById('explorer');
+      if (explorerEl) explorerEl.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    card.addEventListener('click', onActivate);
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        onActivate();
+      }
+    });
+  });
+
+  // CLI 1-line download copy button (legacy support)
+  const cliCopyBtn = document.getElementById('cliCopyBtn');
+  if (cliCopyBtn) {
+    cliCopyBtn.addEventListener('click', () => {
+      const codeEl = document.getElementById('cliCommandCode');
+      const text = codeEl ? codeEl.innerText.trim() : 'curl -O -L https://raw.githubusercontent.com/promptinjection/promptinjection.github.io/main/prompt-injection-v3-part-{1,2,3}.csv && cat prompt-injection-v3-part-*.csv > prompt-injection-v3.csv';
+      copyPromptText(text, cliCopyBtn);
+    });
+  }
+
+  // Hugging Face snippet copy button
+  const hfSnippetCopyBtn = document.getElementById('hfSnippetCopyBtn');
+  if (hfSnippetCopyBtn) {
+    hfSnippetCopyBtn.addEventListener('click', () => {
+      const codeEl = document.getElementById('hfSnippetCode');
+      const text = codeEl ? codeEl.innerText.trim() : 'from datasets import load_dataset\ndataset = load_dataset("AIDataFdn/promptinjection")';
+      copyPromptText(text, hfSnippetCopyBtn);
+    });
+  }
+
+  // Fetch live GitHub Stars
+  const ghLiveStarCount = document.getElementById('ghLiveStarCount');
+  if (ghLiveStarCount) {
+    fetch('https://api.github.com/repos/promptinjection/promptinjection.github.io')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data && typeof data.stargazers_count === 'number') {
+          ghLiveStarCount.textContent = `★ ${data.stargazers_count.toLocaleString()}`;
         }
-      });
-    });
+      })
+      .catch(() => {});
   }
-  
-  updatePromptCount(filteredPrompts.length, prompts.length);
-}
 
-// Scroll to prompt card function
-function scrollToPrompt(title, prompt) {
-  // Find the prompt card with matching title
-  const cards = document.querySelectorAll('.prompt-card');
-  const targetCard = Array.from(cards).find(card => {
-    const cardTitle = card.querySelector('.prompt-title').textContent
-      .replace(/\s+/g, ' ') // Normalize whitespace
-      .replace(/[\n\r]/g, '') // Remove newlines
-      .trim();
-
-    const searchTitle = title
-      .replace(/\s+/g, ' ') // Normalize whitespace
-      .replace(/[\n\r]/g, '') // Remove newlines
-      .trim();
-
-    return cardTitle.toLowerCase().includes(searchTitle.toLowerCase()) ||
-           searchTitle.toLowerCase().includes(cardTitle.toLowerCase());
+  // Keyboard shortcut '/' to focus search
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+      const explorerSearch = document.getElementById('explorerSearchInput');
+      if (explorerSearch) {
+        e.preventDefault();
+        explorerSearch.focus();
+        explorerSearch.select();
+        const explorerEl = document.getElementById('explorer');
+        if (explorerEl) {
+          explorerEl.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    }
   });
-
-  if (targetCard) {
-    // Remove highlight from all cards
-    cards.forEach(card => {
-      card.style.transition = 'all 0.3s ease';
-      card.style.transform = 'none';
-      card.style.boxShadow = 'none';
-      card.style.borderColor = '';
-    });
-
-    // Different scroll behavior for mobile and desktop
-    const isMobile = window.innerWidth <= 768;
-    const headerHeight = document.querySelector('.site-header').offsetHeight;
-
-    if (isMobile) {
-      // On mobile, scroll the window
-      const cardRect = targetCard.getBoundingClientRect();
-      const scrollTop = window.pageYOffset + cardRect.top - headerHeight - 20;
-
-      window.scrollTo({
-        top: scrollTop,
-        behavior: 'smooth'
-      });
-    } else {
-      // On desktop, scroll the main-content container
-      const mainContent = document.querySelector('.main-content');
-      const cardRect = targetCard.getBoundingClientRect();
-      const scrollTop = mainContent.scrollTop + cardRect.top - headerHeight - 20;
-
-      mainContent.scrollTo({
-        top: scrollTop,
-        behavior: 'smooth'
-      });
-    }
-
-    // Add highlight effect after scrolling completes
-    setTimeout(() => {
-      targetCard.style.transform = 'scale(1.02)';
-      targetCard.style.boxShadow = '0 0 0 2px var(--accent-color)';
-      targetCard.style.borderColor = 'var(--accent-color)';
-
-      // Remove highlight after animation
-      setTimeout(() => {
-        targetCard.style.transform = 'none';
-        targetCard.style.boxShadow = 'none';
-        targetCard.style.borderColor = '';
-      }, 2000);
-    }, 500); // Wait for scroll to complete
-  }
 }
 
-
-
-// Fetch GitHub stars
-async function fetchGitHubStars() {
-  try {
-    const response = await fetch("https://api.github.com/repos/promptinjection/promptinjection.github.io");
-    const data = await response.json();
-    const stars = data.stargazers_count;
-    const starCount = document.getElementById("starCount");
-    if (starCount) {
-      starCount.textContent = stars.toLocaleString();
-    }
-  } catch (error) {
-    console.error("Error fetching star count:", error);
-    const starCount = document.getElementById("starCount");
-    if (starCount) {
-      starCount.textContent = "0";
-    }
-  }
-}
+window.clearSearchAndReset = function() {
+  const headerInput = document.getElementById('searchInput');
+  const explorerInput = document.getElementById('explorerSearchInput');
+  if (headerInput) headerInput.value = '';
+  if (explorerInput) explorerInput.value = '';
+  const clearBtn = document.getElementById('clearSearchBtn');
+  if (clearBtn) clearBtn.style.display = 'none';
+  searchQuery = '';
+  currentPage = 1;
+  applyFilterAndSearch();
+};
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
-  renderMainPrompts();
-  renderSidebarPrompts();
-  
-  // Initialize sidebar visibility based on screen size
-  const sidebar = document.querySelector('.sidebar');
-  const toggleButton = document.querySelector('.categories-toggle');
-  
-  if (window.innerWidth <= 768) {
-    // Hide sidebar by default on mobile
-    if (sidebar) sidebar.classList.add('hidden');
-    if (toggleButton) toggleButton.classList.remove('active');
-  } else {
-    // Show sidebar by default on desktop
-    if (sidebar) sidebar.classList.remove('hidden');
-    if (toggleButton) toggleButton.classList.add('active');
-  }
-  
-  // Ensure category filters are visible on mobile when sidebar is shown
-  if (window.innerWidth <= 768) {
-    setTimeout(() => {
-      renderSidebarPrompts();
-    }, 100);
-  }
-  
-  // Handle window resize to manage sidebar visibility
-  window.addEventListener('resize', () => {
-    const sidebar = document.querySelector('.sidebar');
-    const toggleButton = document.querySelector('.categories-toggle');
-    
-    if (window.innerWidth <= 768) {
-      // Mobile: Only hide sidebar if toggle button is not active
-      if (sidebar && toggleButton && !toggleButton.classList.contains('active')) {
-        sidebar.classList.add('hidden');
-      }
-      const searchInput = document.getElementById('searchInput');
-      if (searchInput && !searchInput.value.trim()) {
-        renderSidebarPrompts();
-      }
-    } else {
-      // Desktop: Show sidebar by default
-      if (sidebar) sidebar.classList.remove('hidden');
-      if (toggleButton) toggleButton.classList.add('active');
-    }
-  });
-  
+  initPromptDataset();
+  initKillChain();
   
   fetchGitHubStars();
   updateModeIcons();
-  
-  // Initialize sidebar state
-  initializeSidebarState();
   
   // Make debug function available globally
   window.debugFiltering = debugFiltering;
   window.clearFilters = clearFilters;
   window.testFiltering = testFiltering;
-  window.toggleSidebar = toggleSidebar;
   
   // Ensure categories dropdown works
   const categoriesToggle = document.querySelector('.categories-toggle');
@@ -937,24 +671,24 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       // Populate on first open
       if (categorySelect.options.length <= 1) {
-        const prompts = await loadPrompts();
-        const categories = Array.from(new Set(prompts.map(p => p.categories))).sort();
+        const manifest = await loadManifest();
+        const categories = manifest ? manifest.categories : [];
         categories.forEach(cat => {
           const opt = document.createElement('option');
-          opt.value = cat;
-          opt.textContent = cat;
+          opt.value = cat.slug;
+          opt.textContent = `${cat.name} (${cat.total.toLocaleString()})`;
           categorySelect.appendChild(opt);
         });
       }
       categorySelect.style.display = '';
-      toggleBtn.textContent = 'Category Filter ▴';
+      toggleBtn.textContent = 'Category Filter ▾';
     });
 
     categorySelect.addEventListener('change', (e) => {
       const value = e.target.value;
-      if (typeof filterByCategory === 'function') {
-        filterByCategory(value);
-      }
+      selectExplorerCategory(value);
+      const explorerEl = document.getElementById('explorer');
+      if (explorerEl) explorerEl.scrollIntoView({ behavior: 'smooth' });
     });
   }
 });
@@ -997,32 +731,26 @@ async function populateCategoriesDropdown() {
   const dropdown = document.getElementById('categoriesDropdown');
   if (!dropdown) return;
   
-  const prompts = await loadPrompts();
-  const grouped = prompts.reduce((acc, prompt) => {
-    if (!acc[prompt.categories]) acc[prompt.categories] = [];
-    acc[prompt.categories].push(prompt);
-    return acc;
-  }, {});
+  const manifest = await loadManifest();
+  const categories = manifest ? manifest.categories : [];
   
   // Update "All Categories" count
   const allCount = document.getElementById('allCount');
-  if (allCount) {
-    allCount.textContent = prompts.length;
+  if (allCount && manifest) {
+    allCount.textContent = manifest.total_prompts.toLocaleString();
   }
   
   // Add category items
-  const categoryItems = Object.entries(grouped)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([category, categoryPrompts]) => {
-      const icon = getCategoryIcon(category);
-      return `
-        <div class="dropdown-item" data-category="${category}">
-          <span class="category-icon">${icon}</span>
-          <span class="category-name">${category}</span>
-          <span class="category-count">${categoryPrompts.length}</span>
-        </div>
-      `;
-    }).join('');
+  const categoryItems = categories.map(cat => {
+    const icon = getCategoryIcon(cat.name);
+    return `
+      <div class="dropdown-item" data-category="${cat.slug}">
+        <span class="category-icon">${icon}</span>
+        <span class="category-name">${cat.name}</span>
+        <span class="category-count">${cat.total.toLocaleString()}</span>
+      </div>
+    `;
+  }).join('');
   
   // Insert after the divider
   const divider = dropdown.querySelector('.dropdown-divider');
@@ -1034,8 +762,10 @@ async function populateCategoriesDropdown() {
   dropdown.querySelectorAll('.dropdown-item').forEach(item => {
     item.addEventListener('click', () => {
       const category = item.dataset.category;
-      selectCategory(category);
+      selectExplorerCategory(category);
       closeDropdown();
+      const explorerEl = document.getElementById('explorer');
+      if (explorerEl) explorerEl.scrollIntoView({ behavior: 'smooth' });
     });
   });
   
@@ -1231,5 +961,242 @@ function hideModal() {
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     hideModal();
+    closeKillChainModal();
   }
 });
+
+// ==========================================================================
+// AI Kill Chain Matrix Chart Implementation
+// Modeled after Lineaje 10-Stage AI Kill Chain Framework
+// ==========================================================================
+
+function initKillChain() {
+  const container = document.getElementById('killchainMatrixContainer');
+  const stepper = document.getElementById('killchainStepper');
+  const searchInput = document.getElementById('killchainSearchInput');
+  const statusEl = document.getElementById('killchainStatus');
+
+  if (!container) return;
+
+  // Stepper Stage Filter / Smooth Scroll
+  if (stepper) {
+    stepper.addEventListener('click', (e) => {
+      const chip = e.target.closest('.killchain-step-chip');
+      if (!chip) return;
+
+      stepper.querySelectorAll('.killchain-step-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+
+      const stage = chip.dataset.stage;
+      const columns = container.querySelectorAll('.killchain-col');
+
+      if (stage === 'all') {
+        columns.forEach(col => {
+          col.style.display = 'flex';
+          col.classList.remove('active-col');
+        });
+        container.scrollTo({ left: 0, behavior: 'smooth' });
+        if (statusEl) statusEl.textContent = 'Showing all 58 techniques across 10 stages';
+      } else {
+        columns.forEach(col => {
+          const isTarget = col.dataset.stageCol === stage;
+          col.classList.toggle('active-col', isTarget);
+        });
+
+        const targetCol = container.querySelector(`.killchain-col[data-stage-col="${stage}"]`);
+        if (targetCol) {
+          const colLeft = targetCol.offsetLeft - 16;
+          container.scrollTo({ left: colLeft, behavior: 'smooth' });
+          const techCount = targetCol.querySelectorAll('.killchain-card').length;
+          const stageTitle = targetCol.querySelector('.killchain-col-title')?.textContent || '';
+          if (statusEl) statusEl.textContent = `Stage ${stage} (${stageTitle}): ${techCount} techniques`;
+        }
+      }
+    });
+  }
+
+  // Real-time Search in Kill Chain Matrix
+  if (searchInput) {
+    searchInput.addEventListener('input', debounce((e) => {
+      const query = e.target.value.toLowerCase().trim();
+      const cards = container.querySelectorAll('.killchain-card');
+
+      if (!query) {
+        cards.forEach(card => {
+          card.classList.remove('dimmed', 'matched');
+        });
+        if (statusEl) statusEl.textContent = 'Showing 58 techniques across 10 stages';
+        return;
+      }
+
+      let matchedCount = 0;
+      const matchedStages = new Set();
+
+      cards.forEach(card => {
+        const name = (card.dataset.name || '').toLowerCase();
+        const desc = (card.dataset.desc || '').toLowerCase();
+        const cat = (card.dataset.category || '').toLowerCase();
+        const techId = (card.dataset.techId || '').toLowerCase();
+
+        if (name.includes(query) || desc.includes(query) || cat.includes(query) || techId.includes(query)) {
+          card.classList.remove('dimmed');
+          card.classList.add('matched');
+          matchedCount++;
+          matchedStages.add(card.dataset.stage);
+        } else {
+          card.classList.remove('matched');
+          card.classList.add('dimmed');
+        }
+      });
+
+      if (statusEl) {
+        statusEl.textContent = `Found ${matchedCount} technique${matchedCount === 1 ? '' : 's'} across ${matchedStages.size} stage${matchedStages.size === 1 ? '' : 's'}`;
+      }
+    }, 180));
+  }
+
+  // Click on Technique Card to inspect
+  container.addEventListener('click', (e) => {
+    const card = e.target.closest('.killchain-card');
+    if (!card) return;
+
+    openKillChainModal({
+      stageNum: card.dataset.stage,
+      techId: card.dataset.techId,
+      name: card.dataset.name,
+      desc: card.dataset.desc,
+      category: card.dataset.category,
+      sample: card.dataset.sample
+    });
+  });
+
+  // Fullscreen View Toggle
+  const fullscreenBtn = document.getElementById('killchainFullscreenBtn');
+  const sectionEl = document.getElementById('ai-kill-chain');
+  const fullscreenText = document.getElementById('kcFullscreenText');
+
+  if (fullscreenBtn && sectionEl) {
+    const toggleFullscreen = () => {
+      const isFull = sectionEl.classList.toggle('is-fullscreen');
+      if (fullscreenText) {
+        fullscreenText.textContent = isFull ? 'Exit Fullscreen' : 'Fullscreen View';
+      }
+      if (isFull) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+      }
+    };
+
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+    // Escape exits fullscreen
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && sectionEl.classList.contains('is-fullscreen')) {
+        sectionEl.classList.remove('is-fullscreen');
+        if (fullscreenText) fullscreenText.textContent = 'Fullscreen View';
+        document.body.style.overflow = '';
+      }
+    });
+  }
+}
+
+function openKillChainModal(tech) {
+  let modalOverlay = document.getElementById('killchainModalOverlay');
+  if (!modalOverlay) {
+    const html = `
+      <div class="modal-overlay" id="killchainModalOverlay" style="display: none; z-index: 10000;">
+        <div class="modal" style="max-width: 640px; width: 92%;">
+          <div class="modal-header">
+            <div>
+              <div class="killchain-modal-stage" id="kcModalStage"></div>
+              <h2 class="modal-title" id="kcModalTitle" style="font-size: 1.3rem; margin: 0;"></h2>
+            </div>
+            <button class="modal-close" id="kcModalClose" title="Close modal">&times;</button>
+          </div>
+          <div class="modal-content" style="padding: 1.25rem 1.5rem;">
+            <p class="killchain-modal-desc" id="kcModalDesc"></p>
+            <div style="margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 0.8rem; font-weight: 600; color: #64748b;">Dataset Taxonomy:</span>
+              <span class="category-badge" id="kcModalCategory"></span>
+            </div>
+            <div class="killchain-modal-payload-box">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span class="killchain-modal-payload-title">Adversarial Signature / Payload Pattern</span>
+                <button class="copy-button" id="kcCopyPayloadBtn" type="button">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy</span>
+                </button>
+              </div>
+              <pre class="killchain-modal-payload-code" id="kcModalSample"></pre>
+            </div>
+          </div>
+          <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <a href="https://www.lineaje.com/ai-kill-chain" target="_blank" rel="noopener" style="font-size: 0.78rem; color: #64748b; text-decoration: underline;">Lineaje AI Kill Chain Docs &rarr;</a>
+            <button class="btn-download" id="kcExploreCategoryBtn" style="padding: 8px 16px; font-size: 0.84rem; cursor: pointer; border: none; border-radius: 8px;">
+              Inspect Prompts in Explorer &rarr;
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', html);
+    modalOverlay = document.getElementById('killchainModalOverlay');
+
+    const closeBtn = document.getElementById('kcModalClose');
+    if (closeBtn) closeBtn.addEventListener('click', closeKillChainModal);
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) closeKillChainModal();
+    });
+
+    const copyBtn = document.getElementById('kcCopyPayloadBtn');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', () => {
+        const sampleText = document.getElementById('kcModalSample')?.textContent || '';
+        copyPromptText(sampleText, copyBtn);
+      });
+    }
+  }
+
+  // Populate data
+  const stageEl = document.getElementById('kcModalStage');
+  const titleEl = document.getElementById('kcModalTitle');
+  const descEl = document.getElementById('kcModalDesc');
+  const catEl = document.getElementById('kcModalCategory');
+  const sampleEl = document.getElementById('kcModalSample');
+  const exploreBtn = document.getElementById('kcExploreCategoryBtn');
+
+  if (stageEl) stageEl.textContent = `Stage ${tech.stageNum} · ${tech.techId}`;
+  if (titleEl) titleEl.textContent = tech.name;
+  if (descEl) descEl.textContent = tech.desc;
+  if (sampleEl) sampleEl.textContent = tech.sample;
+
+  if (catEl) {
+    const catClass = tech.category.toLowerCase().replace(/[^a-z0-9_-]/g, '');
+    catEl.className = `category-badge ${catClass}`;
+    catEl.innerHTML = `${getCategoryIcon(tech.category)} ${tech.category}`;
+  }
+
+  if (exploreBtn) {
+    exploreBtn.onclick = () => {
+      closeKillChainModal();
+      selectExplorerCategory(tech.category.toLowerCase());
+      const explorerEl = document.getElementById('explorer');
+      if (explorerEl) explorerEl.scrollIntoView({ behavior: 'smooth' });
+    };
+  }
+
+  modalOverlay.style.display = 'flex';
+  modalOverlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeKillChainModal() {
+  const modalOverlay = document.getElementById('killchainModalOverlay');
+  if (modalOverlay) {
+    modalOverlay.style.display = 'none';
+    modalOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+

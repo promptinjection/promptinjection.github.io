@@ -19,6 +19,15 @@ show_excerpts: true
 plugins:
   - jekyll-seo-tag
 
+exclude:
+  - scripts
+  - "*.csv"
+  - "*.bak*"
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - .bundle
+
 # Permalink structure for blog posts
 permalink: /:year/:month/:day/:title:output_ext
 
