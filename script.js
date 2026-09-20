@@ -274,12 +274,21 @@ async function selectExplorerCategory(slug) {
 
   const grid = document.getElementById('explorerGrid');
   if (grid) {
-    grid.innerHTML = `
-      <div class="loading-container">
-        <div class="loading-spinner"></div>
-        <p class="loading-text">Loading ${slug === 'all' ? 'featured prompts' : slug}...</p>
-      </div>
-    `;
+    grid.textContent = '';
+
+    const loadingContainer = document.createElement('div');
+    loadingContainer.className = 'loading-container';
+
+    const loadingSpinner = document.createElement('div');
+    loadingSpinner.className = 'loading-spinner';
+
+    const loadingText = document.createElement('p');
+    loadingText.className = 'loading-text';
+    loadingText.textContent = `Loading ${slug === 'all' ? 'featured prompts' : slug}...`;
+
+    loadingContainer.appendChild(loadingSpinner);
+    loadingContainer.appendChild(loadingText);
+    grid.appendChild(loadingContainer);
   }
 
   isLoadingData = true;
