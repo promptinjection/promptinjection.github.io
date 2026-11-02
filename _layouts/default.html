@@ -61,11 +61,24 @@
       </div>
       <div class="header-right">
         <nav class="main-nav">
-          <a href="/#community" class="nav-link nav-download" title="Star on GitHub & Access Hugging Face Dataset">
-            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="color: #fbbf24;">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          <a href="/#playground" class="nav-link" title="Interactive Prompt Injection Simulator">
+            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
             </svg>
-            <span class="nav-text">Star &amp; HF</span>
+            <span class="nav-text">Simulator</span>
+          </a>
+          <a href="/#leaderboard" class="nav-link" title="Frontier Model Defense Leaderboard">
+            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+            <span class="nav-text">Leaderboard</span>
+          </a>
+          <a href="/#ai-kill-chain" class="nav-link" title="AI Kill Chain 10-Stage Matrix">
+            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+            </svg>
+            <span class="nav-text">Kill Chain</span>
           </a>
           <a href="/#categories" class="nav-link" title="Explore 13 attack categories">
             <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -76,19 +89,18 @@
             </svg>
             <span class="nav-text">Taxonomy</span>
           </a>
-          <a href="/#ai-kill-chain" class="nav-link" title="AI Kill Chain 10-Stage Matrix">
-            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-            </svg>
-            <span class="nav-text">Kill Chain</span>
-          </a>
           <a href="/#explorer" class="nav-link" title="Live Prompt Explorer">
             <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="8"></circle>
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
             <span class="nav-text">Explorer</span>
+          </a>
+          <a href="/#community" class="nav-link nav-download" title="Star on GitHub & Access Hugging Face Dataset">
+            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="color: #fbbf24;">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            <span class="nav-text">Star &amp; HF</span>
           </a>
           <a href="/blog" class="nav-link">
             <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
@@ -102,6 +114,11 @@
             <span class="nav-text">Blog</span>
           </a>
         </nav>
+        <button class="cmd-k-trigger-btn" id="cmdKTriggerBtn" type="button" aria-label="Quick Search Palette" title="Command Palette (⌘K)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <span class="cmd-k-text">Search</span>
+          <kbd class="cmd-k-pill">⌘K</kbd>
+        </button>
         <div class="categories-dropdown">
           <button class="categories-toggle" onclick="toggleCategoriesDropdown()" title="Select category filter">
             <svg class="categories-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
@@ -439,6 +456,25 @@
       }
     }
   </style>
+  <!-- Spotlight Command Palette (Cmd + K) -->
+  <div class="cmd-palette-overlay" id="cmdPaletteOverlay" style="display: none;" role="dialog" aria-modal="true" aria-label="Command search palette">
+    <div class="cmd-palette-modal">
+      <div class="cmd-palette-input-wrap">
+        <svg class="cmd-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" class="cmd-palette-input" id="cmdPaletteInput" placeholder="Search prompts, categories, AI Kill Chain, or type a command..." autocomplete="off">
+        <button class="cmd-close-btn" id="cmdCloseBtn" type="button" aria-label="Close command palette">&times;</button>
+      </div>
+      <div class="cmd-palette-results" id="cmdPaletteResults">
+        <!-- Results injected dynamically -->
+      </div>
+      <div class="cmd-palette-footer">
+        <span><kbd>&uarr;</kbd> <kbd>&darr;</kbd> Navigate</span>
+        <span><kbd>&crarr;</kbd> Select</span>
+        <span><kbd>ESC</kbd> Close</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MSNHFWTE77"></script>
   <script>

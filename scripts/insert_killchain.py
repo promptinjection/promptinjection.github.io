@@ -12,22 +12,27 @@ with open(INDEX_PATH, "r", encoding="utf-8") as f:
 with open(SNIPPET_PATH, "r", encoding="utf-8") as f:
     killchain_html = f.read()
 
-# Check if already inserted
-if 'id="ai-kill-chain"' in index_content:
-    print("Already in index.md, replacing existing block...")
-    # Replace from <!-- ========================================================================== \n AI Kill Chain to </section>
-    import re
-    index_content = re.sub(r'<!-- ===+.*AI Kill Chain 10-Stage Matrix.*?</section>\n', '', index_content, flags=re.DOTALL)
+import re
 
-# Insert after end of categories section
-target = '</section>\n\n<!-- Interactive Prompt Explorer Section -->'
-if target in index_content:
-    new_index = index_content.replace(target, f"</section>\n\n{killchain_html}\n<!-- Interactive Prompt Explorer Section -->")
+# Match the entire Kill Chain section if present
+pattern = r'<!-- =+[\r\n\s]+AI Kill Chain 10-Stage Matrix Framework.*?<\/section>[\r\n\s]+<!-- Interactive Prompt Explorer Section -->'
+replacement = f"{killchain_html}\n<!-- Interactive Prompt Explorer Section -->"
+
+if re.search(pattern, index_content, flags=re.DOTALL):
+    new_index = re.sub(pattern, replacement, index_content, flags=re.DOTALL)
     with open(INDEX_PATH, "w", encoding="utf-8") as f:
         f.write(new_index)
-    print("Successfully inserted AI Kill Chain into index.md")
+    print("Successfully replaced AI Kill Chain in index.md")
 else:
-    print("Target marker not found in index.md!")
+    # If not present yet, insert before explorer
+    target = '<!-- Interactive Prompt Explorer Section -->'
+    if target in index_content:
+        new_index = index_content.replace(target, f"{killchain_html}\n{target}")
+        with open(INDEX_PATH, "w", encoding="utf-8") as f:
+            f.write(new_index)
+        print("Successfully inserted AI Kill Chain into index.md")
+    else:
+        print("Target marker not found in index.md!")
 
 # Also create manage.md (and manage page) for user direct access
 manage_md_content = f"""---
