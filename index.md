@@ -23,13 +23,17 @@ layout: default
   </p>
 
   <div class="hero-cta-row">
-    <a href="#explorer" class="cta-btn cta-primary">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-      Explore 731K Dataset
+    <a href="/threat-model/" class="cta-btn cta-primary">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Interactive Threat Model
     </a>
     <a href="#ai-kill-chain" class="cta-btn cta-secondary">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
       AI Kill Chain™
+    </a>
+    <a href="#explorer" class="cta-btn cta-secondary">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      Explore 731K Dataset
     </a>
     <a href="https://github.com/promptinjection/promptinjection.github.io" target="_blank" rel="noopener" class="cta-btn cta-gh">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color: #fbbf24;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>

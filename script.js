@@ -1400,6 +1400,7 @@ function initCommandPalette() {
   if (!overlay || !input || !results) return;
 
   const commands = [
+    { type: 'Navigation', title: 'AI Threat Model & Attack Chains', desc: 'Interactive visual architecture, STRIDE, TA01-07, and P1-P6', href: '/threat-model/' },
     { type: 'Navigation', title: 'AI Kill Chain™ Matrix', desc: '10 stages & 58 techniques security matrix', href: '#ai-kill-chain' },
     { type: 'Navigation', title: '13 Attack Taxonomy Categories', desc: 'Jailbreak, Override, Tool Hijack, Obfuscation...', href: '#categories' },
     { type: 'Navigation', title: 'Live Prompt Explorer', desc: 'Search and inspect 731,908 prompts', href: '#explorer' },

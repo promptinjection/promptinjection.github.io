@@ -118,10 +118,46 @@ def render_site():
             f.write(manage_html)
         print("Generated manage.html, manage/index.html, and ai-kill-chain/index.html")
 
-    # Copy style.css, script.js
+    # Also render threat-model.md if present
+    tm_md_path = os.path.join(ROOT_DIR, "threat-model.md")
+    if os.path.exists(tm_md_path):
+        with open(tm_md_path, "r", encoding="utf-8") as f:
+            tm_raw = f.read()
+        tm_parts = tm_raw.split("---", 2)
+        tm_body = tm_parts[2].strip() if len(tm_parts) >= 3 else tm_raw
+        tm_html = layout
+        tm_html = tm_html.replace('{{ page.title | default: site.title }}', 'AI Threat Model & Attack Chains')
+        tm_html = tm_html.replace('{{ page.subtitle | default: site.subtitle }}', 'interactive reference architecture for enterprise LLM & autonomous agent security')
+        tm_html = tm_html.replace("{{ page.body_class | default: '' }}", 'vibe')
+        tm_html = tm_html.replace('{% seo %}', '<meta name="description" content="Interactive AI Threat Model & Attack Chains Reference Architecture across STRIDE, TA01-07, and P1-P6.">')
+        tm_html = re.sub(r'\{%\s*if\s+page\.hide_platform_selector\s*!=\s*true\s*%\}.*?\{%\s*endif\s*%\}', '', tm_html, flags=re.DOTALL)
+        tm_html = re.sub(r'\{%\s*if\s+page\.hide_tone_selector\s*!=\s*true\s*%\}.*?\{%\s*endif\s*%\}', '', tm_html, flags=re.DOTALL)
+        tm_html = re.sub(r'\{%\s*if\s+page\.subpage\s*!=\s*true\s*%\}.*?\{%\s*endif\s*%\}', '', tm_html, flags=re.DOTALL)
+        tm_html = tm_html.replace('{{ content }}', tm_body)
+        tm_html = re.sub(r'\{%.*?%\}', '', tm_html)
+
+        with open(os.path.join(SITE_DIR, "threat-model.html"), "w", encoding="utf-8") as f:
+            f.write(tm_html)
+        os.makedirs(os.path.join(SITE_DIR, "threat-model"), exist_ok=True)
+        with open(os.path.join(SITE_DIR, "threat-model", "index.html"), "w", encoding="utf-8") as f:
+            f.write(tm_html)
+        print("Generated threat-model.html and threat-model/index.html")
+
+    # Copy style.css, script.js, threat-model.css, threat-model.js
     shutil.copy2(os.path.join(ROOT_DIR, "style.css"), os.path.join(SITE_DIR, "style.css"))
     shutil.copy2(os.path.join(ROOT_DIR, "script.js"), os.path.join(SITE_DIR, "script.js"))
-    print("Copied style.css and script.js to _site/")
+    if os.path.exists(os.path.join(ROOT_DIR, "threat-model.css")):
+        shutil.copy2(os.path.join(ROOT_DIR, "threat-model.css"), os.path.join(SITE_DIR, "threat-model.css"))
+    if os.path.exists(os.path.join(ROOT_DIR, "threat-model.js")):
+        shutil.copy2(os.path.join(ROOT_DIR, "threat-model.js"), os.path.join(SITE_DIR, "threat-model.js"))
+    print("Copied assets, style.css, script.js, threat-model.css, threat-model.js to _site/")
+
+    # Sync assets/
+    src_assets = os.path.join(ROOT_DIR, "assets")
+    dest_assets = os.path.join(SITE_DIR, "assets")
+    if os.path.exists(src_assets):
+        shutil.copytree(src_assets, dest_assets, dirs_exist_ok=True)
+        print("Synced assets/ directory to _site/assets/")
 
     # Sync data/
     src_data = os.path.join(ROOT_DIR, "data")

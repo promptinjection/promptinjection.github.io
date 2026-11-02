@@ -1,0 +1,152 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1360 840" width="100%" height="100%" style="font-family: 'Inter', -apple-system, sans-serif;">
+  
+  <defs>
+    <!-- Background Grid Pattern -->
+    <pattern id="gridPattern" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 255, 255, 0.04)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1.5" fill="rgba(56, 189, 248, 0.15)"/>
+    </pattern>
+
+    <!-- Glowing Filters -->
+    <filter id="glowGreen" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="glowRed" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="glowBlue" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <!-- Marker Arrows -->
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#22c55e" />
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#ef4444" />
+    </marker>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#38bdf8" />
+    </marker>
+  </defs>
+  <rect width="100%" height="100%" fill="#090d16" />
+  <rect width="100%" height="100%" fill="url(#gridPattern)" />
+
+
+  <!-- Sheet Title Header -->
+  <g id="sheet-header" transform="translate(40, 40)">
+    <rect x="0" y="0" width="480" height="42" rx="8" fill="rgba(239, 68, 68, 0.12)" stroke="rgba(239, 68, 68, 0.35)" stroke-width="1"/>
+    <circle cx="20" cy="21" r="6" fill="#ef4444" />
+    <text x="36" y="26" fill="#f8fafc" font-size="14" font-weight="700">SHEET 02 · ATTACK CHAINS &amp; MITIGATION NARRATIVES (P1–P6)</text>
+  </g>
+
+  <!-- Chain Cards Grid -->
+  <!-- P1 -->
+  <g class="tm-node" data-id="P1" data-slug="p1" transform="translate(40, 110)" cursor="pointer">
+    <rect width="620" height="105" rx="12" fill="#130e1a" stroke="#ef4444" stroke-width="1.5"/>
+    <rect x="16" y="14" width="34" height="22" rx="4" fill="#ef4444"/>
+    <text x="33" y="30" fill="#ffffff" font-size="12" font-weight="800" text-anchor="middle">P1</text>
+    <text x="60" y="31" fill="#ffffff" font-size="14" font-weight="800">Direct Jailbreak to System Directive Exfiltration</text>
+    <text x="16" y="58" fill="#fca5a5" font-size="11">Trajectory: TA01 -> Ingress Prompt -> Dissolve Boundaries -> Verbatim Key Leakage</text>
+    <text x="16" y="82" fill="#94a3b8" font-size="10">Primary Mitigations: C01 (Nonce Framing), C02 (Llama-Guard), C05 (Canary Token)</text>
+  </g>
+
+  <!-- P2 -->
+  <g class="tm-node" data-id="P2" data-slug="p2" transform="translate(700, 110)" cursor="pointer">
+    <rect width="620" height="105" rx="12" fill="#130e1a" stroke="#ef4444" stroke-width="1.5"/>
+    <rect x="16" y="14" width="34" height="22" rx="4" fill="#ef4444"/>
+    <text x="33" y="30" fill="#ffffff" font-size="12" font-weight="800" text-anchor="middle">P2</text>
+    <text x="60" y="31" fill="#ffffff" font-size="14" font-weight="800">Indirect RAG Poisoning to Context Hijack</text>
+    <text x="16" y="58" fill="#fca5a5" font-size="11">Trajectory: TA02 -> Web/PDF Injection -> Vector Store -> Attention Capture -> Email Dispatch</text>
+    <text x="16" y="82" fill="#94a3b8" font-size="10">Primary Mitigations: C03 (RAG Sanitizer), C04 (Data Separation), C08 (Human Approval)</text>
+  </g>
+
+  <!-- P3 -->
+  <g class="tm-node" data-id="P3" data-slug="p3" transform="translate(40, 245)" cursor="pointer">
+    <rect width="620" height="105" rx="12" fill="#130e1a" stroke="#ef4444" stroke-width="1.5"/>
+    <rect x="16" y="14" width="34" height="22" rx="4" fill="#ef4444"/>
+    <text x="33" y="30" fill="#ffffff" font-size="12" font-weight="800" text-anchor="middle">P3</text>
+    <text x="60" y="31" fill="#ffffff" font-size="14" font-weight="800">Tool Call Schema Hijack to Internal SSRF / RCE</text>
+    <text x="16" y="58" fill="#fca5a5" font-size="11">Trajectory: TA01 -> Argument Poisoning -> fetch_webpage -> 169.254.169.254 IMDS -> AWS STS Keys</text>
+    <text x="16" y="82" fill="#94a3b8" font-size="10">Primary Mitigations: C04 (MicroVM Sandbox &amp; NetPol), C06 (Pydantic Schema)</text>
+  </g>
+
+  <!-- P4 -->
+  <g class="tm-node" data-id="P4" data-slug="p4" transform="translate(700, 245)" cursor="pointer">
+    <rect width="620" height="105" rx="12" fill="#130e1a" stroke="#f59e0b" stroke-width="1.5"/>
+    <rect x="16" y="14" width="34" height="22" rx="4" fill="#f59e0b"/>
+    <text x="33" y="30" fill="#ffffff" font-size="12" font-weight="800" text-anchor="middle">P4</text>
+    <text x="60" y="31" fill="#ffffff" font-size="14" font-weight="800">Gradual Multi-Turn Alignment Erosion &amp; Persona Rebinding</text>
+    <text x="16" y="58" fill="#fde68a" font-size="11">Trajectory: TA01 -> Rapport Priming -> Hypothetical Scenario -> Refusal Dissolution -> Exploit Output</text>
+    <text x="16" y="82" fill="#94a3b8" font-size="10">Primary Mitigations: Multi-turn Entropy Scoring, Anchor Reinjection, Refusal Telemetry</text>
+  </g>
+
+  <!-- P5 -->
+  <g class="tm-node" data-id="P5" data-slug="p5" transform="translate(40, 380)" cursor="pointer">
+    <rect width="620" height="105" rx="12" fill="#130e1a" stroke="#ef4444" stroke-width="1.5"/>
+    <rect x="16" y="14" width="34" height="22" rx="4" fill="#ef4444"/>
+    <text x="33" y="30" fill="#ffffff" font-size="12" font-weight="800" text-anchor="middle">P5</text>
+    <text x="60" y="31" fill="#ffffff" font-size="14" font-weight="800">Long-Term Memory Seeding &amp; Cross-Session Persistence</text>
+    <text x="16" y="58" fill="#fca5a5" font-size="11">Trajectory: TA01 -> Memory Write Tool -> Vector DB -> Future Executive Session -> Exfiltration</text>
+    <text x="16" y="82" fill="#94a3b8" font-size="10">Primary Mitigations: Memory Mutation Policy, Cryptographic Memory Signing, Isolation</text>
+  </g>
+
+  <!-- P6 -->
+  <g class="tm-node" data-id="P6" data-slug="p6" transform="translate(700, 380)" cursor="pointer">
+    <rect width="620" height="105" rx="12" fill="#130e1a" stroke="#ef4444" stroke-width="1.5"/>
+    <rect x="16" y="14" width="34" height="22" rx="4" fill="#ef4444"/>
+    <text x="33" y="30" fill="#ffffff" font-size="12" font-weight="800" text-anchor="middle">P6</text>
+    <text x="60" y="31" fill="#ffffff" font-size="14" font-weight="800">Inter-Agent Lateral Movement &amp; Orchestrator Hijack</text>
+    <text x="16" y="58" fill="#fca5a5" font-size="11">Trajectory: TA01 -> Triage Agent -> Unescaped Ticket -> Admin Agent -> Database Permission Override</text>
+    <text x="16" y="82" fill="#94a3b8" font-size="10">Primary Mitigations: Signed Message Envelopes (Ed25519), Sandboxed Agent Scopes</text>
+  </g>
+
+  <!-- Interactive Stepper Simulation Box below -->
+  <g id="flow-stepper-box" transform="translate(40, 520)">
+    <rect width="1280" height="280" rx="16" fill="rgba(15, 23, 42, 0.85)" stroke="#334155" stroke-width="1.5"/>
+    <text x="24" y="36" fill="#38bdf8" font-size="13" font-weight="800" letter-spacing="0.04em">INTERACTIVE EXPLOIT PATH SIMULATOR (P1–P6)</text>
+    <text x="24" y="58" fill="#94a3b8" font-size="11">Select any attack chain above to trace adversarial packet progression across trust boundaries.</text>
+
+    <!-- Visual Step Pipeline -->
+    <g transform="translate(24, 90)">
+      <rect width="280" height="140" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>
+      <text x="16" y="28" fill="#38bdf8" font-size="11" font-weight="700">STAGE 1: INGRESS</text>
+      <text x="16" y="54" fill="#f8fafc" font-size="12" font-weight="600">Adversary Payload Injected</text>
+      <text x="16" y="76" fill="#cbd5e1" font-size="10">Bypasses naive string filters</text>
+      <circle cx="260" cy="24" r="6" fill="#22c55e"/>
+    </g>
+
+    <path d="M 314 160 L 344 160" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrowBlue)"/>
+
+    <g transform="translate(344, 90)">
+      <rect width="280" height="140" rx="10" fill="#0f172a" stroke="#f59e0b" stroke-width="1"/>
+      <text x="16" y="28" fill="#f59e0b" font-size="11" font-weight="700">STAGE 2: CONTEXT HIJACK</text>
+      <text x="16" y="54" fill="#f8fafc" font-size="12" font-weight="600">Attention Head Saturation</text>
+      <text x="16" y="76" fill="#cbd5e1" font-size="10">System anchor overridden</text>
+      <circle cx="260" cy="24" r="6" fill="#f59e0b"/>
+    </g>
+
+    <path d="M 634 160 L 664 160" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#arrowBlue)"/>
+
+    <g transform="translate(664, 90)">
+      <rect width="280" height="140" rx="10" fill="#0f172a" stroke="#ef4444" stroke-width="1"/>
+      <text x="16" y="28" fill="#ef4444" font-size="11" font-weight="700">STAGE 3: PRIVILEGE ESCALATION</text>
+      <text x="16" y="54" fill="#f8fafc" font-size="12" font-weight="600">Tool / Action Dispatched</text>
+      <text x="16" y="76" fill="#cbd5e1" font-size="10">Malicious command executes</text>
+      <circle cx="260" cy="24" r="6" fill="#ef4444"/>
+    </g>
+
+    <path d="M 954 160 L 984 160" stroke="#ef4444" stroke-width="2.5" marker-end="url(#arrowRed)"/>
+
+    <g transform="translate(984, 90)">
+      <rect width="270" height="140" rx="10" fill="#0f172a" stroke="#10b981" stroke-width="1"/>
+      <text x="16" y="28" fill="#10b981" font-size="11" font-weight="700">STAGE 4: DEFENSE CONTAINMENT</text>
+      <text x="16" y="54" fill="#f8fafc" font-size="12" font-weight="600">Guardrail Neutralization</text>
+      <text x="16" y="76" fill="#cbd5e1" font-size="10">Canary trigger / sandbox block</text>
+      <circle cx="250" cy="24" r="6" fill="#10b981"/>
+    </g>
+  </g>
+</svg>

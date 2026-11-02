@@ -1,0 +1,279 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1360 840" width="100%" height="100%" style="font-family: 'Inter', -apple-system, sans-serif;">
+  
+  <defs>
+    <!-- Background Grid Pattern -->
+    <pattern id="gridPattern" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 255, 255, 0.04)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1.5" fill="rgba(56, 189, 248, 0.15)"/>
+    </pattern>
+
+    <!-- Glowing Filters -->
+    <filter id="glowGreen" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="glowRed" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="glowBlue" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <!-- Marker Arrows -->
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#22c55e" />
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#ef4444" />
+    </marker>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#38bdf8" />
+    </marker>
+  </defs>
+  <rect width="100%" height="100%" fill="#090d16" />
+  <rect width="100%" height="100%" fill="url(#gridPattern)" />
+
+
+  <!-- Sheet Title Header -->
+  <g id="sheet-header" transform="translate(40, 40)">
+    <rect x="0" y="0" width="480" height="42" rx="8" fill="rgba(34, 197, 94, 0.12)" stroke="rgba(34, 197, 94, 0.35)" stroke-width="1"/>
+    <circle cx="20" cy="21" r="6" fill="#22c55e" />
+    <text x="36" y="26" fill="#f8fafc" font-size="14" font-weight="700">SHEET 01 · MASTER THREAT REGISTER &amp; SYSTEM ARCHITECTURE</text>
+  </g>
+
+  <!-- ==========================================
+       TRUST BOUNDARY 1: Untrusted Ingress Envelope
+       ========================================== -->
+  <g id="tb-ingress" transform="translate(40, 110)">
+    <rect x="0" y="0" width="280" height="690" rx="16" fill="rgba(15, 23, 42, 0.65)" stroke="#334155" stroke-dasharray="6,6" stroke-width="2"/>
+    <rect x="16" y="16" width="248" height="32" rx="6" fill="rgba(51, 65, 85, 0.5)"/>
+    <text x="26" y="37" fill="#94a3b8" font-size="11" font-weight="700" letter-spacing="0.05em">TB01 · UNTRUSTED INGRESS BOUNDARY</text>
+
+    <!-- Threat Actors in Ingress -->
+    <g class="tm-node" data-id="TA01" data-slug="ta01" transform="translate(20, 65)" cursor="pointer">
+      <rect width="240" height="74" rx="10" fill="#1e1b4b" stroke="#6366f1" stroke-width="1.5"/>
+      <rect x="12" y="12" width="46" height="20" rx="4" fill="#ef4444"/>
+      <text x="35" y="26" fill="#ffffff" font-size="10" font-weight="800" text-anchor="middle">TA01</text>
+      <text x="66" y="27" fill="#f8fafc" font-size="12" font-weight="700">Remote Adversary</text>
+      <text x="12" y="52" fill="#cbd5e1" font-size="10">Direct injection &amp; DAN bypass</text>
+    </g>
+
+    <g class="tm-node" data-id="TA02" data-slug="ta02" transform="translate(20, 155)" cursor="pointer">
+      <rect width="240" height="74" rx="10" fill="#1e1b4b" stroke="#6366f1" stroke-width="1.5"/>
+      <rect x="12" y="12" width="46" height="20" rx="4" fill="#ef4444"/>
+      <text x="35" y="26" fill="#ffffff" font-size="10" font-weight="800" text-anchor="middle">TA02</text>
+      <text x="66" y="27" fill="#f8fafc" font-size="12" font-weight="700">Malicious Author</text>
+      <text x="12" y="52" fill="#cbd5e1" font-size="10">Indirect RAG &amp; poisoned docs</text>
+    </g>
+
+    <!-- Attack Vectors floating -->
+    <g class="tm-node" data-id="AV01" data-slug="av01" transform="translate(20, 255)" cursor="pointer">
+      <rect width="240" height="54" rx="8" fill="rgba(239, 68, 68, 0.12)" stroke="rgba(239, 68, 68, 0.4)" stroke-width="1"/>
+      <text x="12" y="24" fill="#ef4444" font-size="11" font-weight="800">AV01 · Direct Prompt Override</text>
+      <text x="12" y="42" fill="#94a3b8" font-size="10">Disregards system instructions</text>
+    </g>
+
+    <g class="tm-node" data-id="AV02" data-slug="av02" transform="translate(20, 320)" cursor="pointer">
+      <rect width="240" height="54" rx="8" fill="rgba(239, 68, 68, 0.12)" stroke="rgba(239, 68, 68, 0.4)" stroke-width="1"/>
+      <text x="12" y="24" fill="#ef4444" font-size="11" font-weight="800">AV02 · DAN Role Rebinding</text>
+      <text x="12" y="42" fill="#94a3b8" font-size="10">Unconstrained persona escape</text>
+    </g>
+
+    <g class="tm-node" data-id="AV04" data-slug="av04" transform="translate(20, 385)" cursor="pointer">
+      <rect width="240" height="54" rx="8" fill="rgba(239, 68, 68, 0.12)" stroke="rgba(239, 68, 68, 0.4)" stroke-width="1"/>
+      <text x="12" y="24" fill="#ef4444" font-size="11" font-weight="800">AV04 · Base64 Smuggling</text>
+      <text x="12" y="42" fill="#94a3b8" font-size="10">Evasion via payload encoding</text>
+    </g>
+
+    <!-- Ingress Components -->
+    <g class="tm-node" data-id="TO01" data-slug="to01" transform="translate(20, 460)" cursor="pointer">
+      <rect width="240" height="60" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
+      <text x="12" y="26" fill="#38bdf8" font-size="11" font-weight="700">TO01 · User Prompt Payload</text>
+      <text x="12" y="46" fill="#94a3b8" font-size="10">Raw input stream before parsing</text>
+    </g>
+
+    <g class="tm-node" data-id="TO02" data-slug="to02" transform="translate(20, 535)" cursor="pointer">
+      <rect width="240" height="60" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
+      <text x="12" y="26" fill="#38bdf8" font-size="11" font-weight="700">TO02 · Webhook / API Ingress</text>
+      <text x="12" y="46" fill="#94a3b8" font-size="10">HTTP POST /v1/chat/completions</text>
+    </g>
+  </g>
+
+  <!-- ==========================================
+       TRUST BOUNDARY 2: Context & Attention Window
+       ========================================== -->
+  <g id="tb-context" transform="translate(360, 110)">
+    <rect x="0" y="0" width="320" height="690" rx="16" fill="rgba(15, 23, 42, 0.75)" stroke="#3b82f6" stroke-dasharray="6,6" stroke-width="2"/>
+    <rect x="16" y="16" width="288" height="32" rx="6" fill="rgba(59, 130, 246, 0.15)"/>
+    <text x="26" y="37" fill="#60a5fa" font-size="11" font-weight="700" letter-spacing="0.05em">TB02 · CONTEXT &amp; ATTENTION BOUNDARY</text>
+
+    <!-- Gateway Input Guardrail C02 -->
+    <g class="tm-node" data-id="C02" data-slug="c02" transform="translate(20, 65)" cursor="pointer">
+      <rect width="280" height="74" rx="10" fill="#064e3b" stroke="#10b981" stroke-width="1.5"/>
+      <rect x="12" y="12" width="42" height="20" rx="4" fill="#10b981"/>
+      <text x="33" y="26" fill="#ffffff" font-size="10" font-weight="800" text-anchor="middle">C02</text>
+      <text x="62" y="27" fill="#f8fafc" font-size="12" font-weight="700">Llama-Guard / NeMo Classifier</text>
+      <text x="12" y="52" fill="#a7f3d0" font-size="10">Sub-25ms pre-inference safety probe</text>
+    </g>
+
+    <!-- Delimiter Framing C01 -->
+    <g class="tm-node" data-id="C01" data-slug="c01" transform="translate(20, 155)" cursor="pointer">
+      <rect width="280" height="74" rx="10" fill="#064e3b" stroke="#10b981" stroke-width="1.5"/>
+      <rect x="12" y="12" width="42" height="20" rx="4" fill="#10b981"/>
+      <text x="33" y="26" fill="#ffffff" font-size="10" font-weight="800" text-anchor="middle">C01</text>
+      <text x="62" y="27" fill="#f8fafc" font-size="12" font-weight="700">Cryptographic Nonce Delimiters</text>
+      <text x="12" y="52" fill="#a7f3d0" font-size="10">XML isolation &amp; instruction anchor</text>
+    </g>
+
+    <!-- System Prompt Anchor -->
+    <g class="tm-node" data-id="TO03" data-slug="to03" transform="translate(20, 255)" cursor="pointer">
+      <rect width="280" height="70" rx="10" fill="#1e1b4b" stroke="#818cf8" stroke-width="1.5"/>
+      <text x="12" y="28" fill="#c7d2fe" font-size="12" font-weight="700">TO03 · System Prompt Anchor</text>
+      <text x="12" y="50" fill="#94a3b8" font-size="10">Privileged developer instruction space</text>
+    </g>
+
+    <!-- Attention Window Matrix -->
+    <g class="tm-node" data-id="TO04" data-slug="to04" transform="translate(20, 345)" cursor="pointer">
+      <rect width="280" height="85" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+      <text x="12" y="28" fill="#38bdf8" font-size="12" font-weight="800">TO04 · Attention Window (Context)</text>
+      <text x="12" y="50" fill="#cbd5e1" font-size="10">Token sequence: System + History + RAG + User</text>
+      <text x="12" y="68" fill="#f59e0b" font-size="10">Target of attention hijack &amp; buffer attacks</text>
+    </g>
+
+    <!-- LLM Reasoning Core -->
+    <g class="tm-node" data-id="TO05" data-slug="to05" transform="translate(20, 450)" cursor="pointer">
+      <rect width="280" height="85" rx="10" fill="#1e293b" stroke="#a855f7" stroke-width="2"/>
+      <text x="12" y="28" fill="#c084fc" font-size="12" font-weight="800">TO05 · LLM Inference Core</text>
+      <text x="12" y="50" fill="#cbd5e1" font-size="10">Transformer decoding &amp; sampling</text>
+      <text x="12" y="68" fill="#94a3b8" font-size="10">Frontier weights (Claude, GPT-4o, DeepSeek)</text>
+    </g>
+
+    <!-- Canary Token Guard C05 -->
+    <g class="tm-node" data-id="C05" data-slug="c05" transform="translate(20, 555)" cursor="pointer">
+      <rect width="280" height="65" rx="10" fill="#064e3b" stroke="#10b981" stroke-width="1.5"/>
+      <rect x="12" y="10" width="42" height="20" rx="4" fill="#10b981"/>
+      <text x="33" y="24" fill="#ffffff" font-size="10" font-weight="800" text-anchor="middle">C05</text>
+      <text x="62" y="25" fill="#f8fafc" font-size="12" font-weight="700">Canary Token Honeytrap</text>
+      <text x="12" y="48" fill="#a7f3d0" font-size="10">Instant abort on credential leak</text>
+    </g>
+  </g>
+
+  <!-- ==========================================
+       TRUST BOUNDARY 3: Tool & Execution Boundary
+       ========================================== -->
+  <g id="tb-tools" transform="translate(720, 110)">
+    <rect x="0" y="0" width="310" height="690" rx="16" fill="rgba(15, 23, 42, 0.75)" stroke="#e11d48" stroke-dasharray="6,6" stroke-width="2"/>
+    <rect x="16" y="16" width="278" height="32" rx="6" fill="rgba(225, 29, 72, 0.15)"/>
+    <text x="26" y="37" fill="#fb7185" font-size="11" font-weight="700" letter-spacing="0.05em">TB03 · TOOL &amp; EXECUTION BOUNDARY</text>
+
+    <!-- Agent Orchestrator -->
+    <g class="tm-node" data-id="TO06" data-slug="to06" transform="translate(15, 65)" cursor="pointer">
+      <rect width="280" height="80" rx="10" fill="#1e1b4b" stroke="#ec4899" stroke-width="1.5"/>
+      <text x="12" y="28" fill="#f472b6" font-size="12" font-weight="800">TO06 · Autonomous Agent Orchestrator</text>
+      <text x="12" y="50" fill="#cbd5e1" font-size="10">Planning loop, subagent delegation</text>
+      <text x="12" y="68" fill="#94a3b8" font-size="10">Target of lateral movement (P6)</text>
+    </g>
+
+    <!-- Tool Schema C06 -->
+    <g class="tm-node" data-id="C06" data-slug="c06" transform="translate(15, 160)" cursor="pointer">
+      <rect width="280" height="70" rx="10" fill="#064e3b" stroke="#10b981" stroke-width="1.5"/>
+      <rect x="12" y="10" width="42" height="20" rx="4" fill="#10b981"/>
+      <text x="33" y="24" fill="#ffffff" font-size="10" font-weight="800" text-anchor="middle">C06</text>
+      <text x="62" y="25" fill="#f8fafc" font-size="12" font-weight="700">Strict Pydantic Schema Validator</text>
+      <text x="12" y="48" fill="#a7f3d0" font-size="10">Rejects SQL/metacharacters in args</text>
+    </g>
+
+    <!-- Sandboxed MicroVM C04 -->
+    <g class="tm-node" data-id="C04" data-slug="c04" transform="translate(15, 245)" cursor="pointer">
+      <rect width="280" height="75" rx="10" fill="#064e3b" stroke="#10b981" stroke-width="1.5"/>
+      <rect x="12" y="10" width="42" height="20" rx="4" fill="#10b981"/>
+      <text x="33" y="24" fill="#ffffff" font-size="10" font-weight="800" text-anchor="middle">C04</text>
+      <text x="62" y="25" fill="#f8fafc" font-size="12" font-weight="700">gVisor / Docker Tool Sandbox</text>
+      <text x="12" y="48" fill="#a7f3d0" font-size="10">Egress NetPol: Blocks 169.254.169.254</text>
+    </g>
+
+    <!-- Attack Vectors in Tools -->
+    <g class="tm-node" data-id="AV05" data-slug="av05" transform="translate(15, 335)" cursor="pointer">
+      <rect width="280" height="56" rx="8" fill="rgba(239, 68, 68, 0.15)" stroke="rgba(239, 68, 68, 0.45)" stroke-width="1.5"/>
+      <text x="12" y="24" fill="#ef4444" font-size="11" font-weight="800">AV05 · Unauthorized Tool Invocation</text>
+      <text x="12" y="43" fill="#cbd5e1" font-size="10">Arbitrary command dispatch</text>
+    </g>
+
+    <g class="tm-node" data-id="AV06" data-slug="av06" transform="translate(15, 405)" cursor="pointer">
+      <rect width="280" height="56" rx="8" fill="rgba(239, 68, 68, 0.15)" stroke="rgba(239, 68, 68, 0.45)" stroke-width="1.5"/>
+      <text x="12" y="24" fill="#ef4444" font-size="11" font-weight="800">AV06 · SSRF via Web Fetch Tools</text>
+      <text x="12" y="43" fill="#cbd5e1" font-size="10">Cloud metadata IAM exfiltration</text>
+    </g>
+
+    <!-- Tool Components -->
+    <g class="tm-node" data-id="TO07" data-slug="to07" transform="translate(15, 480)" cursor="pointer">
+      <rect width="280" height="60" rx="8" fill="#0f172a" stroke="#e11d48" stroke-width="1.5"/>
+      <text x="12" y="26" fill="#fb7185" font-size="11" font-weight="700">TO07 · MCP Server &amp; Connectors</text>
+      <text x="12" y="46" fill="#94a3b8" font-size="10">Model Context Protocol endpoints</text>
+    </g>
+
+    <g class="tm-node" data-id="C08" data-slug="c08" transform="translate(15, 555)" cursor="pointer">
+      <rect width="280" height="65" rx="10" fill="#064e3b" stroke="#10b981" stroke-width="1.5"/>
+      <rect x="12" y="10" width="42" height="20" rx="4" fill="#10b981"/>
+      <text x="33" y="24" fill="#ffffff" font-size="10" font-weight="800" text-anchor="middle">C08</text>
+      <text x="62" y="25" fill="#f8fafc" font-size="12" font-weight="700">Human-in-the-Loop Confirmation</text>
+      <text x="12" y="48" fill="#a7f3d0" font-size="10">Approval gate on sensitive tools</text>
+    </g>
+  </g>
+
+  <!-- ==========================================
+       TRUST BOUNDARY 4: Persistence & Storage
+       ========================================== -->
+  <g id="tb-storage" transform="translate(1060, 110)">
+    <rect x="0" y="0" width="260" height="690" rx="16" fill="rgba(15, 23, 42, 0.65)" stroke="#8b5cf6" stroke-dasharray="6,6" stroke-width="2"/>
+    <rect x="16" y="16" width="228" height="32" rx="6" fill="rgba(139, 92, 246, 0.15)"/>
+    <text x="26" y="37" fill="#c084fc" font-size="11" font-weight="700" letter-spacing="0.05em">TB04 · PERSISTENCE &amp; MEMORY</text>
+
+    <!-- Vector DB -->
+    <g class="tm-node" data-id="TO08" data-slug="to08" transform="translate(15, 65)" cursor="pointer">
+      <rect width="230" height="80" rx="10" fill="#1e1b4b" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="12" y="28" fill="#ddd6fe" font-size="12" font-weight="800">TO08 · Vector Database (RAG)</text>
+      <text x="12" y="50" fill="#cbd5e1" font-size="10">Pinecone, Milvus, Chroma</text>
+      <text x="12" y="68" fill="#94a3b8" font-size="10">Target of indirect poisoning (P2)</text>
+    </g>
+
+    <!-- RAG Sanitizer C03 -->
+    <g class="tm-node" data-id="C03" data-slug="c03" transform="translate(15, 160)" cursor="pointer">
+      <rect width="230" height="70" rx="10" fill="#064e3b" stroke="#10b981" stroke-width="1.5"/>
+      <rect x="12" y="10" width="42" height="20" rx="4" fill="#10b981"/>
+      <text x="33" y="24" fill="#ffffff" font-size="10" font-weight="800" text-anchor="middle">C03</text>
+      <text x="62" y="25" fill="#f8fafc" font-size="12" font-weight="700">RAG Chunk Sanitizer</text>
+      <text x="12" y="48" fill="#a7f3d0" font-size="10">Strips comments &amp; directives</text>
+    </g>
+
+    <!-- Memory Poisoning AV10 -->
+    <g class="tm-node" data-id="AV10" data-slug="av10" transform="translate(15, 245)" cursor="pointer">
+      <rect width="230" height="56" rx="8" fill="rgba(239, 68, 68, 0.15)" stroke="rgba(239, 68, 68, 0.45)" stroke-width="1.5"/>
+      <text x="12" y="24" fill="#ef4444" font-size="11" font-weight="800">AV10 · Memory Seeding</text>
+      <text x="12" y="43" fill="#cbd5e1" font-size="10">Cross-session persistence (P5)</text>
+    </g>
+
+    <!-- Long Term Memory -->
+    <g class="tm-node" data-id="TO09" data-slug="to09" transform="translate(15, 320)" cursor="pointer">
+      <rect width="230" height="60" rx="8" fill="#0f172a" stroke="#8b5cf6" stroke-width="1.5"/>
+      <text x="12" y="26" fill="#a78bfa" font-size="11" font-weight="700">TO09 · Semantic Memory</text>
+      <text x="12" y="46" fill="#94a3b8" font-size="10">User facts, preferences</text>
+    </g>
+
+    <!-- Audit Log Store -->
+    <g class="tm-node" data-id="TO10" data-slug="to10" transform="translate(15, 395)" cursor="pointer">
+      <rect width="230" height="60" rx="8" fill="#0f172a" stroke="#8b5cf6" stroke-width="1.5"/>
+      <text x="12" y="26" fill="#a78bfa" font-size="11" font-weight="700">TO10 · Security Telemetry</text>
+      <text x="12" y="46" fill="#94a3b8" font-size="10">Tamper-evident audit trail</text>
+    </g>
+  </g>
+
+  <!-- Connective Directional Arrows -->
+  <path d="M 320 200 L 360 200" stroke="#22c55e" stroke-width="2.5" marker-end="url(#arrowGreen)" />
+  <path d="M 680 380 L 720 380" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrowBlue)" />
+  <path d="M 1030 400 L 1060 400" stroke="#a855f7" stroke-width="2.5" marker-end="url(#arrowBlue)" />
+  <path d="M 1060 200 L 680 200" stroke="#ef4444" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#arrowRed)" />
+
+</svg>

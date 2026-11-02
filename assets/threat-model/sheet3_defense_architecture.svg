@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1360 840" width="100%" height="100%" style="font-family: 'Inter', -apple-system, sans-serif;">
+  
+  <defs>
+    <!-- Background Grid Pattern -->
+    <pattern id="gridPattern" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 255, 255, 0.04)" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1.5" fill="rgba(56, 189, 248, 0.15)"/>
+    </pattern>
+
+    <!-- Glowing Filters -->
+    <filter id="glowGreen" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="glowRed" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="glowBlue" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <!-- Marker Arrows -->
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#22c55e" />
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#ef4444" />
+    </marker>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#38bdf8" />
+    </marker>
+  </defs>
+  <rect width="100%" height="100%" fill="#090d16" />
+  <rect width="100%" height="100%" fill="url(#gridPattern)" />
+
+
+  <!-- Sheet Title Header -->
+  <g id="sheet-header" transform="translate(40, 40)">
+    <rect x="0" y="0" width="480" height="42" rx="8" fill="rgba(59, 130, 246, 0.12)" stroke="rgba(59, 130, 246, 0.35)" stroke-width="1"/>
+    <circle cx="20" cy="21" r="6" fill="#3b82f6" />
+    <text x="36" y="26" fill="#f8fafc" font-size="14" font-weight="700">SHEET 03 · LAYERED AI DEFENSE REFERENCE ARCHITECTURE</text>
+  </g>
+
+  <!-- 6 Horizontal Defense Layers -->
+  <!-- Layer 1 -->
+  <g class="tm-node" data-id="C02" data-slug="c02" transform="translate(40, 110)" cursor="pointer">
+    <rect width="1280" height="95" rx="12" fill="#0b1329" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="20" y="16" width="70" height="24" rx="4" fill="#0284c7"/>
+    <text x="55" y="32" fill="#ffffff" font-size="11" font-weight="800" text-anchor="middle">LAYER 1</text>
+    <text x="105" y="33" fill="#ffffff" font-size="14" font-weight="800">Gateway Ingress &amp; Token Classification (Llama-Guard / NeMo)</text>
+    <text x="20" y="60" fill="#93c5fd" font-size="11">Pre-inference classifier running on low-latency edge (&lt; 25ms). Drops known jailbreaks and adversarial Unicode sequences.</text>
+    <text x="20" y="80" fill="#94a3b8" font-size="10">Controls: C02 (Classifier), Rate Limiting, IP Reputation, UTF-8 Normalization</text>
+  </g>
+
+  <!-- Layer 2 -->
+  <g class="tm-node" data-id="C01" data-slug="c01" transform="translate(40, 225)" cursor="pointer">
+    <rect width="1280" height="95" rx="12" fill="#0b1329" stroke="#10b981" stroke-width="1.5"/>
+    <rect x="20" y="16" width="70" height="24" rx="4" fill="#059669"/>
+    <text x="55" y="32" fill="#ffffff" font-size="11" font-weight="800" text-anchor="middle">LAYER 2</text>
+    <text x="105" y="33" fill="#ffffff" font-size="14" font-weight="800">System Prompt Framing &amp; Cryptographic Delimiter Isolation</text>
+    <text x="20" y="60" fill="#a7f3d0" font-size="11">Encapsulates untrusted input in per-request random hex nonces &lt;input nonce='...'&gt;. Hardens attention heads against override.</text>
+    <text x="20" y="80" fill="#94a3b8" font-size="10">Controls: C01 (Nonce Framing), Role Anchoring, Recency Bias Neutralization</text>
+  </g>
+
+  <!-- Layer 3 -->
+  <g class="tm-node" data-id="C03" data-slug="c03" transform="translate(40, 340)" cursor="pointer">
+    <rect width="1280" height="95" rx="12" fill="#0b1329" stroke="#8b5cf6" stroke-width="1.5"/>
+    <rect x="20" y="16" width="70" height="24" rx="4" fill="#7c3aed"/>
+    <text x="55" y="32" fill="#ffffff" font-size="11" font-weight="800" text-anchor="middle">LAYER 3</text>
+    <text x="105" y="33" fill="#ffffff" font-size="14" font-weight="800">RAG Chunk Sanitization &amp; Multi-Modal Data Preprocessing</text>
+    <text x="20" y="60" fill="#ddd6fe" font-size="11">Strips hidden HTML comments, zero-font injection text, and control characters from vector retrieval chunks before attention injection.</text>
+    <text x="20" y="80" fill="#94a3b8" font-size="10">Controls: C03 (RAG Sanitizer), Metadata Stripping, Semantic Divergence Check</text>
+  </g>
+
+  <!-- Layer 4 -->
+  <g class="tm-node" data-id="C06" data-slug="c06" transform="translate(40, 455)" cursor="pointer">
+    <rect width="1280" height="95" rx="12" fill="#0b1329" stroke="#f59e0b" stroke-width="1.5"/>
+    <rect x="20" y="16" width="70" height="24" rx="4" fill="#d97706"/>
+    <text x="55" y="32" fill="#ffffff" font-size="11" font-weight="800" text-anchor="middle">LAYER 4</text>
+    <text x="105" y="33" fill="#ffffff" font-size="14" font-weight="800">Pydantic Tool Schema Validation &amp; Function Call Restraints</text>
+    <text x="20" y="60" fill="#fde68a" font-size="11">Strict typed JSON validation rejecting SQL metacharacters, shell pipes, and dangerous URLs in tool arguments.</text>
+    <text x="20" y="80" fill="#94a3b8" font-size="10">Controls: C06 (Schema Validation), Argument Sanitization, Tool Scope Limitation</text>
+  </g>
+
+  <!-- Layer 5 -->
+  <g class="tm-node" data-id="C04" data-slug="c04" transform="translate(40, 570)" cursor="pointer">
+    <rect width="1280" height="95" rx="12" fill="#0b1329" stroke="#e11d48" stroke-width="1.5"/>
+    <rect x="20" y="16" width="70" height="24" rx="4" fill="#be123c"/>
+    <text x="55" y="32" fill="#ffffff" font-size="11" font-weight="800" text-anchor="middle">LAYER 5</text>
+    <text x="105" y="33" fill="#ffffff" font-size="14" font-weight="800">Sandboxed Runtime Execution &amp; Egress Network Policies</text>
+    <text x="20" y="60" fill="#fecdd3" font-size="11">MicroVM / Docker isolation for bash and Python runners. Egress NetPol blocks cloud metadata 169.254.169.254 and intranet CIDRs.</text>
+    <text x="20" y="80" fill="#94a3b8" font-size="10">Controls: C04 (MicroVM Sandbox), C08 (Human Approval), IMDSv2 Hop Limit = 1</text>
+  </g>
+
+  <!-- Layer 6 -->
+  <g class="tm-node" data-id="C05" data-slug="c05" transform="translate(40, 685)" cursor="pointer">
+    <rect width="1280" height="95" rx="12" fill="#0b1329" stroke="#10b981" stroke-width="1.5"/>
+    <rect x="20" y="16" width="70" height="24" rx="4" fill="#059669"/>
+    <text x="55" y="32" fill="#ffffff" font-size="11" font-weight="800" text-anchor="middle">LAYER 6</text>
+    <text x="105" y="33" fill="#ffffff" font-size="14" font-weight="800">Egress Output Filtering &amp; Canary Token Honeytraps</text>
+    <text x="20" y="60" fill="#a7f3d0" font-size="11">Active stream scanner scanning for HMAC canary tokens, internal secrets, and PII before chunks are sent to the client.</text>
+    <text x="20" y="80" fill="#94a3b8" font-size="10">Controls: C05 (Canary Tokens), Secret Scanners (Gitleaks), Anomaly SIEM Telemetry</text>
+  </g>
+</svg>
