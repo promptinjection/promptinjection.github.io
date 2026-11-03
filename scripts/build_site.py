@@ -143,14 +143,16 @@ def render_site():
             f.write(tm_html)
         print("Generated threat-model.html and threat-model/index.html")
 
-    # Copy style.css, script.js, threat-model.css, threat-model.js
+    # Copy style.css, script.js, threat-model.css, threat_model_bundle.js, threat-model.js
     shutil.copy2(os.path.join(ROOT_DIR, "style.css"), os.path.join(SITE_DIR, "style.css"))
     shutil.copy2(os.path.join(ROOT_DIR, "script.js"), os.path.join(SITE_DIR, "script.js"))
     if os.path.exists(os.path.join(ROOT_DIR, "threat-model.css")):
         shutil.copy2(os.path.join(ROOT_DIR, "threat-model.css"), os.path.join(SITE_DIR, "threat-model.css"))
+    if os.path.exists(os.path.join(ROOT_DIR, "threat_model_bundle.js")):
+        shutil.copy2(os.path.join(ROOT_DIR, "threat_model_bundle.js"), os.path.join(SITE_DIR, "threat_model_bundle.js"))
     if os.path.exists(os.path.join(ROOT_DIR, "threat-model.js")):
         shutil.copy2(os.path.join(ROOT_DIR, "threat-model.js"), os.path.join(SITE_DIR, "threat-model.js"))
-    print("Copied assets, style.css, script.js, threat-model.css, threat-model.js to _site/")
+    print("Copied assets, style.css, script.js, threat-model.css, threat_model_bundle.js to _site/")
 
     # Sync assets/
     src_assets = os.path.join(ROOT_DIR, "assets")

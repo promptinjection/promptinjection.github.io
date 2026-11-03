@@ -1,0 +1,332 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2040 1470" width="100%" height="100%" class="threat-model-sheet-svg" data-sheet-id="2">
+<defs>
+  <marker id="arr-2-gold" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#EFC85C" />
+  </marker>
+  <marker id="arr-2-cyan" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#27C5D9" />
+  </marker>
+  <marker id="arr-2-purple" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#B8A3FF" />
+  </marker>
+  <marker id="arr-2-green" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#4AD49E" />
+  </marker>
+  <marker id="arr-2-coral" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#FE6577" />
+  </marker>
+  <marker id="arr-2-white" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#EDF5FC" />
+  </marker>
+  <filter id="cShadow" x="-10%" y="-10%" width="120%" height="120%">
+    <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.4" />
+  </filter>
+</defs>
+<rect width="2040" height="1470" fill="#0B1220" />
+<rect id="n2" x="35.0" y="20.0" width="1970.0" height="126.0" rx="14" fill="#1B2C43" stroke="#35516C" stroke-width="1.5"  opacity="0.95" />
+<rect id="n6" x="42.0" y="183.0" width="482.0" height="776.0" rx="14" fill="#142236" stroke="#35516C" stroke-width="1.5"  opacity="0.95" />
+<rect id="n7" x="60.0" y="201.0" width="445.0" height="34.0" rx="14" fill="#1B2C43" stroke="#27C5D9" stroke-width="1"  opacity="0.95" />
+<rect id="n8" x="58.0" y="265.0" width="449.0" height="82.0" rx="14" fill="#1B2C43" stroke="#27C5D9" stroke-width="1.5"  opacity="0.95" />
+<rect id="n9" x="58.0" y="374.0" width="449.0" height="82.0" rx="14" fill="#1B2C43" stroke="#27C5D9" stroke-width="1.5"  opacity="0.95" />
+<rect id="n41" x="1049.0" y="1005.0" width="934.0" height="161.0" rx="14" fill="#1B2C43" stroke="#B8A3FF" stroke-width="1.5"  opacity="0.95" />
+<rect id="n44" x="53.0" y="1190.0" width="934.0" height="161.0" rx="14" fill="#1B2C43" stroke="#FE6577" stroke-width="1.5"  opacity="0.95" />
+<g id="grp-2-n3" class="static-element" data-node-id="n3" style="">
+  <foreignObject x="62.0" y="31.0" width="1916.0" height="29.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #27C5D9; font-size: 17px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      SYSTEM DECOMPOSITION
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n4" class="interactive-node" data-node-id="n4" style="cursor:pointer;">
+  <foreignObject x="62.0" y="59.0" width="1916.0" height="48.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #EDF5FC; font-size: 38px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Assets, principals, entry points and authorization boundaries
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n5" class="static-element" data-node-id="n5" style="">
+  <foreignObject x="63.0" y="109.0" width="1916.0" height="27.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #A8BED0; font-size: 16px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      DFD checklist: enumerate identities and paths, then apply the appropriate threat categories to each crossing.
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n10" class="interactive-node" data-node-id="n10" style="cursor:pointer;">
+  <rect x="58.0" y="483.0" width="449.0" height="82.0" rx="10" fill="#1B2C43" stroke="#27C5D9" stroke-width="1.5" filter="url(#cShadow)" />
+  <foreignObject x="58.0" y="483.0" width="449.0" height="82.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 14px; box-sizing: border-box; color: #EDF5FC; font-size: 18px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      API credentials / OAuth tokens
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n11" class="interactive-node" data-node-id="n11" style="cursor:pointer;">
+  <rect x="58.0" y="592.0" width="449.0" height="82.0" rx="10" fill="#1B2C43" stroke="#27C5D9" stroke-width="1.5" filter="url(#cShadow)" />
+  <foreignObject x="58.0" y="592.0" width="449.0" height="82.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 14px; box-sizing: border-box; color: #EDF5FC; font-size: 18px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Models, adapters and weights
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n12" class="interactive-node" data-node-id="n12" style="cursor:pointer;">
+  <rect x="58.0" y="701.0" width="449.0" height="82.0" rx="10" fill="#1B2C43" stroke="#27C5D9" stroke-width="1.5" filter="url(#cShadow)" />
+  <foreignObject x="58.0" y="701.0" width="449.0" height="82.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 14px; box-sizing: border-box; color: #EDF5FC; font-size: 18px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Vector embeddings &amp; memories
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n13" class="interactive-node" data-node-id="n13" style="cursor:pointer;">
+  <rect x="58.0" y="810.0" width="449.0" height="82.0" rx="10" fill="#1B2C43" stroke="#27C5D9" stroke-width="1.5" filter="url(#cShadow)" />
+  <foreignObject x="58.0" y="810.0" width="449.0" height="82.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 14px; box-sizing: border-box; color: #EDF5FC; font-size: 18px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Tool/action audit logs
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n14" class="static-element" data-node-id="n14" style="">
+  <rect x="546.0" y="183.0" width="482.0" height="776.0" rx="10" fill="#142236" stroke="#35516C" stroke-width="1.5" filter="url(#cShadow)" />
+</g>
+<g id="grp-2-n15" class="interactive-node" data-node-id="n15" style="cursor:pointer;">
+  <rect x="564.0" y="201.0" width="445.0" height="34.0" rx="10" fill="#1B2C43" stroke="#B8A3FF" stroke-width="1" filter="url(#cShadow)" />
+  <foreignObject x="564.0" y="201.0" width="445.0" height="34.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 3px; box-sizing: border-box; color: #B8A3FF; font-size: 15px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: center;">
+      PRINCIPALS
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n16" class="interactive-node" data-node-id="n16" style="cursor:pointer;">
+  <rect x="562.0" y="265.0" width="449.0" height="82.0" rx="10" fill="#1B2C43" stroke="#B8A3FF" stroke-width="1.5" filter="url(#cShadow)" />
+  <foreignObject x="562.0" y="265.0" width="449.0" height="82.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 14px; box-sizing: border-box; color: #EDF5FC; font-size: 18px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      End user and tenant
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n17" class="interactive-node" data-node-id="n17" style="cursor:pointer;">
+  <rect x="562.0" y="374.0" width="449.0" height="82.0" rx="10" fill="#1B2C43" stroke="#B8A3FF" stroke-width="1.5" filter="url(#cShadow)" />
+  <foreignObject x="562.0" y="374.0" width="449.0" height="82.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 14px; box-sizing: border-box; color: #EDF5FC; font-size: 18px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Host application / orchestrator
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n18" class="interactive-node" data-node-id="n18" style="cursor:pointer;">
+  <rect x="562.0" y="483.0" width="449.0" height="82.0" rx="10" fill="#1B2C43" stroke="#B8A3FF" stroke-width="1.5" filter="url(#cShadow)" />
+  <foreignObject x="562.0" y="483.0" width="449.0" height="82.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 14px; box-sizing: border-box; color: #EDF5FC; font-size: 18px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      LLM provider and tool runtime
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n19" class="interactive-node" data-node-id="n19" style="cursor:pointer;">
+  <rect x="562.0" y="592.0" width="449.0" height="82.0" rx="10" fill="#1B2C43" stroke="#B8A3FF" stroke-width="1.5" filter="url(#cShadow)" />
+  <foreignObject x="562.0" y="592.0" width="449.0" height="82.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 14px; box-sizing: border-box; color: #EDF5FC; font-size: 18px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      MCP server / tool issuer
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n20" class="interactive-node" data-node-id="n20" style="cursor:pointer;">
+  <rect x="562.0" y="701.0" width="449.0" height="82.0" rx="10" fill="#1B2C43" stroke="#B8A3FF" stroke-width="1.5" filter="url(#cShadow)" />
+  <foreignObject x="562.0" y="701.0" width="449.0" height="82.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 14px; box-sizing: border-box; color: #EDF5FC; font-size: 18px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Peer agent and delegated identity
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n21" class="interactive-node" data-node-id="n21" style="cursor:pointer;">
+  <rect x="562.0" y="810.0" width="449.0" height="82.0" rx="10" fill="#1B2C43" stroke="#B8A3FF" stroke-width="1.5" filter="url(#cShadow)" />
+  <foreignObject x="562.0" y="810.0" width="449.0" height="82.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 14px; box-sizing: border-box; color: #EDF5FC; font-size: 18px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Approver / operator
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n22" class="static-element" data-node-id="n22" style="">
+  <rect x="1050.0" y="183.0" width="482.0" height="776.0" rx="10" fill="#142236" stroke="#35516C" stroke-width="1.5" filter="url(#cShadow)" />
+</g>
+<g id="grp-2-n23" class="interactive-node" data-node-id="n23" style="cursor:pointer;">
+  <rect x="1068.0" y="201.0" width="445.0" height="34.0" rx="10" fill="#1B2C43" stroke="#EFC85C" stroke-width="1" filter="url(#cShadow)" />
+  <foreignObject x="1068.0" y="201.0" width="445.0" height="34.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 3px; box-sizing: border-box; color: #EFC85C; font-size: 15px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: center;">
+      UNTRUSTED ENTRY POINTS
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n24" class="interactive-node" data-node-id="n24" style="cursor:pointer;">
+  <rect x="1066.0" y="265.0" width="449.0" height="82.0" rx="10" fill="#1B2C43" stroke="#EFC85C" stroke-width="1.5" filter="url(#cShadow)" />
+  <foreignObject x="1066.0" y="265.0" width="449.0" height="82.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 14px; box-sizing: border-box; color: #EDF5FC; font-size: 18px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Email bodies and attachments
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n25" class="interactive-node" data-node-id="n25" style="cursor:pointer;">
+  <rect x="1066.0" y="374.0" width="449.0" height="82.0" rx="10" fill="#1B2C43" stroke="#EFC85C" stroke-width="1.5" filter="url(#cShadow)" />
+  <foreignObject x="1066.0" y="374.0" width="449.0" height="82.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 14px; box-sizing: border-box; color: #EDF5FC; font-size: 18px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Web pages, search snippets
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n26" class="interactive-node" data-node-id="n26" style="cursor:pointer;">
+  <rect x="1066.0" y="483.0" width="449.0" height="82.0" rx="10" fill="#1B2C43" stroke="#EFC85C" stroke-width="1.5" filter="url(#cShadow)" />
+  <foreignObject x="1066.0" y="483.0" width="449.0" height="82.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 14px; box-sizing: border-box; color: #EDF5FC; font-size: 18px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Retrieved docs / vector chunks
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n27" class="interactive-node" data-node-id="n27" style="cursor:pointer;">
+  <rect x="1066.0" y="592.0" width="449.0" height="82.0" rx="10" fill="#1B2C43" stroke="#EFC85C" stroke-width="1.5" filter="url(#cShadow)" />
+  <foreignObject x="1066.0" y="592.0" width="449.0" height="82.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 14px; box-sizing: border-box; color: #EDF5FC; font-size: 18px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Tool descriptions and results
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n28" class="interactive-node" data-node-id="n28" style="cursor:pointer;">
+  <rect x="1066.0" y="701.0" width="449.0" height="82.0" rx="10" fill="#1B2C43" stroke="#EFC85C" stroke-width="1.5" filter="url(#cShadow)" />
+  <foreignObject x="1066.0" y="701.0" width="449.0" height="82.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 14px; box-sizing: border-box; color: #EDF5FC; font-size: 18px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Inter-agent messages / memory
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n29" class="interactive-node" data-node-id="n29" style="cursor:pointer;">
+  <rect x="1066.0" y="810.0" width="449.0" height="82.0" rx="10" fill="#1B2C43" stroke="#EFC85C" stroke-width="1.5" filter="url(#cShadow)" />
+  <foreignObject x="1066.0" y="810.0" width="449.0" height="82.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 14px; box-sizing: border-box; color: #EDF5FC; font-size: 18px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Source code / model artifacts
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n30" class="static-element" data-node-id="n30" style="">
+  <rect x="1554.0" y="183.0" width="482.0" height="776.0" rx="10" fill="#142236" stroke="#35516C" stroke-width="1.5" filter="url(#cShadow)" />
+</g>
+<g id="grp-2-n31" class="interactive-node" data-node-id="n31" style="cursor:pointer;">
+  <rect x="1572.0" y="201.0" width="445.0" height="34.0" rx="10" fill="#1B2C43" stroke="#FE6577" stroke-width="1" filter="url(#cShadow)" />
+  <foreignObject x="1572.0" y="201.0" width="445.0" height="34.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 3px; box-sizing: border-box; color: #FE6577; font-size: 15px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: center;">
+      SENSITIVE ACTIONS
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n32" class="interactive-node" data-node-id="n32" style="cursor:pointer;">
+  <rect x="1570.0" y="265.0" width="449.0" height="82.0" rx="10" fill="#1B2C43" stroke="#FE6577" stroke-width="1.5" filter="url(#cShadow)" />
+  <foreignObject x="1570.0" y="265.0" width="449.0" height="82.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 14px; box-sizing: border-box; color: #EDF5FC; font-size: 18px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Search/read cross-tenant data
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n33" class="interactive-node" data-node-id="n33" style="cursor:pointer;">
+  <rect x="1570.0" y="374.0" width="449.0" height="82.0" rx="10" fill="#1B2C43" stroke="#FE6577" stroke-width="1.5" filter="url(#cShadow)" />
+  <foreignObject x="1570.0" y="374.0" width="449.0" height="82.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 14px; box-sizing: border-box; color: #EDF5FC; font-size: 18px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Update CRM / send email
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n34" class="interactive-node" data-node-id="n34" style="cursor:pointer;">
+  <rect x="1570.0" y="483.0" width="449.0" height="82.0" rx="10" fill="#1B2C43" stroke="#FE6577" stroke-width="1.5" filter="url(#cShadow)" />
+  <foreignObject x="1570.0" y="483.0" width="449.0" height="82.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 14px; box-sizing: border-box; color: #EDF5FC; font-size: 18px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Access vault / issue tokens
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n35" class="interactive-node" data-node-id="n35" style="cursor:pointer;">
+  <rect x="1570.0" y="592.0" width="449.0" height="82.0" rx="10" fill="#1B2C43" stroke="#FE6577" stroke-width="1.5" filter="url(#cShadow)" />
+  <foreignObject x="1570.0" y="592.0" width="449.0" height="82.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 14px; box-sizing: border-box; color: #EDF5FC; font-size: 18px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Run code or browser session
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n36" class="interactive-node" data-node-id="n36" style="cursor:pointer;">
+  <rect x="1570.0" y="701.0" width="449.0" height="82.0" rx="10" fill="#1B2C43" stroke="#FE6577" stroke-width="1.5" filter="url(#cShadow)" />
+  <foreignObject x="1570.0" y="701.0" width="449.0" height="82.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 14px; box-sizing: border-box; color: #EDF5FC; font-size: 18px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Call external URLs / upload data
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n37" class="interactive-node" data-node-id="n37" style="cursor:pointer;">
+  <rect x="1570.0" y="810.0" width="449.0" height="82.0" rx="10" fill="#1B2C43" stroke="#FE6577" stroke-width="1.5" filter="url(#cShadow)" />
+  <foreignObject x="1570.0" y="810.0" width="449.0" height="82.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 14px; box-sizing: border-box; color: #EDF5FC; font-size: 18px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Modify knowledge or memory
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n38" class="static-element" data-node-id="n38" style="">
+  <rect x="53.0" y="1005.0" width="934.0" height="161.0" rx="10" fill="#1B2C43" stroke="#27C5D9" stroke-width="1.5" filter="url(#cShadow)" />
+</g>
+<g id="grp-2-n39" class="interactive-node" data-node-id="n39" style="cursor:pointer;">
+  <foreignObject x="73.0" y="1023.0" width="886.0" height="31.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #27C5D9; font-size: 20px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      BOUNDARY CHECK 01 · INPUT → CONTEXT
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n40" class="interactive-node" data-node-id="n40" style="cursor:pointer;">
+  <foreignObject x="73.0" y="1067.0" width="887.0" height="83.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #EDF5FC; font-size: 19px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Source is attributable; text/media is marked as data; parsing and decoding do not silently upgrade authority.
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n42" class="interactive-node" data-node-id="n42" style="cursor:pointer;">
+  <foreignObject x="1069.0" y="1023.0" width="886.0" height="31.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #B8A3FF; font-size: 20px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      BOUNDARY CHECK 02 · CONTEXT → PLANNER
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n43" class="interactive-node" data-node-id="n43" style="cursor:pointer;">
+  <foreignObject x="1069.0" y="1067.0" width="887.0" height="83.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #EDF5FC; font-size: 19px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      LLM receives constrained task context, task-scoped memory, and trusted role hierarchy separate from documents.
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n45" class="interactive-node" data-node-id="n45" style="cursor:pointer;">
+  <foreignObject x="73.0" y="1208.0" width="886.0" height="31.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #FE6577; font-size: 20px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      BOUNDARY CHECK 03 · PLANNER → TOOL
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n46" class="interactive-node" data-node-id="n46" style="cursor:pointer;">
+  <foreignObject x="73.0" y="1252.0" width="887.0" height="83.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #EDF5FC; font-size: 19px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      One immutable policy gate verifies subject, session, resource, tool name, args, scope and approval.
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n47" class="static-element" data-node-id="n47" style="">
+  <rect x="1049.0" y="1190.0" width="934.0" height="161.0" rx="10" fill="#1B2C43" stroke="#4AD49E" stroke-width="1.5" filter="url(#cShadow)" />
+</g>
+<g id="grp-2-n48" class="interactive-node" data-node-id="n48" style="cursor:pointer;">
+  <foreignObject x="1069.0" y="1208.0" width="886.0" height="31.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #4AD49E; font-size: 20px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      BOUNDARY CHECK 04 · TOOL → OUTPUT
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n49" class="interactive-node" data-node-id="n49" style="cursor:pointer;">
+  <foreignObject x="1069.0" y="1252.0" width="887.0" height="83.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #EDF5FC; font-size: 19px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      DLP, outbound allowlists, logging, rate limits, confirmation and containment apply to effects.
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-2-n50" class="static-element" data-node-id="n50" style="">
+  <foreignObject x="45.0" y="1428.0" width="1950.0" height="25.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #A8BED0; font-size: 14px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Analyst-designed crosswalk · source framework identifiers and version are shown · not an official endorsement
+    </div>
+  </foreignObject>
+</g>
+</svg>

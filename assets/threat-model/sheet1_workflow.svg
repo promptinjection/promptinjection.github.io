@@ -1,0 +1,290 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1980 1240" width="100%" height="100%" class="threat-model-sheet-svg" data-sheet-id="1">
+<defs>
+  <marker id="arr-1-gold" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#EFC85C" />
+  </marker>
+  <marker id="arr-1-cyan" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#27C5D9" />
+  </marker>
+  <marker id="arr-1-purple" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#B8A3FF" />
+  </marker>
+  <marker id="arr-1-green" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#4AD49E" />
+  </marker>
+  <marker id="arr-1-coral" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#FE6577" />
+  </marker>
+  <marker id="arr-1-white" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#EDF5FC" />
+  </marker>
+  <filter id="cShadow" x="-10%" y="-10%" width="120%" height="120%">
+    <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.4" />
+  </filter>
+</defs>
+<rect width="1980" height="1240" fill="#0B1220" />
+<rect id="n2" x="35.0" y="20.0" width="1910.0" height="126.0" rx="14" fill="#1B2C43" stroke="#35516C" stroke-width="1.5"  opacity="0.95" />
+<rect id="n6" x="54.0" y="200.0" width="444.0" height="292.0" rx="14" fill="#142236" stroke="#35516C" stroke-width="1.5"  opacity="0.95" />
+<rect id="n7" x="70.0" y="216.0" width="52.0" height="34.0" rx="14" fill="#1B2C43" stroke="#27C5D9" stroke-width="1"  opacity="0.95" />
+<rect id="n8" x="139.0" y="220.0" width="341.0" height="55.0" rx="0" fill="none" stroke="none" stroke-width="0"  opacity="0.95" />
+<rect id="n9" x="75.0" y="298.0" width="404.0" height="96.0" rx="0" fill="none" stroke="none" stroke-width="0"  opacity="0.95" />
+<rect id="n41" x="1476.0" y="560.0" width="444.0" height="292.0" rx="14" fill="#142236" stroke="#35516C" stroke-width="1.5"  opacity="0.95" />
+<rect id="n44" x="1497.0" y="658.0" width="404.0" height="96.0" rx="0" fill="none" stroke="none" stroke-width="0"  opacity="0.95" />
+<g id="grp-1-n3" class="static-element" data-node-id="n3" style="">
+  <foreignObject x="62.0" y="31.0" width="1856.0" height="29.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #27C5D9; font-size: 17px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      METHODS AND SEQUENCE
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n4" class="interactive-node" data-node-id="n4" style="cursor:pointer;">
+  <foreignObject x="62.0" y="59.0" width="1856.0" height="48.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #EDF5FC; font-size: 38px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      How to threat-model an AI or agentic workflow
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n5" class="static-element" data-node-id="n5" style="">
+  <foreignObject x="63.0" y="109.0" width="1856.0" height="27.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #A8BED0; font-size: 16px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Use methods for questions, taxonomies for naming, controls for treatment, and governance for risk acceptance.
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n10" class="interactive-node" data-node-id="n10" style="cursor:pointer;">
+  <foreignObject x="73.0" y="422.0" width="404.0" height="56.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #4AD49E; font-size: 17px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      NIST MAP | PASTA 1–2
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n11" class="static-element" data-node-id="n11" style="">
+  <rect x="528.0" y="200.0" width="444.0" height="292.0" rx="10" fill="#142236" stroke="#35516C" stroke-width="1.5" filter="url(#cShadow)" />
+</g>
+<g id="grp-1-n12" class="static-element" data-node-id="n12" style="">
+  <rect x="544.0" y="216.0" width="52.0" height="34.0" rx="10" fill="#1B2C43" stroke="#FE6577" stroke-width="1" filter="url(#cShadow)" />
+  <foreignObject x="544.0" y="216.0" width="52.0" height="34.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 3px; box-sizing: border-box; color: #FE6577; font-size: 15px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: center;">
+      2
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n13" class="interactive-node" data-node-id="n13" style="cursor:pointer;">
+  <foreignObject x="613.0" y="220.0" width="341.0" height="55.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #EDF5FC; font-size: 24px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Decompose system &amp; flows
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n14" class="interactive-node" data-node-id="n14" style="cursor:pointer;">
+  <foreignObject x="549.0" y="298.0" width="404.0" height="96.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #EDF5FC; font-size: 21px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Data provenance, DFD, agent handoffs, RAG, execution, boundaries
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n15" class="interactive-node" data-node-id="n15" style="cursor:pointer;">
+  <foreignObject x="547.0" y="422.0" width="404.0" height="56.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #4AD49E; font-size: 17px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      STRIDE | MAESTRO L1–L7
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n16" class="static-element" data-node-id="n16" style="">
+  <rect x="1002.0" y="200.0" width="444.0" height="292.0" rx="10" fill="#142236" stroke="#35516C" stroke-width="1.5" filter="url(#cShadow)" />
+</g>
+<g id="grp-1-n17" class="static-element" data-node-id="n17" style="">
+  <rect x="1018.0" y="216.0" width="52.0" height="34.0" rx="10" fill="#1B2C43" stroke="#4AD49E" stroke-width="1" filter="url(#cShadow)" />
+  <foreignObject x="1018.0" y="216.0" width="52.0" height="34.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 3px; box-sizing: border-box; color: #4AD49E; font-size: 15px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: center;">
+      3
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n18" class="interactive-node" data-node-id="n18" style="cursor:pointer;">
+  <foreignObject x="1087.0" y="220.0" width="341.0" height="55.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #EDF5FC; font-size: 24px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Find attacker capabilities
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n19" class="interactive-node" data-node-id="n19" style="cursor:pointer;">
+  <foreignObject x="1023.0" y="298.0" width="404.0" height="96.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #EDF5FC; font-size: 21px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Who controls the email, tool output, model, memory or OAuth scope?
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n20" class="interactive-node" data-node-id="n20" style="cursor:pointer;">
+  <foreignObject x="1021.0" y="422.0" width="404.0" height="56.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #4AD49E; font-size: 17px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      CrowdStrike PI | ATLAS
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n21" class="static-element" data-node-id="n21" style="">
+  <rect x="1476.0" y="200.0" width="444.0" height="292.0" rx="10" fill="#142236" stroke="#35516C" stroke-width="1.5" filter="url(#cShadow)" />
+</g>
+<g id="grp-1-n22" class="static-element" data-node-id="n22" style="">
+  <rect x="1492.0" y="216.0" width="52.0" height="34.0" rx="10" fill="#1B2C43" stroke="#B8A3FF" stroke-width="1" filter="url(#cShadow)" />
+  <foreignObject x="1492.0" y="216.0" width="52.0" height="34.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 3px; box-sizing: border-box; color: #B8A3FF; font-size: 15px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: center;">
+      4
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n23" class="interactive-node" data-node-id="n23" style="cursor:pointer;">
+  <foreignObject x="1561.0" y="220.0" width="341.0" height="55.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #EDF5FC; font-size: 24px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Enumerate threats
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n24" class="interactive-node" data-node-id="n24" style="cursor:pointer;">
+  <foreignObject x="1497.0" y="298.0" width="404.0" height="96.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #EDF5FC; font-size: 21px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Prompt injection, privilege abuse, exposure, poisoning, supply chain
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n25" class="interactive-node" data-node-id="n25" style="cursor:pointer;">
+  <foreignObject x="1495.0" y="422.0" width="404.0" height="56.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #4AD49E; font-size: 17px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      OWASP LLM/ASI/MCP | STRIDE | LINDDUN
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n26" class="static-element" data-node-id="n26" style="">
+  <rect x="54.0" y="560.0" width="444.0" height="292.0" rx="10" fill="#142236" stroke="#35516C" stroke-width="1.5" filter="url(#cShadow)" />
+</g>
+<g id="grp-1-n27" class="static-element" data-node-id="n27" style="">
+  <rect x="70.0" y="576.0" width="52.0" height="34.0" rx="10" fill="#1B2C43" stroke="#27C5D9" stroke-width="1" filter="url(#cShadow)" />
+  <foreignObject x="70.0" y="576.0" width="52.0" height="34.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 3px; box-sizing: border-box; color: #27C5D9; font-size: 15px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: center;">
+      5
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n28" class="interactive-node" data-node-id="n28" style="cursor:pointer;">
+  <foreignObject x="139.0" y="580.0" width="341.0" height="55.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #EDF5FC; font-size: 24px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Build attack paths
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n29" class="interactive-node" data-node-id="n29" style="cursor:pointer;">
+  <foreignObject x="75.0" y="658.0" width="404.0" height="96.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #EDF5FC; font-size: 21px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Sources → mechanism → boundary crossing → privileged sink
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n30" class="interactive-node" data-node-id="n30" style="cursor:pointer;">
+  <foreignObject x="73.0" y="782.0" width="404.0" height="56.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #4AD49E; font-size: 17px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      ATLAS | PASTA | attack trees
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n31" class="static-element" data-node-id="n31" style="">
+  <rect x="528.0" y="560.0" width="444.0" height="292.0" rx="10" fill="#142236" stroke="#35516C" stroke-width="1.5" filter="url(#cShadow)" />
+</g>
+<g id="grp-1-n32" class="static-element" data-node-id="n32" style="">
+  <rect x="544.0" y="576.0" width="52.0" height="34.0" rx="10" fill="#1B2C43" stroke="#FE6577" stroke-width="1" filter="url(#cShadow)" />
+  <foreignObject x="544.0" y="576.0" width="52.0" height="34.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 3px; box-sizing: border-box; color: #FE6577; font-size: 15px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: center;">
+      6
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n33" class="interactive-node" data-node-id="n33" style="cursor:pointer;">
+  <foreignObject x="613.0" y="580.0" width="341.0" height="55.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #EDF5FC; font-size: 24px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Evaluate risk
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n34" class="interactive-node" data-node-id="n34" style="cursor:pointer;">
+  <foreignObject x="549.0" y="658.0" width="404.0" height="96.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #EDF5FC; font-size: 21px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Preconditions, likelihood, impact, blast radius, detectability
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n35" class="interactive-node" data-node-id="n35" style="cursor:pointer;">
+  <foreignObject x="547.0" y="782.0" width="404.0" height="56.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #4AD49E; font-size: 17px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      PASTA | NIST MEASURE | risk register
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n36" class="static-element" data-node-id="n36" style="">
+  <rect x="1002.0" y="560.0" width="444.0" height="292.0" rx="10" fill="#142236" stroke="#35516C" stroke-width="1.5" filter="url(#cShadow)" />
+</g>
+<g id="grp-1-n37" class="static-element" data-node-id="n37" style="">
+  <rect x="1018.0" y="576.0" width="52.0" height="34.0" rx="10" fill="#1B2C43" stroke="#4AD49E" stroke-width="1" filter="url(#cShadow)" />
+  <foreignObject x="1018.0" y="576.0" width="52.0" height="34.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 3px; box-sizing: border-box; color: #4AD49E; font-size: 15px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: center;">
+      7
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n38" class="interactive-node" data-node-id="n38" style="cursor:pointer;">
+  <foreignObject x="1087.0" y="580.0" width="341.0" height="55.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #EDF5FC; font-size: 24px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Design enforceable controls
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n39" class="interactive-node" data-node-id="n39" style="cursor:pointer;">
+  <foreignObject x="1023.0" y="658.0" width="404.0" height="96.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #EDF5FC; font-size: 21px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Capability gate, isolation, identity, egress, approvals, logs
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n40" class="interactive-node" data-node-id="n40" style="cursor:pointer;">
+  <foreignObject x="1021.0" y="782.0" width="404.0" height="56.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #4AD49E; font-size: 17px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      SAIF | CSA AICM | ACS | ISO
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n42" class="static-element" data-node-id="n42" style="">
+  <rect x="1492.0" y="576.0" width="52.0" height="34.0" rx="10" fill="#1B2C43" stroke="#B8A3FF" stroke-width="1" filter="url(#cShadow)" />
+  <foreignObject x="1492.0" y="576.0" width="52.0" height="34.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 3px; box-sizing: border-box; color: #B8A3FF; font-size: 15px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: center;">
+      8
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n43" class="interactive-node" data-node-id="n43" style="cursor:pointer;">
+  <foreignObject x="1561.0" y="580.0" width="341.0" height="55.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #EDF5FC; font-size: 24px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Validate &amp; monitor
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n45" class="interactive-node" data-node-id="n45" style="cursor:pointer;">
+  <foreignObject x="1495.0" y="782.0" width="404.0" height="56.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #4AD49E; font-size: 17px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      NIST MANAGE | continuous testing
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n46" class="interactive-node" data-node-id="n46" style="cursor:pointer;">
+  <rect x="63.0" y="1013.0" width="1852.0" height="143.0" rx="10" fill="#1B2C43" stroke="#4AD49E" stroke-width="1.5" filter="url(#cShadow)" />
+  <foreignObject x="63.0" y="1013.0" width="1852.0" height="143.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 14px; box-sizing: border-box; color: #EDF5FC; font-size: 21px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      <b>Stop condition / evidence pack</b><br/>Every high-impact data flow has a named owner, attacker-controlled source, trust boundary, abuse case, policy enforcement point, test case, signal, and accepted residual risk.
+    </div>
+  </foreignObject>
+</g>
+<g id="grp-1-n47" class="static-element" data-node-id="n47" style="">
+  <foreignObject x="45.0" y="1198.0" width="1890.0" height="25.0" style="pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px; box-sizing: border-box; color: #A8BED0; font-size: 14px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; text-align: left;">
+      Analyst-designed crosswalk · source framework identifiers and version are shown · not an official endorsement
+    </div>
+  </foreignObject>
+</g>
+</svg>

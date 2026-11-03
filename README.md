@@ -5,6 +5,8 @@
   <p>
     <a href="https://promptinjection.github.io" target="_blank"><b>🌐 Live Benchmark Platform</b></a>
     ·
+    <a href="https://promptinjection.github.io/threat-model/" target="_blank"><b>🛡️ AI Threat Model (All Frameworks)</b></a>
+    ·
     <a href="https://promptinjection.github.io/#ai-kill-chain" target="_blank"><b>⚡ AI Kill Chain Matrix</b></a>
     ·
     <a href="https://huggingface.co/datasets/AIDataFdn/promptinjection" target="_blank"><b>🤗 Hugging Face Dataset</b></a>
@@ -105,6 +107,29 @@ Modeled after the enterprise AI governance framework, Prompt Injection v3 organi
 | **10 Actions on Objectives** | High-impact adversarial goals | Data Exfiltration via AI, Autonomous Fraud, Supply-Chain Propagation, Operational Disruption |
 
 > 💡 **Explore the Full Matrix**: Visit [promptinjection.github.io/#ai-kill-chain](https://promptinjection.github.io/#ai-kill-chain) for the interactive 10-column chart with 1-click payload testing.
+
+---
+
+## 🛡️ AI & Agentic Security Threat Model (All Frameworks)
+
+An authoritative, interactive reference architecture and threat modeling engine:
+**"Untrusted content → autonomous decision → privileged tool"**
+
+Building on the **CrowdStrike Prompt Injection Taxonomy**, **OWASP LLM Top 10 (2026)**, **OWASP Agentic Top 10 (2026)**, **OWASP MCP Top 10 (2025 Beta)**, **MITRE ATLAS**, **NIST AI RMF**, and **CSA MAESTRO**.
+
+```
+[TB0 · UNTRUSTED ORIGIN]  ──>  [TB1 · INGESTION / DATA]  ──>  [TB2 · AGENT EXECUTION]  ──>  [TB3 · PRIVILEGED EFFECTS]
+ Attacker inputs & users        Parsers, RAG, Memory          Gateway, LLM, PEP/PDP         CRM API, MCP Tools, Egress
+```
+
+### 📋 Key Features & Artifacts
+- **Interactive Architecture Viewport**: Pan/zoom vector canvas with live data flow highlights across 10 diagrams (Reference System, Threat Modeling Workflow, Trust Boundaries, OWASP LLM 2026, OWASP Agentic 2026, OWASP MCP Beta, MITRE ATLAS, Runtime PEP Gate, and 6 End-to-End Attack Stories).
+- **6-Tab Slide-Over Inspector Drawer**: Comprehensive asset profiles, 30 cataloged threat scenarios, defense invariants, cross-framework mappings, and external decision contract schemas.
+- **30-Threat Register Matrix (T01–T30)**: Searchable and filterable by severity (Critical, High, Medium), trust boundaries, STRIDE classifications, and primary mitigations.
+- **CrowdStrike 222-Technique Crosswalk**: Complete technique hierarchy mapped from direct/indirect injections to defensive test controls.
+- **10 Non-Negotiable Controls at Every Boundary**: Scoped token broker, external policy enforcement (PEP/PDP), deny-by-default action gates, origin labeling, sandboxed microVMs, and emergency kill switches.
+
+> 🌐 **Interactive Threat Model**: Visit [promptinjection.github.io/threat-model/](https://promptinjection.github.io/threat-model/) to inspect the live architecture and threat register.
 
 ---
 
