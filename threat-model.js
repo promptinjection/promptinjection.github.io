@@ -488,13 +488,21 @@
         dropdown.style.display = 'block';
       } else {
         dropdown.innerHTML = matches.map(m => `
-          <div class="autocomplete-item" onclick="locateAndInspect('${m.id.toLowerCase()}', '${escapeHtml(m.id)}'); clearSearch();">
+          <div class="autocomplete-item" data-id="${escapeHtml(m.id.toLowerCase())}" data-raw-id="${escapeHtml(m.id)}">
             <span class="autocomplete-id">${escapeHtml(m.id)}</span>
             <span class="autocomplete-name">${escapeHtml(m.name)}</span>
             <span class="autocomplete-cat">${escapeHtml(m.category || '')}</span>
           </div>
         `).join('');
         dropdown.style.display = 'block';
+      }
+    });
+
+    dropdown.addEventListener('click', (e) => {
+      const item = e.target.closest('.autocomplete-item');
+      if (item) {
+        locateAndInspect(item.dataset.id, item.dataset.rawId);
+        clearSearch();
       }
     });
 

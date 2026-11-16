@@ -196,8 +196,8 @@ function populateCategoryPills(categories) {
   categories.forEach(cat => {
     const icon = getCategoryIcon(cat.name);
     html += `
-      <button class="cat-pill" data-category="${cat.slug}" role="tab" aria-selected="false">
-        <span>${icon} ${cat.name}</span>
+      <button class="cat-pill" data-category="${escapeHTML(cat.slug)}" role="tab" aria-selected="false">
+        <span>${icon} ${escapeHTML(cat.name)}</span>
         <span class="pill-count">${cat.total.toLocaleString()}</span>
       </button>
     `;
@@ -231,10 +231,10 @@ function populateSidebar(categories) {
   categories.forEach(cat => {
     const icon = getCategoryIcon(cat.name);
     html += `
-      <li class="search-result-item category-filter" data-category="${cat.slug}">
+      <li class="search-result-item category-filter" data-category="${escapeHTML(cat.slug)}">
         <div class="category-item-content">
           <span class="category-icon">${icon}</span>
-          <span class="category-name">${cat.name}</span>
+          <span class="category-name">${escapeHTML(cat.name)}</span>
           <span class="category-count-badge">${cat.total.toLocaleString()}</span>
         </div>
       </li>
@@ -758,9 +758,9 @@ async function populateCategoriesDropdown() {
   const categoryItems = categories.map(cat => {
     const icon = getCategoryIcon(cat.name);
     return `
-      <div class="dropdown-item" data-category="${cat.slug}">
+      <div class="dropdown-item" data-category="${escapeHTML(cat.slug)}">
         <span class="category-icon">${icon}</span>
-        <span class="category-name">${cat.name}</span>
+        <span class="category-name">${escapeHTML(cat.name)}</span>
         <span class="category-count">${cat.total.toLocaleString()}</span>
       </div>
     `;
@@ -957,7 +957,7 @@ function showModal(act, prompt, for_devs) {
   const modalCode = modalOverlay.querySelector('.modal-content code');
 
   modalTitle.textContent = act;
-  modalCode.innerHTML = prompt.replace(/\\n/g, '<br>');
+  modalCode.innerHTML = escapeHTML(prompt).replace(/\r?\n/g, '<br>');
 
   modalOverlay.style.display = 'block';
   document.body.style.overflow = 'hidden';
@@ -1188,7 +1188,7 @@ function openKillChainModal(tech) {
   if (catEl) {
     const catClass = tech.category.toLowerCase().replace(/[^a-z0-9_-]/g, '');
     catEl.className = `category-badge ${catClass}`;
-    catEl.innerHTML = `${getCategoryIcon(tech.category)} ${tech.category}`;
+    catEl.innerHTML = `${getCategoryIcon(tech.category)} ${escapeHTML(tech.category)}`;
   }
 
   if (exploreBtn) {
@@ -1442,16 +1442,16 @@ function initCommandPalette() {
     list.forEach((item, idx) => {
       if (item.type !== currentType) {
         currentType = item.type;
-        html += `<div class="cmd-result-group-title">${currentType}</div>`;
+        html += `<div class="cmd-result-group-title">${escapeHTML(currentType)}</div>`;
       }
       const selectedClass = idx === 0 ? 'selected' : '';
       html += `
         <div class="cmd-result-item ${selectedClass}" data-cmd-index="${idx}" tabindex="0">
           <div class="cmd-result-left">
-            <span class="cmd-result-badge">${item.type}</span>
+            <span class="cmd-result-badge">${escapeHTML(item.type)}</span>
             <div>
-              <div style="font-weight:600; font-size:0.9rem;">${item.title}</div>
-              <div style="font-size:0.75rem; color:#94a3b8;">${item.desc}</div>
+              <div style="font-weight:600; font-size:0.9rem;">${escapeHTML(item.title)}</div>
+              <div style="font-size:0.75rem; color:#94a3b8;">${escapeHTML(item.desc)}</div>
             </div>
           </div>
           <span style="font-size:0.8rem; color:#64748b;">&rarr;</span>
