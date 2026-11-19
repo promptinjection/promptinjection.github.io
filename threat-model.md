@@ -19,7 +19,7 @@ permalink: /threat-model/
         <span class="tm-badge-pulse"><span class="pulse-dot"></span> AI/AGENTIC THREAT MODELING • REFERENCE SYSTEM</span>
         <span class="tm-edition-pill">EDITION 2026-11-03 • 30 SCENARIOS • 222 TECHNIQUES</span>
       </div>
-      <h2 class="tm-title">Untrusted content → autonomous decision → privileged tool</h2>
+      <h1 class="tm-title">Untrusted content → autonomous decision → privileged tool</h1>
       <p class="tm-subtitle">
         Reference agent architecture reading emails &amp; RAG documents, making autonomous reasoning decisions, and invoking privileged CRM &amp; MCP tools.
         Crosswalked across <strong>CrowdStrike 2026 Taxonomy</strong>, <strong>OWASP LLM 2026</strong>, <strong>OWASP Agentic 2026</strong>, <strong>OWASP MCP Beta</strong>, <strong>MITRE ATLAS</strong>, <strong>NIST AI RMF</strong>, and <strong>CSA MAESTRO</strong>.

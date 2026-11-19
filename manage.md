@@ -17,7 +17,7 @@ layout: default
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       Security Architecture Framework
     </div>
-    <h2>The AI Kill Chain™ Matrix</h2>
+    <h1>The AI Kill Chain™ Matrix</h1>
     <p>A comprehensive 10-stage system-level framework mapping 58 attack techniques across large language models, autonomous agents, and tool-augmented workflows.</p>
   </div>
 

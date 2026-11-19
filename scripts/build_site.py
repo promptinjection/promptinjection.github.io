@@ -8,10 +8,20 @@ SITE_DIR = os.path.join(ROOT_DIR, "_site")
 LAYOUT_PATH = os.path.join(ROOT_DIR, "_layouts", "default.html")
 INDEX_MD_PATH = os.path.join(ROOT_DIR, "index.md")
 
+def read_theme_include(filename):
+    with open(os.path.join(ROOT_DIR, "_includes", filename), encoding="utf-8") as source:
+        return source.read().strip()
+
+
 def render_site():
     print("Building site...")
     with open(LAYOUT_PATH, "r", encoding="utf-8") as f:
-        layout = f.read()
+        layout = f.read().replace('{{ page.lang | default: site.lang | default: \'en-US\' }}', 'en-US')
+    layout = re.sub(
+        r"\{% include (research-[a-z-]+\.html) %\}",
+        lambda match: read_theme_include(match.group(1)),
+        layout,
+    )
 
     with open(INDEX_MD_PATH, "r", encoding="utf-8") as f:
         md_content = f.read()
@@ -31,7 +41,6 @@ def render_site():
 
     # Replace layout variables
     html = layout
-    html = html.replace('{{ page.lang | default: site.lang | default: " en-US" }}', 'en-US')
     html = html.replace('{{ page.title | default: site.title }}', frontmatter.get('title', 'Prompt Injection v3'))
     html = html.replace('{{ page.subtitle | default: site.subtitle }}', frontmatter.get('subtitle', 'security research dataset'))
     html = html.replace("{{ page.body_class | default: '' }}", frontmatter.get('body_class', 'vibe'))
@@ -96,8 +105,7 @@ def render_site():
             manage_raw = f.read()
         manage_parts = manage_raw.split("---", 2)
         manage_body = manage_parts[2].strip() if len(manage_parts) >= 3 else manage_raw
-        manage_html = layout
-        manage_html = manage_html.replace('{{ page.title | default: site.title }}', 'AI Kill Chain Framework')
+        manage_html = layout.replace('{{ page.title | default: site.title }}', 'AI Kill Chain Framework')
         manage_html = manage_html.replace('{{ page.subtitle | default: site.subtitle }}', '10-stage matrix for agentic & LLM security')
         manage_html = manage_html.replace("{{ page.body_class | default: '' }}", 'vibe')
         manage_html = manage_html.replace('{% seo %}', '<meta name="description" content="AI Kill Chain 10-stage security matrix across 58 techniques.">')
@@ -125,8 +133,7 @@ def render_site():
             tm_raw = f.read()
         tm_parts = tm_raw.split("---", 2)
         tm_body = tm_parts[2].strip() if len(tm_parts) >= 3 else tm_raw
-        tm_html = layout
-        tm_html = tm_html.replace('{{ page.title | default: site.title }}', 'AI Threat Model & Attack Chains')
+        tm_html = layout.replace('{{ page.title | default: site.title }}', 'AI Threat Model & Attack Chains')
         tm_html = tm_html.replace('{{ page.subtitle | default: site.subtitle }}', 'interactive reference architecture for enterprise LLM & autonomous agent security')
         tm_html = tm_html.replace("{{ page.body_class | default: '' }}", 'vibe')
         tm_html = tm_html.replace('{% seo %}', '<meta name="description" content="Interactive AI Threat Model & Attack Chains Reference Architecture across STRIDE, TA01-07, and P1-P6.">')
@@ -147,7 +154,8 @@ def render_site():
     for static_file in [
         "style.css", "script.js", "threat-model.css", "threat_model_bundle.js",
         "threat-model.js", "embed-preview-script.js", "embed-script.js",
-        "embed-preview-style.css", "embed-style.css", "blog-styles.css"
+        "embed-preview-style.css", "embed-style.css", "blog-styles.css",
+        "research-theme.css", "research-theme.js"
     ]:
         src_f = os.path.join(ROOT_DIR, static_file)
         if os.path.exists(src_f):

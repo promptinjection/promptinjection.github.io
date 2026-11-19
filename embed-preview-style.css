@@ -248,4 +248,13 @@
         transform: scale(0.95);
         transition: transform 0.1s ease;
     }
-} 
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .flash-animation,
+    .diff-enter,
+    .diff-exit,
+    .animate-slide-in {
+        animation: none !important;
+    }
+}
