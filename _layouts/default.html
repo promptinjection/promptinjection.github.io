@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="{{ page.lang | default: site.lang | default: " en-US" }}">
+<html lang="{{ page.lang | default: site.lang | default: 'en-US' }}">
 
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-  <title>{{ page.title | default: site.title }} — awesome AI prompts</title>
+  <title>{{ page.title | default: site.title }} — Prompt Injection</title>
   {% seo %}
 
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -18,22 +18,17 @@
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/blog-styles.css">
   <link rel="stylesheet" href="/threat-model.css">
+  <link rel="stylesheet" href="/research-theme.css">
 </head>
 
-<body class="{{ page.body_class | default: '' }}">
+<body class="research-shell {{ page.body_class | default: '' }}">
+  <script src="/research-theme.js"></script>
+  <a class="research-skip" href="#main-content">Skip to content</a>
   <div class="layout-wrapper">
 
     <header class="site-header">
       <div class="header-left">
-        <div class="logo-container">
-          <img src="/myimg-bg.png" alt="Prompt Injection Logo" class="site-logo">
-          <h1 class="site-title">{{ page.title | default: site.title }}</h1>
-        </div>
-        <p class="site-slogan">{{ page.subtitle | default: site.subtitle }}
-          {% if page.subpage != true %}
-
-          {% endif %}
-        </p>
+        {% include research-brand.html %}
         {% if page.hide_platform_selector != true %}
         <div class="site-description">
           <p class="platform-hint">Choose your AI platform</p>
@@ -61,54 +56,7 @@
         {% endif %}
       </div>
       <div class="header-right">
-        <nav class="main-nav">
-          <a href="/threat-model/" class="nav-link" title="AI Threat Model &amp; Attack Chains Reference Architecture">
-            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-            </svg>
-            <span class="nav-text">Threat Model</span>
-          </a>
-          <a href="/#ai-kill-chain" class="nav-link" title="AI Kill Chain 10-Stage Matrix">
-            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-            </svg>
-            <span class="nav-text">Kill Chain</span>
-          </a>
-          <a href="/#categories" class="nav-link" title="Explore 13 attack categories">
-            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="3" width="7" height="7"></rect>
-              <rect x="14" y="3" width="7" height="7"></rect>
-              <rect x="14" y="14" width="7" height="7"></rect>
-              <rect x="3" y="14" width="7" height="7"></rect>
-            </svg>
-            <span class="nav-text">Taxonomy</span>
-          </a>
-          <a href="/#explorer" class="nav-link" title="Live Prompt Explorer">
-            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <span class="nav-text">Explorer</span>
-          </a>
-          <a href="/#community" class="nav-link nav-download" title="Star on GitHub & Access Hugging Face Dataset">
-            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="color: #fbbf24;">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-            </svg>
-            <span class="nav-text">Star &amp; HF</span>
-          </a>
-          <a href="/blog" class="nav-link">
-            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-              <polyline points="14,2 14,8 20,8"></polyline>
-              <line x1="16" y1="13" x2="8" y2="13"></line>
-              <line x1="16" y1="17" x2="8" y2="17"></line>
-              <polyline points="10,9 9,9 8,9"></polyline>
-            </svg>
-            <span class="nav-text">Blog</span>
-          </a>
-        </nav>
+        {% include research-nav.html %}
         <button class="cmd-k-trigger-btn" id="cmdKTriggerBtn" type="button" aria-label="Quick Search Palette" title="Command Palette (⌘K)">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
           <span class="cmd-k-text">Search</span>
@@ -146,30 +94,12 @@
           </svg>
           <span id="starCount">...</span>
         </a>
-        <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">
-          <svg class="mode-icon sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-          </svg>
-          <svg class="mode-icon moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            style="display: none;">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
-        </button>
+        {% include research-theme-toggle.html %}
       </div>
     </header>
 
     <div class="content-wrapper">
-      <div class="main-content">
+      <main class="main-content" id="main-content" tabindex="-1">
         {% if page.hide_platform_selector != true %}
         <div class="main-content-header">
           <div class="header-content">
@@ -229,7 +159,7 @@
             {{ content }}
           </div>
         </div>
-      </div>
+      </main>
     </div>
     <footer class="site-footer">
       <div class="footer-content">

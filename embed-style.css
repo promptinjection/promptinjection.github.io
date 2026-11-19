@@ -11,14 +11,14 @@
     
     /* Main site theme variables */
     --bg-color-light: #ffffff;
-    --bg-color-dark: #1a1a1a;
-    --text-color-light: #000000;
+    --bg-color-dark: #101724;
+    --text-color-light: #142239;
     --text-color-dark: #ffffff;
     --header-height: 80px;
-    --accent-color: #10b981;
-    --accent-color-hover: #059669;
-    --border-color: #e1e4e8;
-    --border-color-dark: #2d2d2d;
+    --accent-color: #234cc3;
+    --accent-color-hover: #193a9e;
+    --border-color: #d8e0eb;
+    --border-color-dark: #334560;
 }
 
 /* Reset body margin and ensure full height */
@@ -78,17 +78,16 @@ body.dark-mode .site-header {
     font-size: 1.8rem;
     font-weight: 700;
     margin: 0;
-    background: linear-gradient(45deg, var(--accent-color), #3b82f6);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    display: inline-block;
-    position: relative;
-    transition: transform 0.3s ease;
+    color: var(--text-color-light);
 }
 
-.site-title:hover {
-    transform: translateY(-2px);
+body.dark-mode {
+    --accent-color: #b0c5ff;
+    --accent-color-hover: #d0dcff;
+}
+
+body.dark-mode .site-title {
+    color: var(--text-color-dark);
 }
 
 .site-slogan {
@@ -214,7 +213,7 @@ body.dark-mode .bg-dynamic-background {
 }
 
 body.dark-mode .bg-dynamic-muted {
-    background-color: #2a2a2a;
+    background-color: #1d2c42;
 }
 
 body.dark-mode .text-dynamic-foreground {
@@ -232,7 +231,7 @@ body.dark-mode .border-dynamic-border {
 /* Designer mode specific styles */
 .designer-panel {
     border-right: 1px solid var(--border-color);
-    background-color: #f8fafb;
+    background-color: #f7f8fa;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -243,7 +242,7 @@ body.dark-mode .border-dynamic-border {
 }
 
 body.dark-mode .designer-panel {
-    background-color: #262626;
+    background-color: #172234;
     border-right-color: var(--border-color-dark);
 }
 
@@ -265,7 +264,7 @@ body.dark-mode .designer-panel {
 }
 
 body.dark-mode .designer-panel > .p-6:last-child {
-    background-color: #2a2a2a;
+    background-color: #1d2c42;
 }
 
 /* Ensure textarea can be full height */

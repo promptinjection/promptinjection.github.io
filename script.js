@@ -594,13 +594,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initPromptDataset();
   if (typeof initThreatModelEngine === "function") initThreatModelEngine();
   initKillChain();
-  initHeroCanvas();
   initCounters();
   initBibTeX();
   initCommandPalette();
   
   fetchGitHubStars();
-  updateModeIcons();
   
   // Make debug function available globally
   window.debugFiltering = debugFiltering;
@@ -707,14 +705,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Dark mode toggle
-function toggleDarkMode() {
-  document.body.classList.toggle('dark-mode');
-  const isDark = document.body.classList.contains('dark-mode');
-  localStorage.setItem('dark-mode', isDark);
-  updateModeIcons();
-}
-
 // Categories dropdown functionality
 function toggleCategoriesDropdown() {
   const dropdown = document.getElementById('categoriesDropdown');
@@ -815,12 +805,6 @@ function closeDropdown() {
   }
 }
 
-// Initialize dark mode from localStorage
-const savedDarkMode = localStorage.getItem('dark-mode') === 'true';
-if (savedDarkMode) {
-  document.body.classList.add('dark-mode');
-}
-
 // Test function for debugging
 window.testCategoriesDropdown = function() {
   console.log('Testing categories dropdown...');
@@ -839,16 +823,6 @@ window.testCategoriesDropdown = function() {
   
   toggleCategoriesDropdown();
 };
-
-// Update sun/moon icons based on current mode
-function updateModeIcons() {
-  const sunIcon = document.querySelector('.sun-icon');
-  const moonIcon = document.querySelector('.moon-icon');
-  if (!sunIcon || !moonIcon) return;
-  const isDark = document.body.classList.contains('dark-mode');
-  sunIcon.style.display = isDark ? 'none' : '';
-  moonIcon.style.display = isDark ? '' : 'none';
-}
 
 
 // Open prompt in AI chat
@@ -1215,119 +1189,12 @@ function closeKillChainModal() {
 }
 
 /* ==========================================================================
-   Interactive Hero Cyber Constellation Canvas
-   ========================================================================== */
-function initHeroCanvas() {
-  const canvas = document.getElementById('heroCanvas');
-  if (!canvas || !canvas.parentElement) return;
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
-
-  let width = (canvas.width = canvas.parentElement.offsetWidth || window.innerWidth);
-  let height = (canvas.height = canvas.parentElement.offsetHeight || 420);
-
-  const isDark = () => document.body.classList.contains('dark-mode') || !document.body.classList.contains('light-mode');
-
-  let particles = [];
-  const particleCount = Math.min(Math.floor((width * height) / 11000), 70);
-
-  for (let i = 0; i < particleCount; i++) {
-    particles.push({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: (Math.random() - 0.5) * 0.4,
-      radius: Math.random() * 1.8 + 0.8,
-    });
-  }
-
-  let mouse = { x: -1000, y: -1000 };
-  window.addEventListener('mousemove', (e) => {
-    const rect = canvas.getBoundingClientRect();
-    mouse.x = e.clientX - rect.left;
-    mouse.y = e.clientY - rect.top;
-  });
-
-  window.addEventListener('resize', () => {
-    if (!canvas.parentElement) return;
-    width = canvas.width = canvas.parentElement.offsetWidth;
-    height = canvas.height = canvas.parentElement.offsetHeight;
-  });
-
-  let isVisible = true;
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries) => {
-      isVisible = entries[0].isIntersecting;
-    });
-    observer.observe(canvas);
-  }
-
-  function draw() {
-    if (!isVisible) {
-      requestAnimationFrame(draw);
-      return;
-    }
-
-    ctx.clearRect(0, 0, width, height);
-    const dark = isDark();
-    const dotColor = dark ? 'rgba(16, 185, 129, 0.55)' : 'rgba(5, 150, 105, 0.35)';
-    const lineColor = dark ? 'rgba(16, 185, 129, ' : 'rgba(59, 130, 246, ';
-
-    for (let i = 0; i < particles.length; i++) {
-      const p = particles[i];
-      p.x += p.vx;
-      p.y += p.vy;
-
-      if (p.x < 0) p.x = width;
-      if (p.x > width) p.x = 0;
-      if (p.y < 0) p.y = height;
-      if (p.y > height) p.y = 0;
-
-      // Gentle mouse interaction
-      const dxm = mouse.x - p.x;
-      const dym = mouse.y - p.y;
-      const distM = Math.sqrt(dxm * dxm + dym * dym);
-      if (distM < 110) {
-        p.x += (dxm / distM) * 0.35;
-        p.y += (dym / distM) * 0.35;
-      }
-
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      ctx.fillStyle = dotColor;
-      ctx.fill();
-
-      // Connect lines
-      for (let j = i + 1; j < particles.length; j++) {
-        const p2 = particles[j];
-        const dx = p.x - p2.x;
-        const dy = p.y - p2.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-
-        if (dist < 105) {
-          const alpha = (1 - dist / 105) * (dark ? 0.2 : 0.12);
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(p2.x, p2.y);
-          ctx.strokeStyle = `${lineColor}${alpha})`;
-          ctx.lineWidth = 0.75;
-          ctx.stroke();
-        }
-      }
-    }
-
-    requestAnimationFrame(draw);
-  }
-
-  requestAnimationFrame(draw);
-}
-
-/* ==========================================================================
    Smooth Animated Counters
    ========================================================================== */
 function initCounters() {
   const elements = document.querySelectorAll('[data-counter-target]');
-  if (!elements.length) return;
+  if (!elements.length || !('IntersectionObserver' in window) ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   const observer = new IntersectionObserver((entries, obs) => {
     entries.forEach(entry => {
