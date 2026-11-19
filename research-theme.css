@@ -438,6 +438,17 @@ body.research-shell.dark-mode {
     color: var(--research-muted);
 }
 
+.taxonomy-source-link {
+    color: var(--research-accent);
+    text-decoration: underline;
+    text-underline-offset: .15em;
+}
+
+.research-shell .cat-card-modern .cat-source-count {
+    color: var(--research-accent);
+    font-weight: 600;
+}
+
 .research-shell :is(.section-badge-modern, .killchain-badge, .explorer-badge, .blog-promo-badge) {
     background: var(--research-tint);
     border-color: var(--research-line);

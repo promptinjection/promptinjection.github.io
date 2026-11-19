@@ -59,7 +59,7 @@ layout: default
   <div class="section-header-modern">
     <div class="section-badge-modern">Attack Taxonomy</div>
     <h2>13 Research Categories</h2>
-    <p>Click any category card to immediately load, filter, and inspect its prompts in the interactive explorer below.</p>
+    <p>Select a category to browse its indexed prompts. The phishing cards also show totals from the <a class="taxonomy-source-link" href="https://datasets-server.huggingface.co/statistics?dataset=AIDataFdn%2Fpromptinjection&amp;config=default&amp;split=train">Hugging Face train split</a>.</p>
   </div>
 
   <div class="cat-matrix-grid">
@@ -173,23 +173,25 @@ layout: default
       <span class="cat-action-hint">Explore Prompts &rarr;</span>
     </article>
 
-    <article class="cat-card-modern" data-cat-select="phishingemail" role="button" tabindex="0" aria-label="Filter PhishingEmail category">
+    <article class="cat-card-modern" data-cat-select="phishingemail" role="button" tabindex="0" aria-label="Filter PhishingEmail category" aria-describedby="phishingemail-source-count">
       <div class="cat-header-top">
         <span class="cat-icon-badge">📧</span>
-        <span class="cat-count-badge">1</span>
+        <span class="cat-count-badge">1 indexed</span>
       </div>
       <h3 class="cat-title">PhishingEmail</h3>
       <p class="cat-desc">Email-vector prompt injection embedded inside inbox bodies and message automation pipelines.</p>
+      <p class="cat-source-count" id="phishingemail-source-count">4 rows on Hugging Face</p>
       <span class="cat-action-hint">Explore Prompts &rarr;</span>
     </article>
 
-    <article class="cat-card-modern" data-cat-select="phishingurl" role="button" tabindex="0" aria-label="Filter PhishingURL category">
+    <article class="cat-card-modern" data-cat-select="phishingurl" role="button" tabindex="0" aria-label="Filter PhishingURL category" aria-describedby="phishingurl-source-count">
       <div class="cat-header-top">
         <span class="cat-icon-badge">🌐</span>
-        <span class="cat-count-badge">1</span>
+        <span class="cat-count-badge">1 indexed</span>
       </div>
       <h3 class="cat-title">PhishingURL</h3>
       <p class="cat-desc">URL parameters and markdown link injections inducing unauthorized web navigations.</p>
+      <p class="cat-source-count" id="phishingurl-source-count">4 rows on Hugging Face</p>
       <span class="cat-action-hint">Explore Prompts &rarr;</span>
     </article>
   </div>
