@@ -10,8 +10,7 @@ body.research-shell {
     --research-action: #234cc3;
     --research-action-hover: #193a9e;
     --research-on-action: #ffffff;
-    --research-width: 1240px;
-    --research-gutter: clamp(1rem, 4vw, 4rem);
+    --research-gutter: clamp(1rem, 2.5vw, 3rem);
     --research-radius: 12px;
     --research-display: 'Outfit', 'Inter', system-ui, sans-serif;
     --research-mono: 'JetBrains Mono', ui-monospace, monospace;
@@ -83,7 +82,7 @@ body.research-shell.dark-mode {
     top: 0;
     height: auto;
     min-height: var(--header-height);
-    padding: .55rem max(var(--research-gutter), calc((100% - var(--research-width)) / 2));
+    padding: .55rem var(--research-gutter);
     background: var(--research-surface);
     border-bottom: 1px solid var(--research-line) !important;
     box-shadow: none;
@@ -185,12 +184,6 @@ body.research-shell.dark-mode {
     background: transparent;
 }
 
-.research-shell .container-lg.markdown-body {
-    margin-inline: auto;
-    padding-inline: 0;
-    max-width: var(--research-width);
-}
-
 .research-shell .site-footer {
     position: static !important;
     height: auto;
@@ -201,7 +194,7 @@ body.research-shell.dark-mode {
 }
 
 .research-shell .footer-content {
-    max-width: var(--research-width);
+    max-width: none;
     padding: 0;
     font-size: .83rem;
 }
@@ -227,7 +220,7 @@ body.research-shell.dark-mode {
 
 .research-hero-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(310px, .85fr);
+    grid-template-columns: minmax(0, 1fr) minmax(310px, min(42%, 52rem));
     align-items: center;
     gap: clamp(2rem, 6vw, 6.5rem);
 }
@@ -504,6 +497,14 @@ body.research-shell.dark-mode {
     font-size: clamp(1.75rem, 4.2vw, 3.5rem);
 }
 
+.research-shell :is(.tm-container, .blog-index) {
+    max-width: none;
+}
+
+.research-shell .blog-index {
+    padding-inline: 0;
+}
+
 .research-shell .blog-index,
 .research-shell .blog-container {
     padding-top: clamp(1.5rem, 5vw, 4rem);
@@ -534,6 +535,15 @@ body.research-shell.dark-mode {
 
 .research-shell .blog-hero-stats {
     justify-content: flex-start;
+}
+
+@media (min-width: 1051px) {
+    .research-shell .hero {
+        display: grid;
+        grid-template-rows: 1fr auto;
+        min-height: calc(100svh - var(--header-height));
+        padding-block: clamp(2.5rem, 5vw, 5rem) clamp(1.5rem, 4vh, 3rem);
+    }
 }
 
 @media (max-width: 1050px) {
